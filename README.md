@@ -33,6 +33,27 @@
 
 ### 1. User Stories (Required and Optional)
 
+**Project Requirements**
+* Your app has multiple views
+* Your app interacts with a database (e.g. Parse) 
+    * Parse or Firebase
+* You can log in/log out of your app as a user
+* You can sign up with a new user profile
+    * New account stores information for name, major, year, profile picture
+* Somewhere in your app you can use the camera to take a picture and do something with the picture (e.g. take a photo and share it to a feed, or take a photo and set a user’s profile picture)
+    * You can take a pictures of your house to attach to your post
+    * Take a profile photo
+* Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
+    * Google Maps - view house locations
+* Your app contains at least one more complex algorithm (talk over this with your manager)
+    * TBD
+* Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
+    * For house search you can like other’s posts (double tap)
+    * (possibly) Long press to save a post
+* Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
+* Your app incorporates an external library to add visual polish
+    * Material design for visual polish
+
 **Required Must-have Stories**
 
 - Use of Zillow API or other real estate API that displays house images, address, landlord contact info, number beds, number bathrooms, etc.
@@ -52,6 +73,7 @@
 **Optional Nice-to-have Stories**
 
 - Need some sort of referral code from someone already in the community to make an account
+- A recommendations page where a complex algorithm is used to match and recommend people based on similar qualities
 - Tab for your house once you found people
   - Shared payments, bills (utilities, furniture, etc)
   - Reminder system
