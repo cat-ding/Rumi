@@ -148,8 +148,7 @@
   * Go into 1:1 conversation
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+![Wireframe](wireframe.png)
 
 ### [BONUS] Digital Wireframes & Mockups
 
