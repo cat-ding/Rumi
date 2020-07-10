@@ -155,9 +155,50 @@
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
+
 ### Models
-[Add table of models]
+#### Post
+| Property | Type | Description |
+| ------------- | ------------- | -------------|
+| objectId  | String  | unique id for the user post (default field)|
+| createdAt | DateTime | date when post is created (default field) |
+| updatedAt | DateTime | date when post is last updated (default field) |
+| author | Pointer to User | to get information on the User who posted|
+| image | File | image that the user posts (optional) |
+| title | String | the title status that will go above the body of the post |
+| body | String | the text giving more details on the author's situation |
+| numRooms | Number | number of rooms the author is looking for |
+| duration | Number | the number of months the author is looking to stay/sublet |
+| furnished | Boolean | if the author room their looking for/subletting is furnished (optional field) |
+| rent | Number | rent required per month / maximum rent their |
+| likes | Array of Pointers to Users | a list of users who has liked this post |
+
+#### User
+| Property | Type | Description |
+| ------------- | ------------- | -------------|
+| objectId  | String  | unique id for the user post (default field)|
+| createdAt | DateTime | date when post is created (default field) |
+| updatedAt | DateTime | date when post is last updated (default field) |
+| name | String | the name of the user |
+| password | String | user's password |
+| email | String | user's email |
+| profilePhoto | File | user's profile photo|
+| major | String | user's major |
+| year | Number | user's graduation year |
+| hobbies | Array of Strings | user's hobbies |
+| status | Boolean | true for looking for a place to stay false for looking for a subletter |
+| savedPosts | Array of Pointers to Posts | when a user saves a post |
+
+#### Comment
+| Property | Type | Description |
+| ------------- | ------------- | -------------|
+| objectId  | String  | unique id for the user post (default field)|
+| createdAt | DateTime | date when post is created (default field) |
+| updatedAt | DateTime | date when post is last updated (default field) |
+| postId | String | objectId of the post the comment is under |
+| commentBody | String | the text inside the comment |
+| user | Pointer to User | a pointer to the user who authored the comment|
+
 ### Networking
 - [Add list of network requests by screen ]
 - [Create basic snippets for each Parse network request]
