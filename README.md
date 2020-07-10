@@ -199,7 +199,39 @@
 | commentBody | String | the text inside the comment |
 | user | Pointer to User | a pointer to the user who authored the comment|
 
+#### Message
+| Property | Type | Description |
+| ------------- | ------------- | -------------|
+| objectId  | String  | unique id for the user post (default field)|
+| createdAt | DateTime | date when post is created (default field) |
+| updatedAt | DateTime | date when post is last updated (default field) |
+| messageAuthor | Pointer to User | who the message was written by |
+| messageRecievedBy | Pointer to User | the user receiving the message | 
+
 ### Networking
-- [Add list of network requests by screen ]
+#### List of network requests by screen
+- Home feed of posts
+    - (Read/GET) Query all posts (possible option to sort posts based on post fields which would mean specific queries)
+    - (Create/POST) Create a new like on a post
+    - (Create/COMMENT) Create a new comment on a post
+    - (Update/USER) Save a post under the current user
+    - (Update/USER) Unsave a post under the current user
+    - (Delete) Delete existing post
+    - (Delete) Delete existing comment
+    - (Delete) Delete existing like
+- Create post screen
+    - (Create/POST) Create a new post object
+- Profile section
+    - (Read/GET) Query all posts made by current user / specific user
+    - (Update/PUT) Update user profile image and other user components (name, major, year, etc.)
+- Real estate browsing section
+    - (Read/GET) Info on houses from the Zillow API
+- Messaging screen (particular converation)
+    - (Read/GET) Query all messages that were written by the current user and recieved by the other user and vice versa
+    - (Create/POST) Create a new message object
+- Saved posts screen
+    - (Read/GET) Query all user's saved posts to display
+    - (Update/USER) Unsave a post under the current user
+
 - [Create basic snippets for each Parse network request]
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
