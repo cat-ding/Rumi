@@ -278,5 +278,8 @@ TODO
 | GET | properties/v2/list-for-rent | lists properties for rent | city, state_code, limit, offset | beds_min, price_max, prop_type, sort, allows_cats, etc |
 | GET | properties/v2/detail | get property detail information | property_id | N/A |
 
+##### Distance Matrix API (Google Maps)
+- (#https://developers.google.com/maps/documentation/distance-matrix/intro)
+
 ##### Zillow API
 - Still need to find more info on this - it seems like Zillow might just be a good API for searching for specific properties rather than listing all available ones.
