@@ -164,6 +164,7 @@
 - Finish up polishing home timeline
 - Implement the liking feature if I haven't gotten to it already last week
 - Implement the save post feature and screen where you can view all your saved posts
+- Start integrating the google maps sdk to display house addresses on a map
 - Set up the messages screen with backend
 - Start working on the real estate browsing screen that pulls data from an API
 
