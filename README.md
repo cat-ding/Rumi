@@ -233,5 +233,17 @@
     - (Read/GET) Query all user's saved posts to display
     - (Update/USER) Unsave a post under the current user
 
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+#### Basic snippets for each Parse network request
+
+
+#### Existing API Endpoints
+
+##### RapidAPI (realtor)
+- Base URL - (#https://realtor.p.rapidapi.com/)
+| HTTP Verb | Endpoint | Description | Required Parameters | Optional Parameters |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| GET | properties/v2/list-for-rent | lists properties for rent | city, state_code, limit, offset | beds_min, price_max, prop_type, sort, allows_cats, etc |
+| GET | properties/v2/detail | get property detail information | property_id | N/A |
+
+##### Zillow API
+- Still need to find more info on this?
