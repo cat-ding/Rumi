@@ -204,7 +204,6 @@
 | duration | Number | the number of months the author is looking to stay/sublet |
 | furnished | Boolean | if the author room their looking for/subletting is furnished (optional field) |
 | rent | Number | rent required per month / maximum rent their |
-| likes | Array of Pointers to Users | a list of users who has liked this post |
 
 #### User
 | Property | Type | Description |
@@ -221,6 +220,16 @@
 | hobbies | Array of Strings | user's hobbies |
 | status | Boolean | true for looking for a place to stay false for looking for a subletter |
 | savedPosts | Array of Pointers to Posts | when a user saves a post |
+
+
+#### Like
+| Property | Type | Description |
+| ------------- | ------------- | -------------|
+| objectId  | String  | unique id for the user post (default field)|
+| createdAt | DateTime | date when post is created (default field) |
+| updatedAt | DateTime | date when post is last updated (default field) |
+| postId | String | unique identifier for which post was liked |
+| user | Pointer to User | which user liked the post |
 
 #### Comment
 | Property | Type | Description |
