@@ -1,5 +1,4 @@
-# Rumi/Homie 
-(official name still tbd)
+# Rumi
 
 ## Table of Contents
 1. [Overview](#Overview)
