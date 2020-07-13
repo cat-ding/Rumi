@@ -281,6 +281,7 @@ TODO
 
 ##### RapidAPI (realtor)
 - Base URL - (#https://realtor.p.rapidapi.com/)
+
 | HTTP Verb | Endpoint | Description | Required Parameters | Optional Parameters |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | GET | properties/v2/list-for-rent | lists properties for rent | city, state_code, limit, offset | beds_min, price_max, prop_type, sort, allows_cats, etc |
