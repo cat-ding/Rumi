@@ -145,9 +145,8 @@ public class ProfileFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                ivProfileImage.setImageBitmap(bitmap);
                 handleUpload(bitmap);
-            } else { // Result was a failure
+            } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -165,7 +164,6 @@ public class ProfileFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Log.d(TAG, "onSuccess");
                         getDownloadUrl(reference);
                     }
                 })
