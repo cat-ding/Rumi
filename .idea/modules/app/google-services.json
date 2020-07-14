@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "133943890328",
+    "firebase_url": "https://rumi-30bb3.firebaseio.com",
+    "project_id": "rumi-30bb3",
+    "storage_bucket": "rumi-30bb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133943890328:android:98a188c5f3ce9bb10bdbed",
+        "android_client_info": {
+          "package_name": "com.cat.rumi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133943890328-8jl9hajse0c1c3vu2plkm47665tmdnv4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cat.rumi",
+            "certificate_hash": "6ae7b638c7a045df23963b67ba022d07c873d04c"
+          }
+        },
+        {
+          "client_id": "133943890328-trcths3oit5ap6movr9s92uuc3duqil7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqNaLvvzHSqZUqE0rapdJmuugdyebntvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133943890328-trcths3oit5ap6movr9s92uuc3duqil7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
