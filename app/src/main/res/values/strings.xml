@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Rumi</string>
-    
+    <string name="rumi">Rumi</string>
+
     <string-array name="majors">
-        <item>Choose Major</item>
+        <item>Select Major</item>
         <item>Undecided</item>
         <item>Africana Studies</item>
         <item>American Studies</item>
@@ -71,12 +72,13 @@
     </string-array>
 
     <string-array name="year">
-        <item>Choose Graduation Year</item>
+        <item>Select Graduation Year</item>
         <item>2024</item>
         <item>2023</item>
         <item>2022</item>
         <item>2021</item>
         <item>2020</item>
-        <item>Other/Graduate</item>
+        <item>Graduate Student</item>
+        <item>Other</item>
     </string-array>
 </resources>

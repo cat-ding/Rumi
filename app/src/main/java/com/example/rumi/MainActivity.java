@@ -13,16 +13,20 @@ import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.fragments.RentalsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private BottomNavigationView bottomNavigationView;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new MessagesFragment();
                         break;
                     case R.id.action_profile:
-                        fragment = new ProfileFragment();
+                        fragment = new ProfileFragment(firebaseAuth.getCurrentUser());
                         break;
                     default:
                         fragment = new PostsFragment();

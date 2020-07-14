@@ -37,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etEmail, etPassword, etName;
     private Button btnRegister;
     private TextView tvLogin;
-    private String userID;
     private Spinner spinnerMajor, spinnerYear;
     private String major, year;
 
@@ -125,28 +124,27 @@ public class RegisterActivity extends AppCompatActivity {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()){
-                            Log.e(TAG, "Error creating user! ", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        if (task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                            userID = firebaseAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = firestore.collection("users").document(userID);
                             Map<String, Object> user = new HashMap<>();
-                            user.put("fullName", name);
+                            user.put("name", name);
                             user.put("email", email);
                             user.put("major", major);
                             user.put("year", year);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                            firestore.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "onSuccess: user profile created for " + userID );
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.i(TAG, "onSuccess: new user profile created");
                                 }
                             });
 
                             Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(i);
                             finish();
+                        } else {
+                            Log.e(TAG, "Error creating user! ", task.getException());
+                            Toast.makeText(RegisterActivity.this, "Error!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

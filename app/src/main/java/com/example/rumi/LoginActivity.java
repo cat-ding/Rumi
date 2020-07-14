@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,13 +41,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        firestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegisterHere = findViewById(R.id.tvRegister);
-
-        firestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (firebaseUser != null) {
                      goMainActivity();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Unsuccessful login! Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Please login.", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = etPassword.getText().toString();
 
                 if (email.isEmpty() && password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Please enter your email and password!", Toast.LENGTH_SHORT).show();
                 } else if (email.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter your email!", Toast.LENGTH_SHORT).show();
                     etEmail.requestFocus();
@@ -95,6 +96,12 @@ public class LoginActivity extends AppCompatActivity {
         setClickableSpan();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
     // sets clickable portion of sign up here message
     private void setClickableSpan() {
         String text = tvRegisterHere.getText().toString();
@@ -104,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(@NonNull View view) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+                finish();
             }
         };
         ss.setSpan(clickableSpan, SIGN_UP_BEGIN, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
