@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         setClickableSpan();
     }
 
+    // sets clickable portion of sign up here message
     private void setClickableSpan() {
         String text = tvRegisterHere.getText().toString();
         SpannableString ss = new SpannableString(text);

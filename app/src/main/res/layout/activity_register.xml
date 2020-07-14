@@ -50,15 +50,17 @@
         android:hint="password"
         android:inputType="textPassword"></EditText>
 
-    <EditText
-        android:id="@+id/etPhone"
+    <Spinner
+        android:id="@+id/spinnerMajor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="phone number"
-        android:inputType="phone" />
+        android:layout_marginTop="10dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
 
     <Button
         android:id="@+id/btnRegister"

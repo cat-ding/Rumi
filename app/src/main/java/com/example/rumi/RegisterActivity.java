@@ -11,8 +11,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +34,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     public static final String TAG = "RegisterActivity";
     private static final int LOG_IN_BEGIN = 25;
-    private EditText etEmail;
-    private EditText etPassword;
-    private EditText etName;
-    private EditText etPhone;
+    private EditText etEmail, etPassword, etName;
     private Button btnRegister;
     private TextView tvLogin;
     private String userID;
+    private Spinner spinnerMajor, spinnerYear;
+    private String major, year;
 
     FirebaseFirestore firestore;
     FirebaseAuth firebaseAuth;
@@ -50,14 +52,49 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etName = findViewById(R.id.etName);
-        etPhone = findViewById(R.id.etPhone);
         btnRegister = findViewById(R.id.btnRegister);
         tvLogin = findViewById(R.id.tvLogin);
+        spinnerMajor = findViewById(R.id.spinnerMajor);
+        spinnerYear = findViewById(R.id.spinnerYear);
 
         firestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         setClickableSpan();
+
+        final ArrayAdapter<CharSequence> adapterMajor = ArrayAdapter.createFromResource(RegisterActivity.this, R.array.majors, android.R.layout.simple_spinner_item);
+        final ArrayAdapter<CharSequence> adapterYear = ArrayAdapter.createFromResource(RegisterActivity.this, R.array.year, android.R.layout.simple_spinner_item);
+        adapterMajor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMajor.setAdapter(adapterMajor);
+        spinnerYear.setAdapter(adapterYear);
+
+        spinnerMajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+                    return;
+                }
+                major = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(RegisterActivity.this, major, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { return; }
+        });
+
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+                    return;
+                }
+                year = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(RegisterActivity.this, year, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { return; }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +102,6 @@ public class RegisterActivity extends AppCompatActivity {
                 final String email = etEmail.getText().toString().trim();
                 final String password = etPassword.getText().toString().trim();
                 final String name = etName.getText().toString();
-                final String phone = etPhone.getText().toString();
-
-                Log.d(TAG, "onClick: " + email + password + name + phone);
 
                 if (name.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Name is required!", Toast.LENGTH_SHORT).show();
@@ -81,11 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Password is required!", Toast.LENGTH_SHORT).show();
                     etPassword.requestFocus();
                     return;
-                } else if (phone.isEmpty()){
-                    Toast.makeText(RegisterActivity.this, "Phone is required!", Toast.LENGTH_SHORT).show();
-                    etPhone.requestFocus();
-                    return;
-                }
+                } // major and year are optional (might change later)
 
                 if (password.length() < 6) {
                     Toast.makeText(RegisterActivity.this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show();
@@ -105,7 +135,8 @@ public class RegisterActivity extends AppCompatActivity {
                             Map<String, Object> user = new HashMap<>();
                             user.put("fullName", name);
                             user.put("email", email);
-                            user.put("phone", phone);
+                            user.put("major", major);
+                            user.put("year", year);
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -123,6 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    // sets clickable portion of login here message
     private void setClickableSpan() {
         String text = tvLogin.getText().toString();
         SpannableString ss = new SpannableString(text);

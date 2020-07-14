@@ -1,3 +1,82 @@
 <resources>
     <string name="app_name">Rumi</string>
+    
+    <string-array name="majors">
+        <item>Choose Major</item>
+        <item>Undecided</item>
+        <item>Africana Studies</item>
+        <item>American Studies</item>
+        <item>Anthropology</item>
+        <item>Applies Mathematics</item>
+        <item>Applied Physics</item>
+        <item>Arabic</item>
+        <item>Archaeology</item>
+        <item>Architectural Studies</item>
+        <item>Art</item>
+        <item>Astrophysics</item>
+        <item>Biochemistry</item>
+        <item>Biology</item>
+        <item>Biomedical Sciences</item>
+        <item>Biopsychology</item>
+        <item>Biotechnology</item>
+        <item>Chemical Physics</item>
+        <item>Chemistry</item>
+        <item>Child Study and Human Development</item>
+        <item>Chinese</item>
+        <item>Civic Studies</item>
+        <item>Classical Studies</item>
+        <item>Clinical Psychology</item>
+        <item>Cognitive and Brain Sciences</item>
+        <item>Community Health</item>
+        <item>Computer Science</item>
+        <item>Drama</item>
+        <item>Economics</item>
+        <item>Education</item>
+        <item>Engineering Psychology / Human Factors Engineering</item>
+        <item>English</item>
+        <item>Environmental Geology</item>
+        <item>Environmental Studies and Applied Environmental Studies</item>
+        <item>Film and Media Studies</item>
+        <item>French</item>
+        <item>Geological Sciences</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>Greek and Latin</item>
+        <item>History</item>
+        <item>History of Art and Architecture</item>
+        <item>Interdisciplinary Studies</item>
+        <item>International Literary and Visual Studies</item>
+        <item>International Relations</item>
+        <item>Italian Studies</item>
+        <item>Japanese</item>
+        <item>Judaic Studies</item>
+        <item>Latin</item>
+        <item>Latin American Studies</item>
+        <item>Mathematics</item>
+        <item>Middle Eastern Studies</item>
+        <item>Music</item>
+        <item>Music, Sound, and Culture</item>
+        <item>Philosophy</item>
+        <item>Physics</item>
+        <item>Political Science</item>
+        <item>Psychology</item>
+        <item>Quantitative Economics</item>
+        <item>Religion</item>
+        <item>Russian and Eastern European Studies</item>
+        <item>Russian Language and Literature</item>
+        <item>Science, Technology, and Society</item>
+        <item>Sociology</item>
+        <item>Spanish</item>
+        <item>Women\'s, Gender, and Sexuality Studies</item>
+    </string-array>
+
+    <string-array name="year">
+        <item>Choose Graduation Year</item>
+        <item>2024</item>
+        <item>2023</item>
+        <item>2022</item>
+        <item>2021</item>
+        <item>2020</item>
+        <item>Other/Graduate</item>
+    </string-array>
 </resources>
