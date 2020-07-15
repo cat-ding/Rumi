@@ -73,7 +73,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
+        private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
         private ImageView ivProfileImage;
 
         //TODO
@@ -87,7 +87,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvName = itemView.findViewById(R.id.tvName);
+            tvUserName = itemView.findViewById(R.id.tvUserName);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
@@ -98,29 +98,30 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final Post post) {
+        public void bind(Post post) {
             // bind the post data to the view elements
-            tvName.setText(post.getUserName());
+
             tvTitle.setText(post.getTitle());
             tvDescription.setText(post.getDescription());
+            tvUserName.setText(post.getUserName());
 
-            if (post.getLookingForHouse()) {
+            if (post.isLookingForHouse()) {
                 tvStatus.setText(LOOKING_FOR_HOUSE_STRING);
             } else {
                 tvStatus.setText(LOOKING_FOR_PERSON_STRING);
             }
 
             String furnished;
-            if (post.getFurnished()) {
+            if (post.isFurnished()) {
                 furnished = IS_FURNISHED;
             } else {
                 furnished = IS_NOT_FURNISHED;
             }
-            tvValues.setText(post.getNumRooms() + " room(s), \\$" + post.getRent() + "\\month\\room, "
-                    + post.getDuration() + " months, starting " + post.getStartMonth() + furnished);
+            tvValues.setText(post.getNumRooms() + " room(s), $" + post.getRent() + " per month per room, "
+                    + post.getDuration() + " months, starting " + post.getStartMonth());
 
             // TODO: make sure profile image and relative time display correctly
-            // tvRelativeTime.setText(post.getRelativeTime());
+             tvRelativeTime.setText(post.getRelativeTime());
         }
 
         @Override

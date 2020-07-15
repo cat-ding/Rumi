@@ -1,6 +1,7 @@
 package com.example.rumi.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rumi.Post;
 import com.example.rumi.PostsAdapter;
 import com.example.rumi.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,8 @@ public class PostsFragment extends Fragment {
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference postsRef = db.collection("posts");
 
     public PostsFragment() {
         // Required empty public constructor
@@ -51,11 +59,24 @@ public class PostsFragment extends Fragment {
 
         //TODO: add endless recycler view scroll listener
 
-        queryPosts();
+        loadPosts();
     }
 
-    private void queryPosts() {
-        // TODO
+    private void loadPosts() {
+        postsRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        adapter.clear();
+                        // QueryDocumentSnapshots are guaranteed to exist
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+
+                            allPosts.add(post);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 
 }
