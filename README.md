@@ -33,61 +33,48 @@
 
 ### 1. User Stories (Required and Optional)
 
-**Project Requirements**
-* Your app has multiple views
-* Your app interacts with a database (e.g. Parse) 
-    * Parse or Firebase
-* You can log in/log out of your app as a user
-* You can sign up with a new user profile
-    * New account stores information for name, major, year, profile picture
-* Somewhere in your app you can use the camera to take a picture and do something with the picture (e.g. take a photo and share it to a feed, or take a photo and set a user’s profile picture)
-    * You can take a pictures of your house to attach to your post
-    * Take a profile photo
-* Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
-    * Google Maps - view house locations
-* Your app contains at least one more complex algorithm (talk over this with your manager)
-    * TBD
-* Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
-    * For house search you can like other’s posts (double tap)
-    * (possibly) Long press to save a post
-* Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
-* Your app incorporates an external library to add visual polish
-    * Material design for visual polish
-
-**Required Must-have Stories**
-
-- Use of Zillow API or other real estate API that displays house images, address, landlord contact info, number beds, number bathrooms, etc.
-  - Integrate google maps sdk into this to view house addresses on a map
-- Login/sign up page - can register new user with new info
-- "Posts” section where you can compose a post about what you’re looking for
-  - Ability to attach photos
-  - Can message people by tapping on their profile photo
-  - Ability to share post to outside sources - text, email, etc
-  - Ability to take a picture for the post through the app
-- Can compose a new post - check boxes or other UI features to help guide/log important info (#rooms, duration, etc)
-- Profile tab that displays your information (name, status - what you're looking for, major, year, clubs/activities)
-- Other users profile screen that also displays their info + ability to direct message them (a button)
-- Chat screen that displays conversations + can navigate to each 1:1 conversation
-- Advanced algo - would be super cool to figure out a recommendation algorithm that uses the info from each users profiles to recommend potential housemates
-
+**Project Requirements / Required Must-have Stories**
+- Your app has multiple views
+    - [ ] "Posts” section where you can compose a post about what you’re looking for
+        - [ ] Ability to compose a new post
+        - [ ] View user profile by tapping on photo
+        - [ ] Ability to take a picture for the post through the app
+    - [ ] Real estate browing screen (use of real estate API that displays house images, address, landlord contact info, number beds, number bathrooms, etc.)
+    - [ ] A profile tab displaying personal info
+    - [ ] Profile screens for other users with ability to message them in app
+    - [x] Messaging screen
+- Your app interacts with a database (e.g. Parse) 
+    - Firebase (decided to learn this over using Parse despite Parse being more familiar, since I wanted to learn more about noSQL databases and overall it seemed like a useful and interesting skill to learn)
+- [x] You can log in/log out of your app as a user
+- [x] You can sign up with a new user profile with information for name, major, year, profile picture
+- [x] Somewhere in your app you can use the camera to take a picture and do something with the picture
+    - You can take a pictures of your house to attach to your post
+    - [x] Take a profile photo
+- Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
+    - Google Maps - view house locations (Use Firestore Geoqueries)
+- Your app contains at least one more complex algorithm (talk over this with your manager)
+    - [ ] Calculate a weighted walking score to particular places on campus
+- Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
+    - [ ] For house search you can like other’s posts (double tap)
+    - [ ] (possibly) Long press to save a post
+- Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
+    - [ ] On profile screen scrolling up to see posts will scroll away the user information to the top
+- Your app incorporates an external library to add visual polish
+    - Material design for visual polish
+    
 **Optional Nice-to-have Stories**
-
-- Need some sort of referral code from someone already in the community to make an account
-- A recommendations page where a complex algorithm is used to match and recommend people based on similar qualities
-- Tab for your house once you found people
-  - Shared payments, bills (utilities, furniture, etc)
-  - Reminder system
-  - Venmo housemates
-  - Store important documents
-  - Access landlord, utilities, etc contact info
-- Different layout for parent accounts
-- Sort through the posts by popularity or recent
-- Sort through posts by customizable filter
-- System where you can input common locations on campus and for each potential house it calculates an average walking distance score (averages of shortest paths to these place)
-- Set a new profile picture (or take a picture)
-
-- A way off idea (not sure if even remotely related) - a system similar to the investing app Acorns where for each of your payments it can auto round to the nearest whole dollar to invest, but instead of investing it, you can periodically put in money towards paying off your student loan
-    - Pretty big issue for our generation rip + not sure how much this will actually help in the long run, but if you’re consistently able to put aside money starting from before you even graduate you could be ahead of the game
+- [ ] Ability to attach photos to posts (instead of taking a picture you can select from your device's photos)
+- [ ] Need a referral code from someone already in the community to make an account
+- [ ] A recommendations page where a complex algorithm is used to match and recommend people based on similar qualities
+- [ ] Tab for your house once you found people
+  - [ ] Shared payments, bills (utilities, furniture, etc)
+  - [ ] Reminder system
+  - [ ] Venmo housemates
+  - [ ] Store important documents
+  - [ ] Access landlord, utilities, etc contact info
+- [ ] Different layout for parent accounts
+- [ ] Sort through the posts by popularity or recent
+- [ ] Sort through posts by customizable filter
 
 ### 2. Screen Archetypes
 
