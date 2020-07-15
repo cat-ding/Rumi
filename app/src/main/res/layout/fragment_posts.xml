@@ -6,4 +6,9 @@
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPosts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

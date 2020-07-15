@@ -8,7 +8,7 @@ public class User {
     public static final String KEY_YEAR = "year";
     public static final String KEY_COLLECTION = "users";
 
-    String name, email, major, year;
+    private String name, email, major, year;
 
     public User () {
         // empty constructor required
@@ -21,11 +21,35 @@ public class User {
         this.year = year;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getEmail() { return email; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getMajor() { return major; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getYear() { return year; }
+    public void setEmail (String email) {
+        this.email = email;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 }

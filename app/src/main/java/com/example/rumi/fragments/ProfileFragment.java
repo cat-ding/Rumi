@@ -132,7 +132,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void launchCamera() {
-        Log.d(TAG, "launchCamera");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_CODE);
@@ -160,6 +159,7 @@ public class ProfileFragment extends Fragment {
                 .child("profileImages")
                 .child(user.getUid() + ".jpeg");
 
+        //this is an UploadTask
         reference.putBytes(baos.toByteArray())
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
