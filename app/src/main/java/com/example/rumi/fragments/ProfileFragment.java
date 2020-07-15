@@ -32,6 +32,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,9 +54,10 @@ public class ProfileFragment extends Fragment {
     private ImageView ivProfileImage;
     private Button btnLogout, btnChangeProfileImage;
 
-    FirebaseFirestore firestore;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser user;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private CollectionReference usersRef = db.collection("users");
+    private FirebaseUser user;
 
 
     public ProfileFragment() {
@@ -80,9 +83,6 @@ public class ProfileFragment extends Fragment {
         tvMajorYear = view.findViewById(R.id.tvMajorYear);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
 
-        firestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-
         if (user.getPhotoUrl() != null) {
             Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
         }
@@ -104,25 +104,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        firestore.collection(User.KEY_COLLECTION).whereEqualTo(User.KEY_EMAIL, user.getEmail())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        usersRef.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
                     String name, email, major, year;
-                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                        name = snapshot.getString(User.KEY_NAME);
-                        email = snapshot.getString(User.KEY_EMAIL);
-                        major = snapshot.getString(User.KEY_MAJOR);
-                        year = snapshot.getString(User.KEY_YEAR);
+                    name = task.getResult().getString("name");
+                    email = task.getResult().getString("email");
+                    major = task.getResult().getString("major");
+                    year = task.getResult().getString("year");
 
-                        User user = new User(name, email, major, year);
+                    User user = new User(name, email, major, year);
 
-                        tvName.setText(name);
-                        tvMajorYear.setText(major + ", Class of " + year);
-                    }
-
+                    tvName.setText(name);
+                    tvMajorYear.setText(major + ", Class of " + year);
                 } else {
                     Log.e(TAG, "Error retrieving user data! ", task.getException());
                     Toast.makeText(getContext(), "Error retrieving user data!", Toast.LENGTH_SHORT).show();
@@ -205,6 +200,7 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), "Profile image upload failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 
 }

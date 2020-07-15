@@ -118,7 +118,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 furnished = IS_NOT_FURNISHED;
             }
             tvValues.setText(post.getNumRooms() + " room(s), $" + post.getRent() + " per month per room, "
-                    + post.getDuration() + " months, starting " + post.getStartMonth());
+                    + post.getDuration() + " months, starting " + post.getStartMonth() + furnished);
 
             // TODO: make sure profile image and relative time display correctly
              tvRelativeTime.setText(post.getRelativeTime());

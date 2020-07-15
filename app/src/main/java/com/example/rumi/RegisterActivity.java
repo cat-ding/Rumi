@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Spinner spinnerMajor, spinnerYear;
     private String major, year;
 
-    FirebaseFirestore firestore;
+    FirebaseFirestore db;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         spinnerMajor = findViewById(R.id.spinnerMajor);
         spinnerYear = findViewById(R.id.spinnerYear);
 
-        firestore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         setClickableSpan();
@@ -132,9 +132,9 @@ public class RegisterActivity extends AppCompatActivity {
                             user.put("major", major);
                             user.put("year", year);
 
-                            firestore.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            db.collection("users").document(task.getResult().getUser().getUid()).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                                public void onSuccess(Void aVoid) {
                                     Log.i(TAG, "onSuccess: new user profile created");
                                 }
                             });
