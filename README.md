@@ -75,6 +75,8 @@
 - [ ] Different layout for parent accounts
 - [ ] Sort through the posts by popularity or recent
 - [ ] Sort through posts by customizable filter
+- [ ] Add endless scroll
+- [ ] Add indeterminate progress bar for loading
 
 ### 2. Screen Archetypes
 
