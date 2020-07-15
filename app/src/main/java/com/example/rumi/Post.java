@@ -23,7 +23,7 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    private String title, description, userName, userEmail, startMonth;
+    private String title, description, startMonth, userId;
     private int numRooms, duration, rent;
     private boolean furnished, lookingForHouse;
     private Date createdAt;
@@ -32,12 +32,10 @@ public class Post {
         // empty constructor required
     }
 
-    public Post(String title, String description, String userName, String userEmail, String startMonth,
-                int numRooms, int duration, int rent, boolean furnished, boolean lookingForHouse) {
+    public Post(String title, String description, String startMonth, String userId, int numRooms,
+                int duration, int rent, boolean furnished, boolean lookingForHouse) {
         this.title = title;
         this.description = description;
-        this.userName = userName;
-        this.userEmail = userEmail;
         this.startMonth = startMonth;
         this.numRooms = numRooms;
         this.duration = duration;
@@ -45,6 +43,15 @@ public class Post {
         this.furnished = furnished;
         this.lookingForHouse = lookingForHouse;
         this.createdAt = new java.util.Date();
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Date getCreatedAt() {
@@ -69,22 +76,6 @@ public class Post {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     public String getStartMonth() {

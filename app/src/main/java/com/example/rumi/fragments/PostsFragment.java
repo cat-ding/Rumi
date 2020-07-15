@@ -34,6 +34,7 @@ public class PostsFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection("posts");
 
+
     public PostsFragment() {
         // Required empty public constructor
     }

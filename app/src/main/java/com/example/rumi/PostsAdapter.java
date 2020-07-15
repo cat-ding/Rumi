@@ -18,6 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.fragments.PostsFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
 
@@ -34,6 +41,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private Context context;
     private List<Post> posts;
     private PostsFragment fragment;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference usersRef = db.collection("users");
 
     public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
         this.context = context;
@@ -76,14 +85,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
         private ImageView ivProfileImage;
 
-        //TODO
-//        private RelativeLayout relativeLayout;
-//        private ImageView ivLike;
-//        private ImageView ivComment;
-//        private TextView tvNumLikes;
-//        private Integer numLikes;
-//        private ImageView ivImage;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -103,7 +104,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             tvTitle.setText(post.getTitle());
             tvDescription.setText(post.getDescription());
-            tvUserName.setText(post.getUserName());
+            tvRelativeTime.setText(post.getRelativeTime());
 
             if (post.isLookingForHouse()) {
                 tvStatus.setText(LOOKING_FOR_HOUSE_STRING);
@@ -120,8 +121,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvValues.setText(post.getNumRooms() + " room(s), $" + post.getRent() + " per month per room, "
                     + post.getDuration() + " months, starting " + post.getStartMonth() + furnished);
 
-            // TODO: make sure profile image and relative time display correctly
-             tvRelativeTime.setText(post.getRelativeTime());
+            bindUserFields(post);
+        }
+
+        private void bindUserFields(Post post) {
+            usersRef.document(post.getUserId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        tvUserName.setText(task.getResult().getString("name"));
+                        Glide.with(context).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                    } else {
+                        Log.e(TAG, "Error retrieving user data! ", task.getException());
+                    }
+                }
+            });
         }
 
         @Override

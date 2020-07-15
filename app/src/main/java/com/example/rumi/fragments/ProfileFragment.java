@@ -37,12 +37,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
@@ -55,7 +58,6 @@ public class ProfileFragment extends Fragment {
     private Button btnLogout, btnChangeProfileImage;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection("users");
     private FirebaseUser user;
 
@@ -181,7 +183,7 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void updateUser(Uri uri) {
+    private void updateUser(final Uri uri) {
         UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(uri)
                 .build();
@@ -192,6 +194,9 @@ public class ProfileFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
                         Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
+                        Map<String, Object> updateUri = new HashMap<>();
+                        updateUri.put("profileUri", user.getPhotoUrl());
+                        usersRef.document(user.getUid()).update("profileUrl", user.getPhotoUrl().toString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -200,7 +205,6 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), "Profile image upload failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
 }
