@@ -167,14 +167,16 @@
             android:id="@+id/tvStartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/tvSelectStart"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/ivCalendarStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/tvStartDate"
             app:srcCompat="@drawable/ic_baseline_date_range_24"
             android:onClick="chooseStartDate"/>
@@ -195,20 +197,22 @@
             android:layout_height="wrap_content"
             android:text="Choose end date: "
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tvEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/tvSelectEnd"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/ivCalendarEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_toRightOf="@id/tvEndDate"
             app:srcCompat="@drawable/ic_baseline_date_range_24"
             android:onClick="chooseEndDate"/>

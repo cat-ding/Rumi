@@ -15,7 +15,7 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    private String title, description, startMonth, userId;
+    private String title, description, startMonth, userId, startDate, endDate;
     private int numRooms, duration, rent;
     private boolean furnished, lookingForHouse;
     private Date createdAt;
@@ -25,7 +25,8 @@ public class Post {
     }
 
     public Post(String title, String description, String startMonth, String userId, int numRooms,
-                int duration, int rent, boolean furnished, boolean lookingForHouse) {
+                int duration, int rent, boolean furnished, boolean lookingForHouse,
+                String startDate, String endDate) {
         this.title = title;
         this.description = description;
         this.startMonth = startMonth;
@@ -36,6 +37,8 @@ public class Post {
         this.lookingForHouse = lookingForHouse;
         this.createdAt = new java.util.Date();
         this.userId = userId;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public String getUserId() {
@@ -116,6 +119,22 @@ public class Post {
 
     public void setLookingForHouse(boolean lookingForHouse) {
         this.lookingForHouse = lookingForHouse;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getRelativeTime() {
