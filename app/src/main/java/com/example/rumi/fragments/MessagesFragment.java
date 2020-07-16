@@ -8,12 +8,20 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rumi.Conversation;
+import com.example.rumi.ConversationAdapter;
 import com.example.rumi.R;
+
+import java.util.List;
 
 public class MessagesFragment extends Fragment {
 
     public static final String TAG = "MessagesFragment";
+    private RecyclerView rvConversations;
+    private List<Conversation> conversations;
+    private ConversationAdapter adapter;
 
     public MessagesFragment() {
         // Required empty public constructor

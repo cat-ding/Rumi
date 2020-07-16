@@ -112,14 +112,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 tvStatus.setText(LOOKING_FOR_PERSON_STRING);
             }
 
-            String furnished;
-            if (post.isFurnished()) {
-                furnished = IS_FURNISHED;
-            } else {
-                furnished = IS_NOT_FURNISHED;
-            }
-            tvValues.setText(post.getNumRooms() + " room(s), $" + post.getRent() + " per month per room, "
-                    + post.getDuration() + " months, starting " + post.getStartMonth() + furnished);
+            // TODO: put this in the details view along with specific start dates and end dates
+//            String furnished;
+//            if (post.isFurnished()) {
+//                furnished = IS_FURNISHED;
+//            } else {
+//                furnished = IS_NOT_FURNISHED;
+//            }
+            tvValues.setText(post.getNumRooms() + " room(s) | $" + post.getRent() + " /mo | "
+                    + post.getDuration() + " months starting " + post.getStartMonth());
 
             bindUserFields(post);
         }

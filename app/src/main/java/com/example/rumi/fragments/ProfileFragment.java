@@ -20,9 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.LoginActivity;
+import com.example.rumi.Post;
+import com.example.rumi.PostsAdapter;
+import com.example.rumi.ProfilePostAdapter;
 import com.example.rumi.R;
 import com.example.rumi.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +40,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -44,7 +50,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -57,7 +65,12 @@ public class ProfileFragment extends Fragment {
     private ImageView ivProfileImage;
     private Button btnLogout, btnChangeProfileImage;
 
+    private RecyclerView rvPosts;
+    private ProfilePostAdapter adapter;
+    private List<Post> allPosts;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference postsRef = db.collection("posts");
     private CollectionReference usersRef = db.collection("users");
     private FirebaseUser user;
 
@@ -84,6 +97,7 @@ public class ProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.tvName);
         tvMajorYear = view.findViewById(R.id.tvMajorYear);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        rvPosts = view.findViewById(R.id.rvPosts);
 
         if (user.getPhotoUrl() != null) {
             Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
@@ -126,6 +140,34 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+
+        allPosts = new ArrayList<>();
+        adapter = new ProfilePostAdapter(getContext(), allPosts, this);
+        rvPosts.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(layoutManager);
+
+        //TODO: add endless recycler view scroll listener
+
+        loadPosts();
+    }
+
+    private void loadPosts() {
+        postsRef.whereEqualTo("userId", user.getUid()).orderBy("createdAt", Query.Direction.DESCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        adapter.clear();
+                        // QueryDocumentSnapshots are guaranteed to exist
+                        Log.d(TAG, "onSuccess: ");
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Post post = documentSnapshot.toObject(Post.class);
+
+                            allPosts.add(post);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     private void launchCamera() {
@@ -194,8 +236,6 @@ public class ProfileFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
                         Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
-                        Map<String, Object> updateUri = new HashMap<>();
-                        updateUri.put("profileUri", user.getPhotoUrl());
                         usersRef.document(user.getUid()).update("profileUrl", user.getPhotoUrl().toString());
                     }
                 })
