@@ -130,7 +130,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString("name"));
-                        Glide.with(context).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                        if (task.getResult().getString("profileUrl") != null) {
+                            Glide.with(context).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                        }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());
                     }

@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/action_home"
-        android:icon="@android:drawable/ic_menu_compass"
+        android:icon="@drawable/ic_baseline_filter_vintage_24"
         android:title="Home"
         app:showAsAction="always" />
     <item

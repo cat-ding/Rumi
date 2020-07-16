@@ -12,14 +12,6 @@ import java.util.Locale;
 @Parcel
 public class Post {
     public static final String KEY_COLLECTION = "posts";
-//    public static final String KEY_CREATED_AT = "createdAt";
-//    public static final String KEY_TITLE = "title";
-//    public static final String KEY_BODY = "body";
-//    public static final String KEY_IMAGE = "image";
-//    public static final String KEY_USER_EMAIL = "userEmail";
-//    public static final String KEY_USER_NAME = "userName";
-//    public static final String KEY_USER_IMAGE = "userImage";
-//    public static final String KEY_START_MONTH = "startMonth";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 

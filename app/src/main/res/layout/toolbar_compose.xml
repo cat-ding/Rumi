@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="#FFFFFF"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/proxima_nova_regular"
+        android:text="New Post"
+        android:textColor="#323232"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+</androidx.appcompat.widget.Toolbar>

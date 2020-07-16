@@ -1,17 +1,25 @@
 package com.example.rumi.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rumi.ComposeActivity;
+import com.example.rumi.MainActivity;
 import com.example.rumi.Post;
 import com.example.rumi.PostsAdapter;
 import com.example.rumi.R;
@@ -33,7 +41,7 @@ public class PostsFragment extends Fragment {
     private List<Post> allPosts;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection("posts");
-
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -43,12 +51,16 @@ public class PostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_posts, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        toolbar = (androidx.appcompat.widget.Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         rvPosts = view.findViewById(R.id.rvPosts);
 
@@ -80,4 +92,17 @@ public class PostsFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_compose, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent = new Intent(getContext(), ComposeActivity.class);
+        startActivity(intent);
+
+        return super.onOptionsItemSelected(item);
+    }
 }
