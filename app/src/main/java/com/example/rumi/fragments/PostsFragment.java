@@ -1,7 +1,9 @@
 package com.example.rumi.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,12 +32,15 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
+    private static final int CREATE_POST_REQUEST = 55;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -102,8 +107,26 @@ public class PostsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent = new Intent(getContext(), ComposeActivity.class);
-        startActivity(intent);
+//        startActivity(intent);
+        startActivityForResult(intent, CREATE_POST_REQUEST);
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == CREATE_POST_REQUEST) {
+            Parcelable newPostParcel = data.getParcelableExtra("newPost");
+
+            if (newPostParcel != null) {
+                Post newPost = Parcels.unwrap(newPostParcel);
+
+                allPosts.add(0, newPost);
+                adapter.notifyItemInserted(0);
+                rvPosts.smoothScrollToPosition(0);
+            }
+        }
     }
 }

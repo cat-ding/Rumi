@@ -2,6 +2,7 @@ package com.example.rumi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -87,23 +90,16 @@ public class ComposeActivity extends AppCompatActivity {
             return;
         }
 
-        Map<String, Object> post = new HashMap<>();
-        post.put("title", title);
-        post.put("description", description);
-        post.put("lookingForHouse", lookingForHouse);
-        post.put("numRooms", numRooms);
-        post.put("createdAt", new java.util.Date());
-        post.put("userId", firebaseAuth.getCurrentUser().getUid());
-
-        post.put("startMonth", "DUMMY MONTH");
-        post.put("duration", 99999);
-        post.put("furnished", true);
-        post.put("rent", 99999);
+        final Post post = new Post(title, description, "DUMMY MONTH", firebaseAuth.getCurrentUser().getUid(),
+                numRooms, 99999, 99999, true, lookingForHouse);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(ComposeActivity.this, "Post created!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.putExtra("newPost", Parcels.wrap(post));
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
