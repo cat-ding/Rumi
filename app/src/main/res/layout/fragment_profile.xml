@@ -60,6 +60,17 @@
             android:text="Change Photo"
             android:visibility="gone" />
 
+        <Button
+            android:id="@+id/btnMessage"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#3897F1"
+            android:text="Message"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#FFFFFF" />
+
+
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

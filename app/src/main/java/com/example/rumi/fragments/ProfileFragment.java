@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage;
-    private Button btnLogout, btnChangeProfileImage;
+    private Button btnLogout, btnChangeProfileImage, btnMessage;
 
     private RecyclerView rvPosts;
     private ProfilePostAdapter adapter;
@@ -97,6 +97,7 @@ public class ProfileFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangeProfileImage = view.findViewById(R.id.btnChangeProfileImage);
+        btnMessage = view.findViewById(R.id.btnMessage);
         tvName = view.findViewById(R.id.tvName);
         tvMajorYear = view.findViewById(R.id.tvMajorYear);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
@@ -107,6 +108,7 @@ public class ProfileFragment extends Fragment {
         if (firebaseAuth.getCurrentUser().getUid().equals(userId)) {
             btnLogout.setVisibility(View.VISIBLE);
             btnChangeProfileImage.setVisibility(View.VISIBLE);
+            btnMessage.setVisibility(View.GONE);
         }
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +125,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 launchCamera();
+            }
+        });
+
+        btnMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: open message dialog to send a dm
             }
         });
 
