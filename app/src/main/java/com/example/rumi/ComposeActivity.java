@@ -95,10 +95,10 @@ public class ComposeActivity extends AppCompatActivity {
         post.put("createdAt", new java.util.Date());
         post.put("userId", firebaseAuth.getCurrentUser().getUid());
 
-        post.put("startMonth", "MONTH");
-        post.put("duration", 3);
+        post.put("startMonth", "DUMMY MONTH");
+        post.put("duration", 99999);
         post.put("furnished", true);
-        post.put("rent", 900);
+        post.put("rent", 99999);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
