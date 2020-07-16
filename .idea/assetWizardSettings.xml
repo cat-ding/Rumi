@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/private/var/folders/f0/y16vvkv13fb34_ylbx97r0x00000gn/T/AppTranslocation/35C27EC8-1DB2-4588-A2C1-DC92A2E117ED/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material/icons/materialicons/filter_vintage/baseline_filter_vintage_24.xml" />
+                                      <entry key="url" value="jar:file:/private/var/folders/f0/y16vvkv13fb34_ylbx97r0x00000gn/T/AppTranslocation/35C27EC8-1DB2-4588-A2C1-DC92A2E117ED/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material/icons/materialicons/date_range/baseline_date_range_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_filter_vintage_24" />
+                            <entry key="outputName" value="ic_baseline_date_range_24" />
                           </map>
                         </option>
                       </PersistentState>

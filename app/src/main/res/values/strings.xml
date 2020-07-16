@@ -81,4 +81,9 @@
         <item>Graduate Student</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="furnished">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
 </resources>

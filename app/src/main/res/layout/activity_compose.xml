@@ -31,33 +31,33 @@
         android:layout_marginEnd="10dp"
         android:hint="Add a description"
         android:textSize="16sp" />
-    
+
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_gravity="center_horizontal">
-        
+        android:orientation="horizontal">
+
         <RadioButton
             android:id="@+id/radioPlace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Looking for a place"
-            android:onClick="checkRadioButton"/>
+            android:onClick="checkRadioButton"
+            android:text="Looking for a place" />
 
         <RadioButton
             android:id="@+id/radioPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Looking for people"
-            android:onClick="checkRadioButton"/>
-        
+            android:onClick="checkRadioButton"
+            android:text="Looking for people" />
+
     </RadioGroup>
 
     <RelativeLayout
@@ -90,13 +90,138 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvRentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Monthly rent per room:"
+            android:layout_marginStart="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etRent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            android:layout_toRightOf="@+id/tvRentText"
+            android:hint="ex. 800"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvFurnished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Furnished:"
+            android:layout_marginStart="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerFurnished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tvFurnished"
+            android:layout_marginStart="30dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvSelectStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose start date: "
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tvStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvSelectStart"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/ivCalendarStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@id/tvStartDate"
+            app:srcCompat="@drawable/ic_baseline_date_range_24"
+            android:onClick="chooseStartDate"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvSelectEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose end date: "
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvSelectEnd"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/ivCalendarEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@id/tvEndDate"
+            app:srcCompat="@drawable/ic_baseline_date_range_24"
+            android:onClick="chooseEndDate"/>
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btnPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:text="Post"
         android:onClick="makePost"/>
-
 
 </LinearLayout>

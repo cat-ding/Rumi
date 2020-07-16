@@ -107,7 +107,6 @@ public class PostsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent = new Intent(getContext(), ComposeActivity.class);
-//        startActivity(intent);
         startActivityForResult(intent, CREATE_POST_REQUEST);
 
         return super.onOptionsItemSelected(item);

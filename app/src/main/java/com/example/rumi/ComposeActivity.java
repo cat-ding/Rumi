@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,14 +34,16 @@ public class ComposeActivity extends AppCompatActivity {
     private static final String TAG = "ComposeActivity";
     private static final int NUM_PICKER_MIN = 1;
     private static final int NUM_PICKER_MAX = 10;
-    private EditText etTitle, etDescription;
+    private EditText etTitle, etDescription, etRent;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private NumberPicker numRoomPicker;
+    private Spinner spinnerFurnished;
+    private ImageView ivCalendarStart, ivCalendarEnd;
     private Button btnPost;
     private String title, description;
-    private int numRooms;
-    private boolean lookingForHouse;
+    private int numRooms, rent;
+    private boolean lookingForHouse, furnished;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -52,6 +58,10 @@ public class ComposeActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         radioGroup = findViewById(R.id.radioGroup);
         numRoomPicker = findViewById(R.id.numRoomPicker);
+        etRent = findViewById(R.id.etRent);
+        spinnerFurnished = findViewById(R.id.spinnerFurnished);
+        ivCalendarStart = findViewById(R.id.ivCalendarStart);
+        ivCalendarEnd = findViewById(R.id.ivCalendarEnd);
         btnPost = findViewById(R.id.btnPost);
 
         numRoomPicker.setMinValue(NUM_PICKER_MIN);
@@ -62,6 +72,24 @@ public class ComposeActivity extends AppCompatActivity {
             public void onValueChange(NumberPicker numberPicker, int i, int i1) {
                 numRooms = numRoomPicker.getValue();
             }
+        });
+
+        final ArrayAdapter<CharSequence> adapterFurnished = ArrayAdapter.createFromResource(ComposeActivity.this, R.array.furnished, android.R.layout.simple_spinner_item);
+        adapterFurnished.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFurnished.setAdapter(adapterFurnished);
+
+        spinnerFurnished.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapterView.getItemAtPosition(i).toString().equals("Yes")) {
+                    furnished = true;
+                } else {
+                    furnished = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
     }
 
@@ -80,6 +108,7 @@ public class ComposeActivity extends AppCompatActivity {
     public void makePost(View view) {
         title = etTitle.getText().toString();
         description = etDescription.getText().toString();
+
         if (title.isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Title is required!", Toast.LENGTH_SHORT).show();
             etTitle.requestFocus();
@@ -88,10 +117,16 @@ public class ComposeActivity extends AppCompatActivity {
             Toast.makeText(ComposeActivity.this, "Description is required!", Toast.LENGTH_SHORT).show();
             etDescription.requestFocus();
             return;
+        } else if (etRent.getText().toString().isEmpty()) {
+            Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
+            etRent.requestFocus();
+            return;
         }
+        rent = Integer.parseInt(etRent.getText().toString());
 
+        // TODO: startMonth/duration, rent, furnished
         final Post post = new Post(title, description, "DUMMY MONTH", firebaseAuth.getCurrentUser().getUid(),
-                numRooms, 99999, 99999, true, lookingForHouse);
+                numRooms, 99999, rent, furnished, lookingForHouse);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -103,5 +138,15 @@ public class ComposeActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    // onClick method for calendar icon for choosing start date
+    public void chooseStartDate(View view) {
+        Toast.makeText(this, "START DATE", Toast.LENGTH_SHORT).show();
+    }
+
+    // onClick method for calendar icon for choosing end date
+    public void chooseEndDate(View view) {
+        Toast.makeText(this, "END DATE", Toast.LENGTH_SHORT).show();
     }
 }
