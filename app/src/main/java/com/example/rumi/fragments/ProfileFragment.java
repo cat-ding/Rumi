@@ -70,16 +70,19 @@ public class ProfileFragment extends Fragment {
     private List<Post> allPosts;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference postsRef = db.collection("posts");
     private CollectionReference usersRef = db.collection("users");
-    private FirebaseUser user;
+    private String userId;
 
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    public ProfileFragment(FirebaseUser user) { this.user = user; }
+    public ProfileFragment(String userId) {
+        this.userId = userId;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,8 +102,11 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         rvPosts = view.findViewById(R.id.rvPosts);
 
-        if (user.getPhotoUrl() != null) {
-            Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
+        getUserInfo();
+
+        if (firebaseAuth.getCurrentUser().getUid().equals(userId)) {
+            btnLogout.setVisibility(View.VISIBLE);
+            btnChangeProfileImage.setVisibility(View.VISIBLE);
         }
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -120,27 +126,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        usersRef.document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    String name, email, major, year;
-                    name = task.getResult().getString("name");
-                    email = task.getResult().getString("email");
-                    major = task.getResult().getString("major");
-                    year = task.getResult().getString("year");
-
-                    User user = new User(name, email, major, year);
-
-                    tvName.setText(name);
-                    tvMajorYear.setText(major + ", Class of " + year);
-                } else {
-                    Log.e(TAG, "Error retrieving user data! ", task.getException());
-                    Toast.makeText(getContext(), "Error retrieving user data!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         allPosts = new ArrayList<>();
         adapter = new ProfilePostAdapter(getContext(), allPosts, this);
         rvPosts.setAdapter(adapter);
@@ -152,8 +137,27 @@ public class ProfileFragment extends Fragment {
         loadPosts();
     }
 
+    private void getUserInfo() {
+        usersRef.document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    User user = task.getResult().toObject(User.class);
+                    if (user.getProfileUrl() != null) {
+                        Glide.with(getContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
+                    }
+                    tvName.setText(user.getName());
+                    tvMajorYear.setText(user.getMajor() + ", Class of " + user.getYear());
+                } else {
+                    Log.e(TAG, "Error retrieving user data! ", task.getException());
+                    Toast.makeText(getContext(), "Error retrieving user data!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void loadPosts() {
-        postsRef.whereEqualTo("userId", user.getUid()).orderBy("createdAt", Query.Direction.DESCENDING).get()
+        postsRef.whereEqualTo("userId", userId).orderBy("createdAt", Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -196,7 +200,7 @@ public class ProfileFragment extends Fragment {
 
         final StorageReference reference = FirebaseStorage.getInstance().getReference()
                 .child("profileImages")
-                .child(user.getUid() + ".jpeg");
+                .child(userId + ".jpeg");
 
         //this is an UploadTask
         reference.putBytes(baos.toByteArray())
@@ -230,13 +234,13 @@ public class ProfileFragment extends Fragment {
                 .setPhotoUri(uri)
                 .build();
 
-        user.updateProfile(request)
+        firebaseAuth.getCurrentUser().updateProfile(request)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
-                        Glide.with(getContext()).load(user.getPhotoUrl()).circleCrop().into(ivProfileImage);
-                        usersRef.document(user.getUid()).update("profileUrl", user.getPhotoUrl().toString());
+                        Glide.with(getContext()).load(firebaseAuth.getCurrentUser().getPhotoUrl()).circleCrop().into(ivProfileImage);
+                        usersRef.document(userId).update("profileUrl", firebaseAuth.getCurrentUser().getPhotoUrl().toString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

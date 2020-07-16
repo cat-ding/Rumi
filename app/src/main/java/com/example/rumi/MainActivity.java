@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new MessagesFragment();
                         break;
                     case R.id.action_profile:
-                        fragment = new ProfileFragment(firebaseAuth.getCurrentUser());
+                        fragment = new ProfileFragment(firebaseAuth.getCurrentUser().getUid());
                         break;
                     default:
                         fragment = new PostsFragment();
