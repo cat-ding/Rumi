@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.rumi.ComposeActivity;
 import com.example.rumi.MainActivity;
@@ -48,6 +49,7 @@ public class PostsFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection("posts");
     private androidx.appcompat.widget.Toolbar toolbar;
+    private SwipeRefreshLayout swipeContainer;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -67,6 +69,19 @@ public class PostsFragment extends Fragment {
 
         toolbar = (androidx.appcompat.widget.Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+        swipeContainer = view.findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "fetching new data!");
+                loadPosts();
+            }
+        });
 
         rvPosts = view.findViewById(R.id.rvPosts);
 
@@ -94,6 +109,7 @@ public class PostsFragment extends Fragment {
                             allPosts.add(post);
                         }
                         adapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
                     }
                 });
     }

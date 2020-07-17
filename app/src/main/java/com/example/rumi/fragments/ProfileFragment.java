@@ -22,6 +22,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.LoginActivity;
@@ -67,13 +68,13 @@ public class ProfileFragment extends Fragment {
     private RecyclerView rvPosts;
     private ProfilePostAdapter adapter;
     private List<Post> allPosts;
+    private SwipeRefreshLayout swipeContainer;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference postsRef = db.collection("posts");
     private CollectionReference usersRef = db.collection("users");
     private String userId;
-
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -102,8 +103,23 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         rvPosts = view.findViewById(R.id.rvPosts);
 
+        swipeContainer = view.findViewById(R.id.swipeContainer);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "fetching new data!");
+                loadPosts();
+            }
+        });
+
         getUserInfo();
 
+        // show logout and change photo buttons, hide message button
         if (firebaseAuth.getCurrentUser().getUid().equals(userId)) {
             btnLogout.setVisibility(View.VISIBLE);
             btnChangeProfileImage.setVisibility(View.VISIBLE);
@@ -178,6 +194,7 @@ public class ProfileFragment extends Fragment {
                             allPosts.add(post);
                         }
                         adapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
                     }
                 });
     }
