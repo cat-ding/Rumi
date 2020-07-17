@@ -59,7 +59,7 @@ public class ComposeActivity extends AppCompatActivity {
     private Date start, end;
     private int numRooms, rent, numMonths;
     private boolean lookingForHouse, furnished;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -181,7 +181,7 @@ public class ComposeActivity extends AppCompatActivity {
                 tvStartDate.setText(month + "/" + day + "/" + year);
                 tvStartDate.setVisibility(View.VISIBLE);
                 startMonth = new DateFormatSymbols().getMonths()[month];
-                startDate = day + " " + month + " " + year;
+                startDate = month + "/" + day + "/" + year;
                 try {
                     start = dateFormat.parse(startDate);
                 } catch (ParseException e) {
@@ -202,7 +202,7 @@ public class ComposeActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 tvEndDate.setText(month + "/" + day + "/" + year);
                 tvEndDate.setVisibility(View.VISIBLE);
-                endDate = day + " " + month + " " + year;
+                endDate = month + "/" + day + "/" + year;
                 try {
                     end = dateFormat.parse(endDate);
                 } catch (ParseException e) {

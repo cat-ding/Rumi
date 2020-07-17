@@ -1,9 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.rumi.PostDetailActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+        android:id="@+id/toolbar_post_detail"
+        layout="@layout/toolbar_post_detail" />
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_below="@id/toolbar_post_detail"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/toolbar_post_detail"
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Catherine Ding" />
+
+    <TextView
+        android:id="@+id/tvMajorYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvUserName"
+        android:layout_toRightOf="@id/ivProfileImage"
+        android:layout_marginStart="8dp"
+        tools:text="Computer Science, Class of 2022" />
+
+    <TextView
+        android:id="@+id/tvRelativeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_below="@+id/tvMajorYear"
+        android:layout_toRightOf="@id/ivProfileImage"
+        tools:text="1 hour ago" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="Looking for a sublet for one person" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        tools:text="Here is the description of my situation...
+        blahblahblahblahblahblahblahblahblah" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDescription"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="8dp"
+        tools:text="Looking for: "/>
+
+    <TextView
+        android:id="@+id/tvNumRooms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStatus"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        tools:text="Number of Rooms: 3"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvRent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvStatus"
+        android:layout_toRightOf="@id/tvNumRooms"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        tools:text="Monthly Rent per Room: $900"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNumRooms"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        tools:text="Start Date: 9/1/2020"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvRent"
+        android:layout_toRightOf="@id/tvStartDate"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        tools:text="End Date: 1/1/2020"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvFurnished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvStartDate"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        tools:text="Furnished: YES"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

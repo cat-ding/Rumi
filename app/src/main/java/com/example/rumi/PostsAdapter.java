@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.fragments.PostsFragment;
+import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,8 +37,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private static final int REQUEST_CODE = 25;
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
-    public static final String IS_FURNISHED = ", is furnished";
-    public static final String IS_NOT_FURNISHED = ", is not furnished";
     private Context context;
     private List<Post> posts;
     private PostsFragment fragment;
@@ -99,9 +98,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Post post) {
-            // bind the post data to the view elements
+        public void bind(final Post post) {
 
+            // onClickListeners to open ProfileFragment
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openProfileFragment(post.getUserId());
+                }
+            });
+            tvUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openProfileFragment(post.getUserId());
+                }
+            });
+
+            // bind values
             tvTitle.setText(post.getTitle());
             tvDescription.setText(post.getDescription());
             tvRelativeTime.setText(post.getRelativeTime());
@@ -112,17 +125,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 tvStatus.setText(LOOKING_FOR_PERSON_STRING);
             }
 
-            // TODO: put this in the details view along with specific start dates and end dates
-//            String furnished;
-//            if (post.isFurnished()) {
-//                furnished = IS_FURNISHED;
-//            } else {
-//                furnished = IS_NOT_FURNISHED;
-//            }
             tvValues.setText(post.getNumRooms() + " room(s) | $" + post.getRent() + " /mo | "
                     + post.getDuration() + " months starting " + post.getStartMonth());
 
             bindUserFields(post);
+        }
+
+        private void openProfileFragment(String userId) {
+            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+            Fragment fragment = new ProfileFragment(userId);
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
         }
 
         private void bindUserFields(Post post) {

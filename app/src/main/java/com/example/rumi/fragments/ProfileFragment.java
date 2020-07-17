@@ -58,7 +58,6 @@ import java.util.Map;
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
-    private static final String CODEPATH_FILE_PROVIDER = "com.codepath.fileprovider";
     private static final int CAPTURE_IMAGE_CODE = 35;
 
     private TextView tvName, tvMajorYear;
@@ -131,7 +130,7 @@ public class ProfileFragment extends Fragment {
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: open message dialog to send a dm
+                // TODO: open message dialog to send a direct message
             }
         });
 
@@ -141,7 +140,7 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
 
-        //TODO: add endless recycler view scroll listener
+        //TODO: refresh feature
 
         loadPosts();
     }
