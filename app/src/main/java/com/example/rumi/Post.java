@@ -13,9 +13,9 @@ import java.util.Locale;
 
 @Parcel
 public class Post {
+
     public static final String KEY_POSTS = "posts";
     public static final String KEY_NAME = "name";
-    public static final String KEY_PROFILE_URL = "profileUrl";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_USER_ID = "userId";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";

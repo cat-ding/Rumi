@@ -8,18 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rumi.R;
-
-import java.util.List;
 
 public class MessagesFragment extends Fragment {
 
     public static final String TAG = "MessagesFragment";
-    private RecyclerView rvConversations;
-    private List<Conversation> conversations;
-    private ConversationAdapter adapter;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -29,6 +23,7 @@ public class MessagesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_messages, container, false);
     }
 

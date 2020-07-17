@@ -37,7 +37,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private List<Post> posts;
     private PostsFragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection(Post.KEY_POSTS);
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
         this.context = context;
@@ -78,7 +78,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
-        private ImageView ivProfileImage, ivImage;
+        private ImageView ivProfileImage, ivImage, ivLike, ivComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +91,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvValues = itemView.findViewById(R.id.tvValues);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             ivImage = itemView.findViewById(R.id.ivImage);
+            ivLike = itemView.findViewById(R.id.ivLike);
+            ivComment = itemView.findViewById(R.id.ivComment);
 
             itemView.setOnClickListener(this);
         }
@@ -108,6 +110,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     openProfileFragment(post.getUserId());
+                }
+            });
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO
+                }
+            });
+
+            ivComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, CommentsActivity.class);
+                    intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                    fragment.startActivityForResult(intent, REQUEST_CODE);
                 }
             });
 
@@ -145,8 +163,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(Post.KEY_PROFILE_URL) != null) {
-                            Glide.with(context).load(task.getResult().getString(Post.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+                            Log.d(TAG, "onComplete: HELLO");
+                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                        }
+                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());

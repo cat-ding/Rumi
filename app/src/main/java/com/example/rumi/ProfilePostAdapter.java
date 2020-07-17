@@ -115,9 +115,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(Post.KEY_PROFILE_URL) != null) {
-                            Glide.with(context).load(task.getResult().getString(Post.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                        tvUserName.setText(task.getResult().getString(User.KEY_NAME));
+                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());

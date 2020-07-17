@@ -51,22 +51,24 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfileImage"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Looking for a sublet for one person" />
 
     <TextView
         android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textSize="16sp"
         tools:text="Here is the description of my situation...
         blahblahblahblahblahblahblahblahblah" />
@@ -77,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDescription"
         android:layout_marginTop="3dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         tools:text="Looking for: "/>
 
     <TextView
@@ -85,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvStatus"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         tools:text="Number of Rooms: 3"
         android:textStyle="bold"/>
@@ -98,6 +100,7 @@
         android:layout_toRightOf="@id/tvNumRooms"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         tools:text="Monthly Rent per Room: $900"
         android:textStyle="bold"/>
 
@@ -106,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvNumRooms"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         tools:text="Start Date: 9/1/2020"
         android:textStyle="bold"/>
@@ -127,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvStartDate"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         tools:text="Furnished: YES"
         android:textStyle="bold"/>
@@ -140,5 +143,27 @@
         android:layout_below="@+id/tvFurnished"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/ivLike"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@+id/ivLike"
+            android:layout_marginStart="12dp"
+            app:srcCompat="@drawable/ic_baseline_comment_24" />
+    </RelativeLayout>
 
 </RelativeLayout>

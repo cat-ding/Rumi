@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -35,22 +36,24 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfileImage"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Looking for a sublet for one person" />
 
     <TextView
         android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textSize="16sp"
         tools:text="Here is the description of my situation...
         blahblahblahblahblahblahblahblahblah" />
@@ -61,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDescription"
         android:layout_marginTop="3dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         tools:text="Looking for: "/>
 
     <TextView
@@ -71,7 +74,7 @@
         android:layout_below="@id/tvStatus"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="3dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         tools:text="3 rooms, 12 months, starting August"
         android:textStyle="bold"/>
 
@@ -85,9 +88,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
+        <ImageView
+            android:id="@+id/ivLike"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_toRightOf="@+id/ivLike"
+            android:layout_marginStart="12dp"
+            app:srcCompat="@drawable/ic_baseline_comment_24" />
     </RelativeLayout>
 
 </RelativeLayout>
