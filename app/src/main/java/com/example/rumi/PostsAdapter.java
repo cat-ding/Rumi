@@ -82,7 +82,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
-        private ImageView ivProfileImage;
+        private ImageView ivProfileImage, ivImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +94,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvStatus = itemView.findViewById(R.id.tvStatus);
             tvValues = itemView.findViewById(R.id.tvValues);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            ivImage = itemView.findViewById(R.id.ivImage);
 
             itemView.setOnClickListener(this);
         }
@@ -118,6 +119,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTitle.setText(post.getTitle());
             tvDescription.setText(post.getDescription());
             tvRelativeTime.setText(post.getRelativeTime());
+
+            if (!post.getPhotoUrl().equals("")) {
+                Glide.with(context).load(post.getPhotoUrl()).into(ivImage);
+                ivImage.setVisibility(View.VISIBLE);
+            }
 
             if (post.isLookingForHouse()) {
                 tvStatus.setText(LOOKING_FOR_HOUSE_STRING);

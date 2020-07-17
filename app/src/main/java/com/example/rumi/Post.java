@@ -2,6 +2,8 @@ package com.example.rumi;
 
 import android.text.format.DateUtils;
 
+import com.google.firebase.firestore.Exclude;
+
 import org.parceler.Parcel;
 
 import java.text.ParseException;
@@ -15,7 +17,7 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    private String title, description, startMonth, userId, startDate, endDate;
+    private String title, description, startMonth, userId, startDate, endDate, photoUrl;
     private int numRooms, duration, rent;
     private boolean furnished, lookingForHouse;
     private Date createdAt;
@@ -26,7 +28,7 @@ public class Post {
 
     public Post(String title, String description, String startMonth, String userId, int numRooms,
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
-                String startDate, String endDate) {
+                String startDate, String endDate, String photoUrl) {
         this.title = title;
         this.description = description;
         this.startMonth = startMonth;
@@ -39,23 +41,18 @@ public class Post {
         this.userId = userId;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.photoUrl = photoUrl;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getUserId() { return userId; }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+    public Date getCreatedAt() { return createdAt; }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
     public String getTitle() {
         return title;
@@ -137,6 +134,15 @@ public class Post {
         this.endDate = endDate;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    @Exclude
     public String getRelativeTime() {
         String timeCreated = createdAt.toString();
 

@@ -75,4 +75,12 @@
         tools:text="3 rooms, 12 months, starting August"
         android:textStyle="bold"/>
 
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tvValues"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

@@ -1,12 +1,18 @@
 package com.example.rumi;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,15 +28,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +50,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ComposeActivity extends AppCompatActivity {
 
@@ -46,16 +58,18 @@ public class ComposeActivity extends AppCompatActivity {
     private static final int NUM_PICKER_MIN = 1;
     private static final int NUM_PICKER_MAX = 10;
     private static final float DAYS_IN_MONTH = 30;
+    private static final int CAPTURE_IMAGE_CODE = 10;
     private EditText etTitle, etDescription, etRent;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private NumberPicker numRoomPicker;
     private Spinner spinnerFurnished;
-    private ImageView ivCalendarStart, ivCalendarEnd;
+    private ImageView ivImagePreview;
     private TextView tvStartDate, tvEndDate;
     private Button btnPost;
 
     private String title, description, startMonth, startDate, endDate;
+    private String photoUrl = "";
     private Date start, end;
     private int numRooms, rent, numMonths;
     private boolean lookingForHouse, furnished;
@@ -77,11 +91,10 @@ public class ComposeActivity extends AppCompatActivity {
         numRoomPicker = findViewById(R.id.numRoomPicker);
         etRent = findViewById(R.id.etRent);
         spinnerFurnished = findViewById(R.id.spinnerFurnished);
-        ivCalendarStart = findViewById(R.id.ivCalendarStart);
-        ivCalendarEnd = findViewById(R.id.ivCalendarEnd);
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
         btnPost = findViewById(R.id.btnPost);
+        ivImagePreview = findViewById(R.id.ivImagePreview);
 
         numRoomPicker.setMinValue(NUM_PICKER_MIN);
         numRoomPicker.setMaxValue(NUM_PICKER_MAX);
@@ -156,9 +169,8 @@ public class ComposeActivity extends AppCompatActivity {
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));
         numMonths = (int) Math.ceil(daysBetween / DAYS_IN_MONTH);
 
-        // TODO: startMonth/duration, rent, furnished
         final Post post = new Post(title, description, startMonth, firebaseAuth.getCurrentUser().getUid(),
-                numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate);
+                numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -215,4 +227,60 @@ public class ComposeActivity extends AppCompatActivity {
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         endDialog.show();    }
 
+    public void launchCamera(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(ComposeActivity.this.getPackageManager()) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                ivImagePreview.setImageBitmap(bitmap);
+                ivImagePreview.setVisibility(View.VISIBLE);
+                handleUpload(bitmap);
+            } else {
+                Toast.makeText(ComposeActivity.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void handleUpload(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+        String imageId = UUID.randomUUID().toString();
+        final StorageReference reference = FirebaseStorage.getInstance().getReference()
+                .child("postImages")
+                .child(imageId + ".jpeg");
+
+        //this is an UploadTask
+        reference.putBytes(baos.toByteArray())
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        getDownloadUrl(reference);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error uploading profile image!", e);
+                    }
+                });
+    }
+
+    private void getDownloadUrl(StorageReference reference) {
+        reference.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        photoUrl = uri.toString();
+                    }
+                });
+    }
 }

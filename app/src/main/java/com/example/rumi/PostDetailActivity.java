@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ public class PostDetailActivity extends AppCompatActivity {
     Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished;
-    private ImageView ivProfileImage;
+    private ImageView ivProfileImage, ivImage;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection("users");
 
@@ -48,6 +49,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
         tvFurnished = findViewById(R.id.tvFurnished);
+        ivImage = findViewById(R.id.ivImage);
 
         setFields(post);
     }
@@ -61,6 +63,11 @@ public class PostDetailActivity extends AppCompatActivity {
         tvRent.setText("Monthly Rent per Room: $" + post.getRent());
         tvStartDate.setText("Start Date: " + post.getStartDate());
         tvEndDate.setText("End Date: " + post.getEndDate());
+
+        if (!post.getPhotoUrl().equals("")) {
+            Glide.with(PostDetailActivity.this).load(post.getPhotoUrl()).into(ivImage);
+            ivImage.setVisibility(View.VISIBLE);
+        }
 
         if (post.isFurnished()) {
             tvFurnished.setText("Furnished: YES");

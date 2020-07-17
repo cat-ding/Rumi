@@ -132,4 +132,13 @@
         tools:text="Furnished: YES"
         android:textStyle="bold"/>
 
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/tvFurnished"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>
