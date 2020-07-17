@@ -35,14 +35,14 @@
 
 **Project Requirements / Required Must-have Stories**
 - Your app has multiple views
-    - [ ] "Posts” section where you can compose a post about what you’re looking for
-        - [ ] Ability to compose a new post
-        - [ ] View user profile by tapping on photo
-        - [ ] Ability to take a picture for the post through the app
+    - [x] "Posts” section where you can compose a post about what you’re looking for
+        - [x] Ability to compose a new post
+        - [x] View user profile by tapping on photo
+        - [x] Ability to take a picture for the post through the app
     - [ ] Real estate browing screen (use of real estate API that displays house images, address, landlord contact info, number beds, number bathrooms, etc.)
-    - [ ] A profile tab displaying personal info
-    - [ ] Profile screens for other users with ability to message them in app
-    - [x] Messaging screen
+    - [x] A profile tab displaying personal info
+    - [x] Profile screens for other users with ability to message them in app
+    - [ ] Messaging screen
 - Your app interacts with a database (e.g. Parse) 
     - Firebase (decided to learn this over using Parse despite Parse being more familiar, since I wanted to learn more about noSQL databases and overall it seemed like a useful and interesting skill to learn)
 - [x] You can log in/log out of your app as a user
