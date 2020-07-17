@@ -28,7 +28,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished;
     private ImageView ivProfileImage, ivImage;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection("users");
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +85,11 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                    tvUserName.setText(task.getResult().getString("name"));
-                    tvMajorYear.setText(task.getResult().getString("major") + ", Class of "
-                            + task.getResult().getString("year"));
-                    if (task.getResult().getString("profileUrl") != null) {
-                        Glide.with(PostDetailActivity.this).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                    tvUserName.setText(task.getResult().getString(User.KEY_NAME));
+                    tvMajorYear.setText(task.getResult().getString(User.KEY_MAJOR) + ", "
+                            + task.getResult().getString(User.KEY_YEAR));
+                    if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+                        Glide.with(PostDetailActivity.this).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                     }
                 } else {
                     Log.e(TAG, "Error retrieving user data! ", task.getException());

@@ -72,8 +72,8 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private CollectionReference postsRef = db.collection("posts");
-    private CollectionReference usersRef = db.collection("users");
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private String userId;
 
     public ProfileFragment() {
@@ -171,7 +171,7 @@ public class ProfileFragment extends Fragment {
                         Glide.with(getContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                     }
                     tvName.setText(user.getName());
-                    tvMajorYear.setText(user.getMajor() + ", Class of " + user.getYear());
+                    tvMajorYear.setText(user.getMajor() + ", " + user.getYear());
                 } else {
                     Log.e(TAG, "Error retrieving user data! ", task.getException());
                     Toast.makeText(getContext(), "Error retrieving user data!", Toast.LENGTH_SHORT).show();
@@ -181,13 +181,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadPosts() {
-        postsRef.whereEqualTo("userId", userId).orderBy("createdAt", Query.Direction.DESCENDING).get()
+        postsRef.whereEqualTo(Post.KEY_USER_ID, userId).orderBy(Post.KEY_CREATED_AT, Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         adapter.clear();
                         // QueryDocumentSnapshots are guaranteed to exist
-                        Log.d(TAG, "onSuccess: ");
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
 
@@ -265,7 +264,7 @@ public class ProfileFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
                         Glide.with(getContext()).load(firebaseAuth.getCurrentUser().getPhotoUrl()).circleCrop().into(ivProfileImage);
-                        usersRef.document(userId).update("profileUrl", firebaseAuth.getCurrentUser().getPhotoUrl().toString());
+                        usersRef.document(userId).update(User.KEY_PROFILE_URL, firebaseAuth.getCurrentUser().getPhotoUrl().toString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

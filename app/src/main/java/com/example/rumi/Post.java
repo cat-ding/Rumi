@@ -13,11 +13,15 @@ import java.util.Locale;
 
 @Parcel
 public class Post {
-    public static final String KEY_COLLECTION = "posts";
+    public static final String KEY_POSTS = "posts";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_PROFILE_URL = "profileUrl";
+    public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_USER_ID = "userId";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    private String title, description, startMonth, userId, startDate, endDate, photoUrl;
+    private String title, description, startMonth, userId, startDate, endDate, photoUrl, postId;
     private int numRooms, duration, rent;
     private boolean furnished, lookingForHouse;
     private Date createdAt;
@@ -28,7 +32,7 @@ public class Post {
 
     public Post(String title, String description, String startMonth, String userId, int numRooms,
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
-                String startDate, String endDate, String photoUrl) {
+                String startDate, String endDate, String photoUrl, String postId) {
         this.title = title;
         this.description = description;
         this.startMonth = startMonth;
@@ -42,6 +46,7 @@ public class Post {
         this.startDate = startDate;
         this.endDate = endDate;
         this.photoUrl = photoUrl;
+        this.postId = postId;
     }
 
     public String getUserId() { return userId; }
@@ -114,9 +119,7 @@ public class Post {
         return lookingForHouse;
     }
 
-    public void setLookingForHouse(boolean lookingForHouse) {
-        this.lookingForHouse = lookingForHouse;
-    }
+    public void setLookingForHouse(boolean lookingForHouse) { this.lookingForHouse = lookingForHouse; }
 
     public String getStartDate() {
         return startDate;
@@ -134,13 +137,13 @@ public class Post {
         this.endDate = endDate;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
+    public String getPhotoUrl() { return photoUrl; }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
+    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
+
+    public String getPostId() { return postId; }
+
+    public void setPostId(String postId) { this.postId = postId; }
 
     @Exclude
     public String getRelativeTime() {

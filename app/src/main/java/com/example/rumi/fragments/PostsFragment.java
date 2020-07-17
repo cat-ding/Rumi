@@ -47,7 +47,7 @@ public class PostsFragment extends Fragment {
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference postsRef = db.collection("posts");
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private androidx.appcompat.widget.Toolbar toolbar;
     private SwipeRefreshLayout swipeContainer;
 
@@ -97,7 +97,7 @@ public class PostsFragment extends Fragment {
     }
 
     private void loadPosts() {
-        postsRef.orderBy("createdAt", Query.Direction.DESCENDING).get()
+        postsRef.orderBy(Post.KEY_CREATED_AT, Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

@@ -59,6 +59,8 @@ public class ComposeActivity extends AppCompatActivity {
     private static final int NUM_PICKER_MAX = 10;
     private static final float DAYS_IN_MONTH = 30;
     private static final int CAPTURE_IMAGE_CODE = 10;
+    private static final String STRING_YES = "Yes";
+    private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
     private EditText etTitle, etDescription, etRent;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
@@ -78,7 +80,8 @@ public class ComposeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private DocumentReference postRef = db.collection("posts").document();
+    private String postId = UUID.randomUUID().toString();
+    private DocumentReference postRef = db.collection(Post.KEY_POSTS).document(postId);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,7 @@ public class ComposeActivity extends AppCompatActivity {
         spinnerFurnished.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapterView.getItemAtPosition(i).toString().equals("Yes")) {
+                if (adapterView.getItemAtPosition(i).toString().equals(STRING_YES)) {
                     furnished = true;
                 } else {
                     furnished = false;
@@ -129,14 +132,14 @@ public class ComposeActivity extends AppCompatActivity {
     public void checkRadioButton(View view) {
         int radioId = radioGroup.getCheckedRadioButtonId();
         radioButton = findViewById(radioId);
-        if (radioButton.getText().equals("Looking for a place")) {
+        if (radioButton.getText().equals(STRING_LOOKING_FOR_PLACE)) {
             lookingForHouse = true;
         } else {
             lookingForHouse = false;
         }
     }
 
-    // onClick method for post button
+    // onClick method for post button - uploads new post to database
     public void makePost(View view) {
         title = etTitle.getText().toString();
         description = etDescription.getText().toString();
@@ -170,7 +173,8 @@ public class ComposeActivity extends AppCompatActivity {
         numMonths = (int) Math.ceil(daysBetween / DAYS_IN_MONTH);
 
         final Post post = new Post(title, description, startMonth, firebaseAuth.getCurrentUser().getUid(),
-                numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl);
+                numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl,
+                postId);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

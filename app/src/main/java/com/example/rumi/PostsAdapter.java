@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,8 +19,6 @@ import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,7 +37,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private List<Post> posts;
     private PostsFragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection("users");
+    private CollectionReference usersRef = db.collection(Post.KEY_POSTS);
 
     public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
         this.context = context;
@@ -148,9 +144,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        tvUserName.setText(task.getResult().getString("name"));
-                        if (task.getResult().getString("profileUrl") != null) {
-                            Glide.with(context).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                        tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
+                        if (task.getResult().getString(Post.KEY_PROFILE_URL) != null) {
+                            Glide.with(context).load(task.getResult().getString(Post.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());

@@ -4,6 +4,7 @@
 
     <string-array name="majors">
         <item>Select Major</item>
+        <item>N/A</item>
         <item>Undecided</item>
         <item>Africana Studies</item>
         <item>American Studies</item>

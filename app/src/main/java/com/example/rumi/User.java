@@ -2,6 +2,12 @@ package com.example.rumi;
 
 public class User {
 
+    public static final String KEY_USERS = "users";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_MAJOR = "major";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_PROFILE_URL = "profileUrl";
+
     private String name, email, major, year, profileUrl;
 
     public User () {

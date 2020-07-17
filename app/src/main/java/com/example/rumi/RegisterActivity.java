@@ -88,6 +88,11 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 year = adapterView.getItemAtPosition(i).toString();
+                if (year.equals("Other")) {
+                    year = "";
+                } else if (!year.equals("Graduate Student")) {
+                    year = "Class of " + year;
+                }
                 Toast.makeText(RegisterActivity.this, year, Toast.LENGTH_SHORT).show();
             }
 

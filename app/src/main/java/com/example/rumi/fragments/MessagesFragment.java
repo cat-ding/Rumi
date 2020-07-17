@@ -10,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rumi.Conversation;
-import com.example.rumi.ConversationAdapter;
 import com.example.rumi.R;
 
 import java.util.List;

@@ -34,7 +34,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     private List<Post> posts;
     private ProfileFragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection("users");
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     public ProfilePostAdapter(Context context, List<Post> posts, ProfileFragment fragment) {
         this.context = context;
@@ -115,9 +115,9 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        tvUserName.setText(task.getResult().getString("name"));
-                        if (task.getResult().getString("profileUrl") != null) {
-                            Glide.with(context).load(task.getResult().getString("profileUrl")).circleCrop().into(ivProfileImage);
+                        tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
+                        if (task.getResult().getString(Post.KEY_PROFILE_URL) != null) {
+                            Glide.with(context).load(task.getResult().getString(Post.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());
