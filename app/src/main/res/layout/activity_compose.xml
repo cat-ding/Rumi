@@ -15,10 +15,10 @@
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:hint="What are you looking for?"
+        android:layout_marginEnd="20dp"
+        android:hint="Add a title"
         android:inputType="textPersonName"
         android:textStyle="bold" />
 
@@ -26,18 +26,20 @@
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="20dp"
         android:hint="Add a description"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:minLines="5"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"/>
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radioGroupOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal">
@@ -47,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:onClick="checkRadioButton"
+            android:onClick="checkPlaceRadioButton"
             android:text="Looking for a place" />
 
         <RadioButton
@@ -55,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:onClick="checkRadioButton"
+            android:onClick="checkPlaceRadioButton"
             android:text="Looking for people" />
 
     </RadioGroup>
@@ -63,9 +65,8 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp">
 
         <TextView
             android:id="@+id/tvTextNumRooms"
@@ -73,29 +74,28 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="false"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
             android:text="Number of rooms:"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <NumberPicker
-            android:id="@+id/numRoomPicker"
+        <EditText
+            android:id="@+id/etNumRooms"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toRightOf="@+id/tvTextNumRooms" />
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@+id/tvTextNumRooms"
+            android:hint="ex. 3"
+            android:textSize="16sp"
+            android:inputType="number"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp">
 
         <TextView
             android:id="@+id/tvRentText"
@@ -103,7 +103,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Monthly rent per room:"
-            android:layout_marginStart="10dp"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -112,20 +111,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="20dp"
             android:layout_toRightOf="@+id/tvRentText"
             android:hint="ex. 800"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:inputType="number"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tvFurnished"
@@ -133,27 +132,44 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Furnished:"
-            android:layout_marginStart="10dp"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/spinnerFurnished"
+        <RadioGroup
+            android:id="@+id/radioGroupFurnished"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tvFurnished"
-            android:layout_marginStart="30dp" />
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal"
+            android:layout_toRightOf="@+id/tvFurnished">
+
+            <RadioButton
+                android:id="@+id/radioButtonYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="checkFurnishedRadioButton"
+                android:text="Yes" />
+
+            <RadioButton
+                android:id="@+id/radioButtonNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:onClick="checkFurnishedRadioButton"
+                android:text="No" />
+
+        </RadioGroup>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tvSelectStart"
@@ -186,10 +202,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tvSelectEnd"
@@ -222,10 +237,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tvTakePicture"

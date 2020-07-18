@@ -61,11 +61,9 @@ public class ComposeActivity extends AppCompatActivity {
     private static final int CAPTURE_IMAGE_CODE = 10;
     private static final String STRING_YES = "Yes";
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
-    private EditText etTitle, etDescription, etRent;
-    private RadioGroup radioGroup;
-    private RadioButton radioButton;
-    private NumberPicker numRoomPicker;
-    private Spinner spinnerFurnished;
+    private EditText etTitle, etDescription, etRent, etNumRooms;
+    private RadioGroup radioGroupOne, radioGroupFurnished;
+    private RadioButton radioButtonHouse, radioButtonFurnished;
     private ImageView ivImagePreview;
     private TextView tvStartDate, tvEndDate;
     private Button btnPost;
@@ -90,52 +88,34 @@ public class ComposeActivity extends AppCompatActivity {
 
         etTitle = findViewById(R.id.etTitle);
         etDescription = findViewById(R.id.etDescription);
-        radioGroup = findViewById(R.id.radioGroup);
-        numRoomPicker = findViewById(R.id.numRoomPicker);
+        radioGroupOne = findViewById(R.id.radioGroupOne);
+        radioGroupFurnished = findViewById(R.id.radioGroupFurnished);
         etRent = findViewById(R.id.etRent);
-        spinnerFurnished = findViewById(R.id.spinnerFurnished);
+        etNumRooms = findViewById(R.id.etNumRooms);
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
         btnPost = findViewById(R.id.btnPost);
         ivImagePreview = findViewById(R.id.ivImagePreview);
-
-        numRoomPicker.setMinValue(NUM_PICKER_MIN);
-        numRoomPicker.setMaxValue(NUM_PICKER_MAX);
-
-        numRoomPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                numRooms = numRoomPicker.getValue();
-            }
-        });
-
-        final ArrayAdapter<CharSequence> adapterFurnished = ArrayAdapter.createFromResource(ComposeActivity.this, R.array.furnished, android.R.layout.simple_spinner_item);
-        adapterFurnished.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFurnished.setAdapter(adapterFurnished);
-
-        spinnerFurnished.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapterView.getItemAtPosition(i).toString().equals(STRING_YES)) {
-                    furnished = true;
-                } else {
-                    furnished = false;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) { }
-        });
     }
 
     // onClick method for radio buttons
-    public void checkRadioButton(View view) {
-        int radioId = radioGroup.getCheckedRadioButtonId();
-        radioButton = findViewById(radioId);
-        if (radioButton.getText().equals(STRING_LOOKING_FOR_PLACE)) {
+    public void checkPlaceRadioButton(View view) {
+        int radioId = radioGroupOne.getCheckedRadioButtonId();
+        radioButtonHouse = findViewById(radioId);
+        if (radioButtonHouse.getText().equals(STRING_LOOKING_FOR_PLACE)) {
             lookingForHouse = true;
         } else {
             lookingForHouse = false;
+        }
+    }
+
+    public void checkFurnishedRadioButton(View view) {
+        int radioId = radioGroupFurnished.getCheckedRadioButtonId();
+        radioButtonFurnished = findViewById(radioId);
+        if (radioButtonFurnished.getText().equals("Yes")) {
+            furnished = true;
+        } else {
+            furnished = false;
         }
     }
 
@@ -152,11 +132,12 @@ public class ComposeActivity extends AppCompatActivity {
             Toast.makeText(ComposeActivity.this, "Description is required!", Toast.LENGTH_SHORT).show();
             etDescription.requestFocus();
             return;
-        } else if (numRooms == 0) {
-            Toast.makeText(ComposeActivity.this, "Number of rooms is required!", Toast.LENGTH_SHORT).show();
-            return;
         } else if (etRent.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
+            etRent.requestFocus();
+            return;
+        } else if (etNumRooms.getText().toString().isEmpty()) {
+            Toast.makeText(ComposeActivity.this, "Number of rooms is required!", Toast.LENGTH_SHORT).show();
             etRent.requestFocus();
             return;
         } else if (tvStartDate.getText().toString().isEmpty()) {
@@ -167,6 +148,7 @@ public class ComposeActivity extends AppCompatActivity {
             return;
         }
         rent = Integer.parseInt(etRent.getText().toString());
+        numRooms = Integer.parseInt(etRent.getText().toString());
 
         // calculate number of months between two dates, rounded up to the nearest whole month
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));
