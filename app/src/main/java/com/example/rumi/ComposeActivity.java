@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.rumi.models.Post;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -35,6 +37,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -63,14 +66,17 @@ public class ComposeActivity extends AppCompatActivity {
     private ImageView ivImagePreview;
     private TextView tvStartDate, tvEndDate;
     private Button btnPost;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private RelativeLayout relativeLayoutAutocomplete;
 
     private String title, description, startMonth, startDate, endDate;
     private String photoUrl = "";
+    private String address = "";
     private Date start, end;
     private int numRooms, rent, numMonths;
     private boolean lookingForHouse, furnished;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
+    private double latitude = 0, longitude = 0;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -92,6 +98,7 @@ public class ComposeActivity extends AppCompatActivity {
         tvEndDate = findViewById(R.id.tvEndDate);
         btnPost = findViewById(R.id.btnPost);
         ivImagePreview = findViewById(R.id.ivImagePreview);
+        relativeLayoutAutocomplete = findViewById(R.id.relativeLayoutAutocomplete);
 
         setUpAddressAutoComplete();
     }
@@ -102,18 +109,26 @@ public class ComposeActivity extends AppCompatActivity {
         }
 
         // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+        autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
+        ((EditText)autocompleteFragment.getView().findViewById(R.id.places_autocomplete_search_input)).setTextSize(16.0f);
+
+        relativeLayoutAutocomplete.setVisibility(View.GONE);
+
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ADDRESS,
+                                                            Place.Field.ID, Place.Field.NAME));
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                LatLng latLng = place.getLatLng();
+                latitude = latLng.latitude;
+                longitude = latLng.longitude;
+                address = place.getAddress();
             }
 
             @Override
@@ -131,8 +146,10 @@ public class ComposeActivity extends AppCompatActivity {
         radioButtonHouse = findViewById(radioId);
         if (radioButtonHouse.getText().equals(STRING_LOOKING_FOR_PLACE)) {
             lookingForHouse = true;
+            relativeLayoutAutocomplete.setVisibility(View.GONE);
         } else {
             lookingForHouse = false;
+            relativeLayoutAutocomplete.setVisibility(View.VISIBLE);
         }
     }
 
@@ -174,6 +191,7 @@ public class ComposeActivity extends AppCompatActivity {
             Toast.makeText(ComposeActivity.this, "End date is required!", Toast.LENGTH_SHORT).show();
             return;
         }
+
         rent = Integer.parseInt(etRent.getText().toString());
         numRooms = Integer.parseInt(etNumRooms.getText().toString());
 
@@ -183,7 +201,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         final Post post = new Post(title, description, startMonth, firebaseAuth.getCurrentUser().getUid(),
                 numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl,
-                postId);
+                postId, address, latitude, longitude);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

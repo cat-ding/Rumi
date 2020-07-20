@@ -170,7 +170,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
                         if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
-                            Log.d(TAG, "onComplete: HELLO");
                             Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                         if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {

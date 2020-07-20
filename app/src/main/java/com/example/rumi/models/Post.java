@@ -1,8 +1,13 @@
 package com.example.rumi.models;
 
+import android.os.Build;
+import android.os.Parcelable;
 import android.text.format.DateUtils;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.GeoPoint;
 
 import org.parceler.Parcel;
 
@@ -21,10 +26,11 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    public String title, description, startMonth, userId, startDate, endDate, photoUrl, postId;
+    public String title, description, startMonth, userId, startDate, endDate, photoUrl, postId, address;
     public int numRooms, duration, rent;
     public boolean furnished, lookingForHouse;
     public Date createdAt;
+    public double latitude, longitude;
 
     public Post() {
         // empty constructor required
@@ -32,7 +38,8 @@ public class Post {
 
     public Post(String title, String description, String startMonth, String userId, int numRooms,
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
-                String startDate, String endDate, String photoUrl, String postId) {
+                String startDate, String endDate, String photoUrl, String postId,
+                String address, double latitude, double longitude) {
         this.title = title;
         this.description = description;
         this.startMonth = startMonth;
@@ -47,6 +54,26 @@ public class Post {
         this.endDate = endDate;
         this.photoUrl = photoUrl;
         this.postId = postId;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    protected Post(android.os.Parcel in) {
+        title = in.readString();
+        description = in.readString();
+        startMonth = in.readString();
+        userId = in.readString();
+        startDate = in.readString();
+        endDate = in.readString();
+        photoUrl = in.readString();
+        postId = in.readString();
+        address = in.readString();
+        numRooms = in.readInt();
+        duration = in.readInt();
+        rent = in.readInt();
+        furnished = in.readByte() != 0;
+        lookingForHouse = in.readByte() != 0;
     }
 
     public String getUserId() { return userId; }
@@ -144,6 +171,30 @@ public class Post {
     public String getPostId() { return postId; }
 
     public void setPostId(String postId) { this.postId = postId; }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     @Exclude
     public String getRelativeTime() {

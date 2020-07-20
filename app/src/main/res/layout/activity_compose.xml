@@ -62,10 +62,32 @@
 
     </RadioGroup>
 
-    <fragment android:id="@+id/autocomplete_fragment"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutAutocomplete"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvAddress"
+            android:layout_marginStart="20dp"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
