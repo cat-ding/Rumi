@@ -133,6 +133,10 @@ public class ComposeActivity extends AppCompatActivity {
                 latitude = latLng.latitude;
                 longitude = latLng.longitude;
                 address = place.getAddress();
+
+                AddressComponents addressComp = place.getAddressComponents();
+                Log.d(TAG, "name: " + place.getName());
+                Log.d(TAG, "size: " + addressComp.asList().toString());
             }
 
             @Override

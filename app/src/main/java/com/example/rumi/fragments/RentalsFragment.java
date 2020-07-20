@@ -13,9 +13,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.rumi.R;
+import com.example.rumi.models.Post;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class RentalsFragment extends Fragment implements OnMapReadyCallback{
 
@@ -25,6 +35,10 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
     private final static String KEY_LOCATION = "location";
 
     private MapView mapView;
+    private GoogleMap googleMap;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     public RentalsFragment() {
         // Required empty public constructor
@@ -64,6 +78,34 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
             return;
         }
         map.setMyLocationEnabled(true);
+        googleMap = map;
+        setMarkers();
+    }
+
+    private void setMarkers() {
+
+        postsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    Post post = documentSnapshot.toObject(Post.class);
+                    if (post.getLatitude() != 0 && post.getLongitude() != 0) {
+                        LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(location)
+                                .title(post.getAddress()));
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        // TODO: use later for camera zooms
+        // googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
     }
 
     @Override
