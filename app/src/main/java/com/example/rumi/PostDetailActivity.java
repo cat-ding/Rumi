@@ -27,7 +27,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
-                    tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished;
+                    tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress;
     private ImageView ivProfileImage, ivImage;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
@@ -52,6 +52,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvEndDate = findViewById(R.id.tvEndDate);
         tvFurnished = findViewById(R.id.tvFurnished);
         ivImage = findViewById(R.id.ivImage);
+        tvAddress = findViewById(R.id.tvAddress);
 
         setFields(post);
     }
@@ -65,6 +66,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvRent.setText("Monthly Rent per Room: $" + post.getRent());
         tvStartDate.setText("Start Date: " + post.getStartDate());
         tvEndDate.setText("End Date: " + post.getEndDate());
+        tvAddress.setText("Address: " + post.getAddress());
 
         if (!post.getPhotoUrl().equals("")) {
             Glide.with(PostDetailActivity.this).load(post.getPhotoUrl()).into(ivImage);
