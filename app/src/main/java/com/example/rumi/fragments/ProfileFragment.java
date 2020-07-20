@@ -54,8 +54,8 @@ public class ProfileFragment extends Fragment {
     private static final int CAPTURE_IMAGE_CODE = 35;
 
     private TextView tvName, tvMajorYear;
-    private ImageView ivProfileImage;
-    private Button btnLogout, btnChangeProfileImage, btnMessage;
+    private ImageView ivProfileImage, btnChangeProfileImage;
+    private Button btnLogout, btnMessage;
 
     private RecyclerView rvPosts;
     private ProfilePostAdapter adapter;
@@ -257,6 +257,7 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
                         Glide.with(getContext()).load(firebaseAuth.getCurrentUser().getPhotoUrl()).circleCrop().into(ivProfileImage);
                         usersRef.document(userId).update(User.KEY_PROFILE_URL, firebaseAuth.getCurrentUser().getPhotoUrl().toString());
+                        loadPosts();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
+        if (isServicesOK()) {
+            if (isMapsEnabled()) {
                 return true;
             }
         }
@@ -102,13 +102,17 @@ public class MainActivity extends AppCompatActivity {
     // prompts user to enable gps if not enabled already
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+        builder.setMessage("This application requires GPS for some features, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
                     }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) { /* nothing happens */ }
                 });
         final AlertDialog alert = builder.create();
         alert.show();

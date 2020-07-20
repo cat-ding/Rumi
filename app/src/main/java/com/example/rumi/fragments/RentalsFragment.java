@@ -26,7 +26,6 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
 
     private MapView mapView;
 
-
     public RentalsFragment() {
         // Required empty public constructor
     }

@@ -9,13 +9,31 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="false"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_baseline_person_24" />
+
+        <ImageView
+            android:id="@+id/btnChangeProfileImage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="-18dp"
+            android:layout_marginTop="-18dp"
+            app:srcCompat="@drawable/ic_baseline_edit_24"
+            android:layout_toRightOf="@+id/ivProfileImage"
+            android:layout_below="@id/ivProfileImage"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvName"
@@ -48,17 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Logout"
-            android:visibility="gone"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-        <Button
-            android:id="@+id/btnChangeProfileImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/btnLogout"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:text="Change Photo"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnMessage"

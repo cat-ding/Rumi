@@ -21,10 +21,10 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    private String title, description, startMonth, userId, startDate, endDate, photoUrl, postId;
-    private int numRooms, duration, rent;
-    private boolean furnished, lookingForHouse;
-    private Date createdAt;
+    public String title, description, startMonth, userId, startDate, endDate, photoUrl, postId;
+    public int numRooms, duration, rent;
+    public boolean furnished, lookingForHouse;
+    public Date createdAt;
 
     public Post() {
         // empty constructor required
