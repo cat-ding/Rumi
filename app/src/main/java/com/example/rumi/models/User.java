@@ -1,4 +1,4 @@
-package com.example.rumi;
+package com.example.rumi.models;
 
 public class User {
 

@@ -42,9 +42,11 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.12'
 
     implementation platform('com.google.firebase:firebase-bom:25.6.0')
-
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-storage'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 }

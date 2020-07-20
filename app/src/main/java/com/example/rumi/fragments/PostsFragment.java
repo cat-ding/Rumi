@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,9 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.rumi.ComposeActivity;
-import com.example.rumi.MainActivity;
-import com.example.rumi.Post;
-import com.example.rumi.PostsAdapter;
+import com.example.rumi.models.Post;
+import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;

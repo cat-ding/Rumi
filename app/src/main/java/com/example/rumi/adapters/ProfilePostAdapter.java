@@ -1,4 +1,4 @@
-package com.example.rumi;
+package com.example.rumi.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rumi.fragments.PostsFragment;
+import com.example.rumi.models.Post;
+import com.example.rumi.PostDetailActivity;
+import com.example.rumi.R;
+import com.example.rumi.models.User;
 import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,19 +28,19 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.ViewHolder> {
 
-    public static final String TAG = "PostsAdapter";
-    private static final int REQUEST_CODE = 25;
+    public static final String TAG = "ProfilePostAdapter";
+    private static final int REQUEST_CODE = 35;
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     private Context context;
     private List<Post> posts;
-    private PostsFragment fragment;
+    private ProfileFragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
-    public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
+    public ProfilePostAdapter(Context context, List<Post> posts, ProfileFragment fragment) {
         this.context = context;
         this.posts = posts;
         this.fragment = fragment;
@@ -78,7 +79,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
-        private ImageView ivProfileImage, ivImage, ivLike, ivComment;
+        private ImageView ivProfileImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,54 +91,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvStatus = itemView.findViewById(R.id.tvStatus);
             tvValues = itemView.findViewById(R.id.tvValues);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
-            ivImage = itemView.findViewById(R.id.ivImage);
-            ivLike = itemView.findViewById(R.id.ivLike);
-            ivComment = itemView.findViewById(R.id.ivComment);
 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final Post post) {
+        public void bind(Post post) {
+            // bind the post data to the view elements
 
-            // onClickListeners to open ProfileFragment
-            ivProfileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openProfileFragment(post.getUserId());
-                }
-            });
-            tvUserName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    openProfileFragment(post.getUserId());
-                }
-            });
-
-            ivLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO
-                }
-            });
-
-            ivComment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, CommentsActivity.class);
-                    intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                    fragment.startActivityForResult(intent, REQUEST_CODE);
-                }
-            });
-
-            // bind values
             tvTitle.setText(post.getTitle());
             tvDescription.setText(post.getDescription());
             tvRelativeTime.setText(post.getRelativeTime());
-
-            if (!post.getPhotoUrl().equals("")) {
-                Glide.with(context).load(post.getPhotoUrl()).into(ivImage);
-                ivImage.setVisibility(View.VISIBLE);
-            }
 
             if (post.isLookingForHouse()) {
                 tvStatus.setText(LOOKING_FOR_HOUSE_STRING);
@@ -151,22 +114,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             bindUserFields(post);
         }
 
-        private void openProfileFragment(String userId) {
-            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
-            Fragment fragment = new ProfileFragment(userId);
-            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-        }
-
         private void bindUserFields(Post post) {
             usersRef.document(post.getUserId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
-                            Log.d(TAG, "onComplete: HELLO");
-                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
-                        }
+                        tvUserName.setText(task.getResult().getString(User.KEY_NAME));
                         if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
                             Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }

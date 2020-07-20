@@ -15,23 +15,19 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rumi.models.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -39,27 +35,20 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class ComposeActivity extends AppCompatActivity {
 
     private static final String TAG = "ComposeActivity";
-    private static final int NUM_PICKER_MIN = 1;
-    private static final int NUM_PICKER_MAX = 10;
     private static final float DAYS_IN_MONTH = 30;
     private static final int CAPTURE_IMAGE_CODE = 10;
-    private static final String STRING_YES = "Yes";
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
     private EditText etTitle, etDescription, etRent, etNumRooms;
     private RadioGroup radioGroupOne, radioGroupFurnished;
@@ -138,7 +127,7 @@ public class ComposeActivity extends AppCompatActivity {
             return;
         } else if (etNumRooms.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Number of rooms is required!", Toast.LENGTH_SHORT).show();
-            etRent.requestFocus();
+            etNumRooms.requestFocus();
             return;
         } else if (tvStartDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Start date is required!", Toast.LENGTH_SHORT).show();
@@ -148,7 +137,7 @@ public class ComposeActivity extends AppCompatActivity {
             return;
         }
         rent = Integer.parseInt(etRent.getText().toString());
-        numRooms = Integer.parseInt(etRent.getText().toString());
+        numRooms = Integer.parseInt(etNumRooms.getText().toString());
 
         // calculate number of months between two dates, rounded up to the nearest whole month
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));

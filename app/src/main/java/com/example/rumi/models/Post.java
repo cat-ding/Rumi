@@ -1,4 +1,4 @@
-package com.example.rumi;
+package com.example.rumi.models;
 
 import android.text.format.DateUtils;
 
