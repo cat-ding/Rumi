@@ -3,6 +3,7 @@ package com.example.rumi;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,7 @@ public class PostDetailActivity extends AppCompatActivity {
     Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress;
-    private ImageView ivProfileImage, ivImage;
+    private ImageView ivProfileImage, ivImage, ivComment, ivLike;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
@@ -53,6 +54,8 @@ public class PostDetailActivity extends AppCompatActivity {
         tvFurnished = findViewById(R.id.tvFurnished);
         ivImage = findViewById(R.id.ivImage);
         tvAddress = findViewById(R.id.tvAddress);
+        ivComment = findViewById(R.id.ivComment);
+        ivLike = findViewById(R.id.ivLike);
 
         setFields(post);
     }
@@ -100,5 +103,12 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // onClick method for the comment icon (ivComment)
+    public void goToComments(View view) {
+        Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
+        intent.putExtra(Post.KEY_POST_ID, post.getPostId());
+        startActivity(intent);
     }
 }

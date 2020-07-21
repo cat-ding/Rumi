@@ -127,7 +127,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         private void openProfileFragment(String userId) {
             FragmentManager fragmentManager = ((CommentsActivity)context).getSupportFragmentManager();
             Fragment fragment = new ProfileFragment(userId);
-            fragmentManager.beginTransaction().add(R.id.flContainer, fragment).addToBackStack(null).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         }
     }
 }

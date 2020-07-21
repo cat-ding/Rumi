@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout android:id="@+id/flContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.rumi.CommentsActivity">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/flContainer"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.rumi.CommentsActivity"
+        android:layout_below="@+id/activityComments">
 
-    <include
-        android:id="@+id/toolbar_comments"
-        layout="@layout/toolbar_comments" />
+        <include
+            android:id="@+id/toolbar_comments"
+            layout="@layout/toolbar_comments" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvComments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_comments"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar_comments"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp" />
 
-    <EditText
-        android:id="@+id/etComment"
-        android:layout_width="306dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="94dp"
-        android:layout_marginBottom="9dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        tools:text="Add a comment..." />
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="306dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="94dp"
+            android:layout_marginBottom="9dp"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            tools:text="Add a comment..." />
 
-    <Button
-        android:id="@+id/btnPost"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-45dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="#3897F1"
-        android:text="Post"
-        android:textColor="#FFFFFF" />
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="-45dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#3897F1"
+            android:text="Post"
+            android:textColor="#FFFFFF" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
