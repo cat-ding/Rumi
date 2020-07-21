@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolbar"
@@ -11,7 +12,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -27,11 +29,11 @@
             android:id="@+id/btnChangeProfileImage"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_below="@id/ivProfileImage"
             android:layout_marginStart="-18dp"
             android:layout_marginTop="-18dp"
-            app:srcCompat="@drawable/ic_baseline_edit_24"
             android:layout_toRightOf="@+id/ivProfileImage"
-            android:layout_below="@id/ivProfileImage"/>
+            app:srcCompat="@drawable/ic_baseline_edit_24" />
 
     </RelativeLayout>
 
@@ -39,8 +41,8 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -67,14 +69,14 @@
             android:layout_gravity="center_horizontal"
             android:text="Logout"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnMessage"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
             android:background="#3897F1"
             android:text="Message"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -91,7 +93,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

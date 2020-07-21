@@ -130,8 +130,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, CommentsActivity.class);
-                    intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                    fragment.startActivityForResult(intent, REQUEST_CODE);
+                    intent.putExtra(Post.KEY_POST_ID, post.getPostId());
+                    fragment.startActivity(intent);
                 }
             });
 
@@ -169,9 +169,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
-                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
-                        }
                         if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
                             Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }

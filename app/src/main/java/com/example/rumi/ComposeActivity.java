@@ -73,8 +73,7 @@ public class ComposeActivity extends AppCompatActivity {
     private RelativeLayout relativeLayoutAutocomplete;
 
     private String title, description, startMonth, startDate, endDate;
-    private String photoUrl = "";
-    private String address = "";
+    private String photoUrl = "", name = "", address = "";
     private Date start, end;
     private int numRooms, rent, numMonths;
     private boolean lookingForHouse, furnished;
@@ -121,8 +120,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ADDRESS,
-                                                            Place.Field.ID, Place.Field.NAME,
-                                                            Place.Field.ADDRESS_COMPONENTS));
+                                                            Place.Field.ID, Place.Field.NAME));
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -133,10 +131,7 @@ public class ComposeActivity extends AppCompatActivity {
                 latitude = latLng.latitude;
                 longitude = latLng.longitude;
                 address = place.getAddress();
-
-                AddressComponents addressComp = place.getAddressComponents();
-                Log.d(TAG, "name: " + place.getName());
-                Log.d(TAG, "size: " + addressComp.asList().toString());
+                name = place.getName();
             }
 
             @Override
@@ -209,7 +204,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         final Post post = new Post(title, description, startMonth, firebaseAuth.getCurrentUser().getUid(),
                 numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl,
-                postId, address, latitude, longitude);
+                postId, name, address, latitude, longitude);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

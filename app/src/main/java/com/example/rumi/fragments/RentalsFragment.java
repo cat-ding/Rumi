@@ -94,7 +94,7 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
                         LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
                         googleMap.addMarker(new MarkerOptions()
                                 .position(location)
-                                .title(post.getAddress()));
+                                .title(post.getName()));
                     }
                 }
 
