@@ -15,11 +15,14 @@ import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     @Override
@@ -86,6 +90,18 @@ public class PostDetailActivity extends AppCompatActivity {
             tvStatus.setText(LOOKING_FOR_HOUSE_STRING);
         } else {
             tvStatus.setText(LOOKING_FOR_PERSON_STRING);
+        }
+
+        // set like icon filled or not
+        if (!post.getLikes().isEmpty()) {
+            ArrayList<String> list = post.getLikes();
+            if (list.contains(firebaseAuth.getCurrentUser().getUid())) {
+                ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+            } else {
+                ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+            }
         }
 
         usersRef.document(post.getUserId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

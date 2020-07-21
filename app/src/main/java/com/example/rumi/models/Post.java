@@ -6,8 +6,10 @@ import com.google.firebase.firestore.Exclude;
 
 import org.parceler.Parcel;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -19,6 +21,7 @@ public class Post {
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_POST_ID = "postId";
+    public static final String KEY_LIKES = "likes";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
@@ -28,7 +31,7 @@ public class Post {
     public boolean furnished, lookingForHouse;
     public Date createdAt;
     public double latitude, longitude;
-
+    public ArrayList<String> likes;
     public Post() {
         // empty constructor required
     }
@@ -55,6 +58,7 @@ public class Post {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.likes = new ArrayList<>();
     }
 
     public String getUserId() { return userId; }
@@ -178,6 +182,10 @@ public class Post {
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
+
+    public ArrayList<String> getLikes() { return likes; }
+
+    public void setLikes(ArrayList<String> likes) { this.likes = likes; }
 
     @Exclude
     public String getRelativeTime() {

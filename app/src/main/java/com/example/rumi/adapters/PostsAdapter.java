@@ -25,12 +25,15 @@ import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -43,6 +46,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private List<Post> posts;
     private PostsFragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
@@ -85,6 +89,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
         private ImageView ivProfileImage, ivImage, ivLike, ivComment;
+        ArrayList<String> likeList;
+        private int numLikes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +111,46 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         public void bind(final Post post) {
 
+            likeList = post.getLikes();
+            numLikes = post.getLikes().size();
+            // set like icon filled or not
+            if (!post.getLikes().isEmpty()) {
+                if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+                } else {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+                }
+            } else {
+                ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+            }
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
+                        ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+                        db.collection(Post.KEY_POSTS).document(post.getPostId())
+                                .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
+                        likeList.add(firebaseAuth.getCurrentUser().getUid());
+                        post.setLikes(likeList);
+                        numLikes++;
+                    } else {
+                        ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                        ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+                        db.collection(Post.KEY_POSTS).document(post.getPostId())
+                                .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
+                        likeList.remove(firebaseAuth.getCurrentUser().getUid());
+                        post.setLikes(likeList);
+                        numLikes--;
+                    }
+//                    setNumLikes(numLikes); // TODO
+                }
+            });
+
             // onClickListeners to open ProfileFragment
             ivProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,13 +162,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     openProfileFragment(post.getUserId());
-                }
-            });
-
-            ivLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // TODO
                 }
             });
 

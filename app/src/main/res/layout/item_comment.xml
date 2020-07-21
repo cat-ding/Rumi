@@ -35,4 +35,10 @@
         android:layout_toEndOf="@+id/tvUserName"
         tools:text="This is my comment!" />
 
+    <TextView
+        android:id="@+id/tvRelativeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1 hour ago" />
+
 </RelativeLayout>
