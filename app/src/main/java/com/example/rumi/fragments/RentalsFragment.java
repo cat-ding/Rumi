@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.R;
 import com.example.rumi.models.Post;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -87,15 +88,28 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
         postsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                LatLng camera = null;
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Post post = documentSnapshot.toObject(Post.class);
                     if (post.getLatitude() != 0 && post.getLongitude() != 0) {
+                        if (post.getAddress().equals("44 Professors Row, Medford, MA 02155, USA"))
+                            camera = new LatLng(post.getLatitude(), post.getLongitude());
                         LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
                         googleMap.addMarker(new MarkerOptions()
                                 .position(location)
                                 .title(post.getAddress()));
                     }
                 }
+                double latitude = camera.latitude;
+                double longitude = camera.longitude;
+                CameraUpdate center=
+                        CameraUpdateFactory.newLatLng(new LatLng(latitude,
+                                longitude));
+                CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+
+                googleMap.moveCamera(center);
+                googleMap.animateCamera(zoom);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
