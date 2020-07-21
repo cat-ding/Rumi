@@ -80,26 +80,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkMapServices(){
-        if (isServicesOK()) {
-            if (isMapsEnabled()) {
-                return true;
-            }
+        if (isServicesOK() && isMapsEnabled()) {
+            return true;
         }
         return false;
     }
 
-    // map sure gps is enabled on device
+    // checks to see if location services is enabled
     public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER) ) {
             buildAlertMessageNoGps();
             return false;
         }
         return true;
     }
 
-    // prompts user to enable gps if not enabled already
+    // prompts user to enable location services if not enabled already
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This application requires GPS for some features, do you want to enable it?")
@@ -151,12 +149,11 @@ public class MainActivity extends AppCompatActivity {
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
         locationPermissionGranted = false;
-        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            && grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionGranted = true;
-            }
+            locationPermissionGranted = true;
         }
     }
 
