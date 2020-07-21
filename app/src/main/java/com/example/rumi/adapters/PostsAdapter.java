@@ -87,7 +87,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues;
+        private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues, tvNumLikes;
         private ImageView ivProfileImage, ivImage, ivLike, ivComment;
         ArrayList<String> likeList;
         private int numLikes;
@@ -105,6 +105,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage = itemView.findViewById(R.id.ivImage);
             ivLike = itemView.findViewById(R.id.ivLike);
             ivComment = itemView.findViewById(R.id.ivComment);
+            tvNumLikes = itemView.findViewById(R.id.tvNumLikes);
 
             itemView.setOnClickListener(this);
         }
@@ -113,6 +114,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             likeList = post.getLikes();
             numLikes = post.getLikes().size();
+            setNumLikes(post.getLikes().size());
             // set like icon filled or not
             if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
                 ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
@@ -131,7 +133,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         db.collection(Post.KEY_POSTS).document(post.getPostId())
                                 .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
                         likeList.add(firebaseAuth.getCurrentUser().getUid());
-                        post.setLikes(likeList);
                         numLikes++;
                     } else {
                         ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
@@ -139,10 +140,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         db.collection(Post.KEY_POSTS).document(post.getPostId())
                                 .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
                         likeList.remove(firebaseAuth.getCurrentUser().getUid());
-                        post.setLikes(likeList);
                         numLikes--;
                     }
-//                    setNumLikes(numLikes); // TODO
+                    post.setLikes(likeList);
+                    setNumLikes(numLikes);
                 }
             });
 
@@ -189,6 +190,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     + post.getDuration() + " months starting " + post.getStartMonth());
 
             bindUserFields(post);
+        }
+
+        private void setNumLikes(int numLikes) {
+            if (numLikes == 1) {
+                tvNumLikes.setText(numLikes + " like");
+            } else {
+                tvNumLikes.setText(numLikes + " likes");
+            }
         }
 
         private void openProfileFragment(String userId) {

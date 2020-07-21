@@ -32,7 +32,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
-                    tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress;
+                    tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress, tvNumLikes;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike;
     private ArrayList<String> likeList;
     private int numLikes;
@@ -63,6 +63,30 @@ public class PostDetailActivity extends AppCompatActivity {
         tvAddress = findViewById(R.id.tvAddress);
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
+        tvNumLikes = findViewById(R.id.tvNumLikes);
+
+        ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+                    db.collection(Post.KEY_POSTS).document(post.getPostId())
+                            .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
+                    likeList.add(firebaseAuth.getCurrentUser().getUid());
+                    numLikes++;
+                } else {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+                    db.collection(Post.KEY_POSTS).document(post.getPostId())
+                            .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
+                    likeList.remove(firebaseAuth.getCurrentUser().getUid());
+                    numLikes--;
+                }
+                post.setLikes(likeList);
+                setNumLikes(numLikes);
+            }
+        });
 
         setFields();
     }
@@ -98,6 +122,7 @@ public class PostDetailActivity extends AppCompatActivity {
         // set like icon filled or not
         likeList = post.getLikes();
         numLikes = post.getLikes().size();
+        setNumLikes(post.getLikes().size());
         // set like icon filled or not
         if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
             ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
@@ -106,30 +131,6 @@ public class PostDetailActivity extends AppCompatActivity {
             ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
             ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
         }
-
-        ivLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
-                    db.collection(Post.KEY_POSTS).document(post.getPostId())
-                            .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
-                    likeList.add(firebaseAuth.getCurrentUser().getUid());
-                    post.setLikes(likeList);
-                    numLikes++;
-                } else {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
-                    db.collection(Post.KEY_POSTS).document(post.getPostId())
-                            .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
-                    likeList.remove(firebaseAuth.getCurrentUser().getUid());
-                    post.setLikes(likeList);
-                    numLikes--;
-                }
-//                    setNumLikes(numLikes); // TODO
-            }
-        });
 
         usersRef.document(post.getUserId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -146,6 +147,14 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setNumLikes(int numLikes) {
+        if (numLikes == 1) {
+            tvNumLikes.setText(numLikes + " like");
+        } else {
+            tvNumLikes.setText(numLikes + " likes");
+        }
     }
 
     // onClick method for the comment icon (ivComment)
