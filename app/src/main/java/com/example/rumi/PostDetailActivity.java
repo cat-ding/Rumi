@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.parceler.Parcels;
@@ -29,10 +30,12 @@ public class PostDetailActivity extends AppCompatActivity {
     public static final String TAG = "PostDetailActivity";
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
-    Post post;
+    private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike;
+    private ArrayList<String> likeList;
+    private int numLikes;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
@@ -61,10 +64,10 @@ public class PostDetailActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
 
-        setFields(post);
+        setFields();
     }
 
-    private void setFields(Post post) {
+    private void setFields() {
         tvTitle.setText(post.getTitle());
         tvDescription.setText(post.getDescription());
         tvRelativeTime.setText(post.getRelativeTime());
@@ -93,16 +96,40 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         // set like icon filled or not
-        if (!post.getLikes().isEmpty()) {
-            ArrayList<String> list = post.getLikes();
-            if (list.contains(firebaseAuth.getCurrentUser().getUid())) {
-                ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
-                ivLike.setTag(R.drawable.ic_baseline_favorite_24);
-            } else {
-                ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
-            }
+        likeList = post.getLikes();
+        numLikes = post.getLikes().size();
+        // set like icon filled or not
+        if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
+            ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+            ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+        } else {
+            ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+            ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
         }
+
+        ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+                    db.collection(Post.KEY_POSTS).document(post.getPostId())
+                            .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
+                    likeList.add(firebaseAuth.getCurrentUser().getUid());
+                    post.setLikes(likeList);
+                    numLikes++;
+                } else {
+                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+                    db.collection(Post.KEY_POSTS).document(post.getPostId())
+                            .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
+                    likeList.remove(firebaseAuth.getCurrentUser().getUid());
+                    post.setLikes(likeList);
+                    numLikes--;
+                }
+//                    setNumLikes(numLikes); // TODO
+            }
+        });
 
         usersRef.document(post.getUserId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -126,5 +153,14 @@ public class PostDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
         intent.putExtra(Post.KEY_POST_ID, post.getPostId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // transmitting post object back to ProfileFragment
+        Intent intent = new Intent();
+        intent.putExtra("updatedPost", Parcels.wrap(post));
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

@@ -114,14 +114,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             likeList = post.getLikes();
             numLikes = post.getLikes().size();
             // set like icon filled or not
-            if (!post.getLikes().isEmpty()) {
-                if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
-                } else {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
-                }
+            if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
+                ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+                ivLike.setTag(R.drawable.ic_baseline_favorite_24);
             } else {
                 ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                 ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);

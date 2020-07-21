@@ -40,6 +40,7 @@ public class PostsFragment extends Fragment {
 
     public static final String TAG = "PostsFragment";
     private static final int CREATE_POST_REQUEST = 55;
+    public static final int LIKE_POST_REQUEST = 25;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -139,6 +140,26 @@ public class PostsFragment extends Fragment {
                 allPosts.add(0, newPost);
                 adapter.notifyItemInserted(0);
                 rvPosts.smoothScrollToPosition(0);
+            }
+        }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == LIKE_POST_REQUEST) {
+            Parcelable updatedPostParcel = data.getParcelableExtra("updatedPost");
+
+            if (updatedPostParcel != null) {
+                Post updatedPost = Parcels.unwrap(updatedPostParcel);
+
+                // find adapter position (where the tweet was)
+                int position = -1;
+                for (int i = 0; i < allPosts.size(); i++) {
+                    if (allPosts.get(i).getPostId().equals(updatedPost.getPostId())) {
+                        position = i;
+                        break;
+                    }
+                }
+                allPosts.remove(position);
+                allPosts.add(position, updatedPost);
+                adapter.notifyItemChanged(position);
             }
         }
     }
