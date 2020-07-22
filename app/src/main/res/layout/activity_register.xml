@@ -54,13 +54,15 @@
         android:id="@+id/spinnerMajor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:entries="@array/majors" />
 
     <Spinner
         android:id="@+id/spinnerYear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:entries="@array/year" />
 
     <Button
         android:id="@+id/btnRegister"

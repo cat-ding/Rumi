@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,10 +36,11 @@ public class PostDetailActivity extends AppCompatActivity {
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress, tvNumLikes;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike;
     private ArrayList<String> likeList;
-    private int numLikes;
+    private int numLikes, postPopularity;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
 
         post = Parcels.unwrap(getIntent().getParcelableExtra(Post.class.getSimpleName()));
+        postPopularity = post.getPopularity();
 
         tvUserName = findViewById(R.id.tvUserName);
         tvTitle = findViewById(R.id.tvTitle);
@@ -75,6 +78,7 @@ public class PostDetailActivity extends AppCompatActivity {
                             .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
                     likeList.add(firebaseAuth.getCurrentUser().getUid());
                     numLikes++;
+                    postPopularity++;
                 } else {
                     ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                     ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
@@ -82,13 +86,25 @@ public class PostDetailActivity extends AppCompatActivity {
                             .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
                     likeList.remove(firebaseAuth.getCurrentUser().getUid());
                     numLikes--;
+                    postPopularity--;
                 }
                 post.setLikes(likeList);
-                setNumLikes(numLikes);
+                post.setPopularity(postPopularity);
+                updateNumLikes(numLikes);
+                updatePopularity(post.getPostId(), postPopularity);
             }
         });
 
         setFields();
+    }
+
+    private void updatePopularity(String postId, int postPopularity) {
+        postsRef.document(postId).update(Post.KEY_POPULARITY, postPopularity).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: unable to update popularity", e.getCause());
+            }
+        });
     }
 
     private void setFields() {
@@ -121,8 +137,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
         // set like icon filled or not
         likeList = post.getLikes();
-        numLikes = post.getLikes().size();
-        setNumLikes(post.getLikes().size());
+        numLikes = likeList.size();
+        updateNumLikes(post.getLikes().size());
         // set like icon filled or not
         if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
             ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
@@ -149,7 +165,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void setNumLikes(int numLikes) {
+    private void updateNumLikes(int numLikes) {
         if (numLikes == 1) {
             tvNumLikes.setText(numLikes + " like");
         } else {

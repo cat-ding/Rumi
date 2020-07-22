@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     public static final String TAG = "PostsFragment";
     private static final int CREATE_POST_REQUEST = 55;
     public static final int LIKE_POST_REQUEST = 25;
+    private static final int BOTTOM_SHEET_REQUEST_CODE = 5;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -131,7 +133,8 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
 
     private void openFilters() {
         FiltersBottomSheetDialog filtersDialog = new FiltersBottomSheetDialog();
-        filtersDialog.show(getFragmentManager(), "filtersBottomSheetDialog");
+        filtersDialog.setTargetFragment(PostsFragment.this, BOTTOM_SHEET_REQUEST_CODE);
+        filtersDialog.show(getFragmentManager(), "FiltersBottomSheetDialog");
     }
 
     @Override
@@ -186,7 +189,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     @Override
-    public void sendFilterSelections() {
+    public void sendFilterSelections(String sortType) {
         // TODO
     }
 }

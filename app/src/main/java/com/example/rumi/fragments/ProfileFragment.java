@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.parceler.Parcels;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,7 @@ public class ProfileFragment extends Fragment {
 
     public static final String TAG = "ProfileFragment";
     private static final int CAPTURE_IMAGE_CODE = 35;
+    public static final int LIKE_POST_REQUEST = 25;
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage, btnChangeProfileImage;
@@ -208,6 +212,26 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == LIKE_POST_REQUEST) {
+            Parcelable updatedPostParcel = data.getParcelableExtra("updatedPost");
+
+            if (updatedPostParcel != null) {
+                Post updatedPost = Parcels.unwrap(updatedPostParcel);
+
+                // find adapter position (where the tweet was)
+                int position = -1;
+                for (int i = 0; i < allPosts.size(); i++) {
+                    if (allPosts.get(i).getPostId().equals(updatedPost.getPostId())) {
+                        position = i;
+                        break;
+                    }
+                }
+                allPosts.remove(position);
+                allPosts.add(position, updatedPost);
+                adapter.notifyItemChanged(position);
+            }
+        }
     }
 
     private void handleUpload(Bitmap bitmap) {
@@ -267,5 +291,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
+
 
 }

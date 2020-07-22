@@ -22,12 +22,13 @@ public class Post {
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_POST_ID = "postId";
     public static final String KEY_LIKES = "likes";
+    public static final String KEY_POPULARITY = "popularity";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
     public String title, description, startMonth, userId, startDate, endDate, photoUrl, postId,
             name, address;
-    public int numRooms, duration, rent;
+    public int numRooms, duration, rent, popularity;
     public boolean furnished, lookingForHouse;
     public Date createdAt;
     public double latitude, longitude;
@@ -59,6 +60,7 @@ public class Post {
         this.latitude = latitude;
         this.longitude = longitude;
         this.likes = new ArrayList<>();
+        this.popularity = 0;
     }
 
     public String getUserId() { return userId; }
@@ -186,6 +188,14 @@ public class Post {
     public ArrayList<String> getLikes() { return likes; }
 
     public void setLikes(ArrayList<String> likes) { this.likes = likes; }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
+    }
 
     @Exclude
     public String getRelativeTime() {

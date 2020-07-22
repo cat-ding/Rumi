@@ -24,6 +24,7 @@ import com.example.rumi.models.User;
 import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -48,6 +49,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
         this.context = context;
@@ -114,7 +116,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             likeList = post.getLikes();
             numLikes = post.getLikes().size();
-            setNumLikes(post.getLikes().size());
+            updateNumLikes(post.getLikes().size());
             // set like icon filled or not
             if (likeList.contains(firebaseAuth.getCurrentUser().getUid())) {
                 ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
@@ -127,6 +129,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int postPopularity = post.getPopularity();
                     if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
                         ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
                         ivLike.setTag(R.drawable.ic_baseline_favorite_24);
@@ -134,6 +137,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                 .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
                         likeList.add(firebaseAuth.getCurrentUser().getUid());
                         numLikes++;
+                        postPopularity++;
                     } else {
                         ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
                         ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
@@ -141,9 +145,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                 .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
                         likeList.remove(firebaseAuth.getCurrentUser().getUid());
                         numLikes--;
+                        postPopularity--;
                     }
                     post.setLikes(likeList);
-                    setNumLikes(numLikes);
+                    post.setPopularity(postPopularity);
+                    updateNumLikes(numLikes);
+                    updatePopularity(post.getPostId(), postPopularity);
                 }
             });
 
@@ -165,6 +172,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, CommentsActivity.class);
+                    intent.putExtra(Post.KEY_POPULARITY, post.getPopularity());
                     intent.putExtra(Post.KEY_POST_ID, post.getPostId());
                     fragment.startActivity(intent);
                 }
@@ -192,12 +200,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             bindUserFields(post);
         }
 
-        private void setNumLikes(int numLikes) {
+        private void updateNumLikes(int numLikes) {
             if (numLikes == 1) {
                 tvNumLikes.setText(numLikes + " like");
             } else {
                 tvNumLikes.setText(numLikes + " likes");
             }
+        }
+
+        private void updatePopularity(String postId, int postPopularity) {
+            postsRef.document(postId).update(Post.KEY_POPULARITY, postPopularity).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "onFailure: unable to update popularity", e.getCause());
+                }
+            });
         }
 
         private void openProfileFragment(String userId) {

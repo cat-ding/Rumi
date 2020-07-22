@@ -20,6 +20,7 @@ import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +40,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     public static final String TAG = "CommentsActivity";
     private String postId;
+    private int postPopularity;
     private RecyclerView rvComments;
     private CommentsAdapter adapter;
     private List<Comment> allComments;
@@ -49,7 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
-    private CollectionReference usersRef = db.collection(User.KEY_USERS);
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comments);
 
         postId = getIntent().getStringExtra(Post.KEY_POST_ID);;
+        postPopularity = getIntent().getIntExtra(Post.KEY_POPULARITY, 0);
 
         rvComments = findViewById(R.id.rvComments);
         btnPost = findViewById(R.id.btnPost);
@@ -100,12 +103,19 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void postComment(String body) {
+        postPopularity++;
         final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(), body);
         commentsRef.document().set(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(CommentsActivity.this, "Comment created!", Toast.LENGTH_SHORT).show();
                 queryComments();
+            }
+        });
+        postsRef.document(postId).update(Post.KEY_POPULARITY, postPopularity).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: unable to update popularity", e.getCause());
             }
         });
     }

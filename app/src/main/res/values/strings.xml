@@ -94,8 +94,10 @@
         <item>Other</item>
     </string-array>
 
-    <string-array name="furnished">
-        <item>Yes</item>
-        <item>No</item>
+    <string-array name="sort">
+        <item>Recent (Default)</item>
+        <item>Popularity</item>
+        <item>Rent (High to Low)</item>
+        <item>Rent (Low to High)</item>
     </string-array>
 </resources>
