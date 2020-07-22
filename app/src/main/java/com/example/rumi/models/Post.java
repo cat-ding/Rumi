@@ -23,6 +23,7 @@ public class Post {
     public static final String KEY_POST_ID = "postId";
     public static final String KEY_LIKES = "likes";
     public static final String KEY_POPULARITY = "popularity";
+    public static final String KEY_RENT = "rent";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 

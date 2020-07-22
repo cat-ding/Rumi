@@ -186,6 +186,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (!post.getPhotoUrl().equals("")) {
                 Glide.with(context).load(post.getPhotoUrl()).into(ivImage);
                 ivImage.setVisibility(View.VISIBLE);
+            } else {
+                ivImage.setVisibility(View.GONE);
             }
 
             if (post.isLookingForHouse()) {

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,7 +47,10 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private static final int CREATE_POST_REQUEST = 55;
     public static final int LIKE_POST_REQUEST = 25;
     private static final int BOTTOM_SHEET_REQUEST_CODE = 5;
+    public static final String SORT_DEFAULT = "Recent (Default)";
     private static final String SORT_POPULARITY = "Popularity";
+    private static final String SORT_RENT_HIGH_TO_LOW = "Rent (High to Low)";
+    private static final String SORT_RENT_LOW_TO_HIGH = "Rent (Low to High)";
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -57,7 +61,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private SwipeRefreshLayout swipeContainer;
     private ImageView ivFilter;
     private TextView tvFilter;
-    private String currSort; // TODO
+    private String currSort = SORT_DEFAULT; // TODO
 
     public PostsFragment() {
         // Required empty public constructor
@@ -78,6 +82,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         toolbar = (androidx.appcompat.widget.Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        // swipeContainer refresh configs
         swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -86,8 +91,15 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i(TAG, "fetching new data!");
-                loadPosts();
+                if (currSort.equals(SORT_DEFAULT)) {
+                    loadPosts();
+                } else if (currSort.equals(SORT_POPULARITY)) {
+                    loadPostsPopularity();
+                } else if (currSort.equals(SORT_RENT_HIGH_TO_LOW)) {
+                    loadPostsHighToLow();
+                } else if (currSort.equals(SORT_RENT_LOW_TO_HIGH)) {
+                    loadPostsLowToHigh();
+                }
             }
         });
 
@@ -116,22 +128,56 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         loadPosts();
     }
 
+    // default load posts by most recent
     private void loadPosts() {
         postsRef.orderBy(Post.KEY_CREATED_AT, Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        adapter.clear();
-                        // QueryDocumentSnapshots are guaranteed to exist
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Post post = documentSnapshot.toObject(Post.class);
-
-                            allPosts.add(post);
-                        }
-                        adapter.notifyDataSetChanged();
-                        swipeContainer.setRefreshing(false);
+                        addPostsToAdapter(queryDocumentSnapshots);
                     }
                 });
+    }
+
+    private void loadPostsPopularity() {
+        postsRef.orderBy(Post.KEY_POPULARITY, Query.Direction.DESCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        addPostsToAdapter(queryDocumentSnapshots);
+                    }
+                });
+    }
+
+    private void loadPostsHighToLow() {
+        postsRef.orderBy(Post.KEY_RENT, Query.Direction.DESCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        addPostsToAdapter(queryDocumentSnapshots);
+                    }
+                });
+    }
+
+    private void loadPostsLowToHigh() {
+        postsRef.orderBy(Post.KEY_RENT, Query.Direction.ASCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        addPostsToAdapter(queryDocumentSnapshots);
+                    }
+                });
+    }
+
+    private void addPostsToAdapter(QuerySnapshot queryDocumentSnapshots) {
+        adapter.clear();
+        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+            Post post = documentSnapshot.toObject(Post.class);
+
+            allPosts.add(post);
+        }
+        adapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 
     private void openFilters() {
@@ -192,14 +238,45 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     @Override
-    public void sendFilterSelections(String sortType) {
-        if (sortType.equals(SORT_POPULARITY)) {
-            Collections.sort(allPosts, new Comparator<Post>() {
-                public int compare(Post postOne, Post postTwo) {
+    public void sendFilterSelections(final String sortType) {
+        Collections.sort(allPosts, new Comparator<Post>() {
+            public int compare(Post postOne, Post postTwo) {
+                if (sortType.equals(SORT_DEFAULT)) {
+                    currSort = SORT_DEFAULT;
+                    return postOne.getCreatedAt().compareTo(postTwo.getCreatedAt());
+                } else if (sortType.equals(SORT_POPULARITY)) {
+                    currSort = SORT_POPULARITY;
                     return postTwo.getPopularity() - postOne.getPopularity();
+                } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
+                    currSort = SORT_RENT_HIGH_TO_LOW;
+                    return postTwo.getRent() - postOne.getRent();
+                } else {
+                    currSort = SORT_RENT_LOW_TO_HIGH;
+                    return postOne.getRent() - postTwo.getRent();
                 }
-            });
-        }
+            }
+        });
+
         adapter.notifyDataSetChanged();
+        rvPosts.smoothScrollToPosition(0);
+//        if (sortType.equals(SORT_DEFAULT)) {
+//            Collections.sort(allPosts, new Comparator<Post>() {
+//                public int compare(Post postOne, Post postTwo) {
+//                    return postTwo.getCreatedAt().compareTo(postOne.getCreatedAt());
+//                }
+//            });
+//            currSort = SORT_DEFAULT;
+//        } else if (sortType.equals(SORT_POPULARITY)) {
+//            Collections.sort(allPosts, new Comparator<Post>() {
+//                public int compare(Post postOne, Post postTwo) {
+//                    return postTwo.getPopularity() - postOne.getPopularity();
+//                }
+//            });
+//            currSort = SORT_POPULARITY;
+//        } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
+//
+//        } else if (sortType.equals(SORT_RENT_LOW_TO_HIGH)) {
+//
+//        }
     }
 }
