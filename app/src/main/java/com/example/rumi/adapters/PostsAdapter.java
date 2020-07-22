@@ -45,13 +45,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     private Context context;
     private List<Post> posts;
-    private PostsFragment fragment;
+    private Fragment fragment;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
-    public PostsAdapter(Context context, List<Post> posts, PostsFragment fragment) {
+    public PostsAdapter(Context context, List<Post> posts, Fragment fragment) {
         this.context = context;
         this.posts = posts;
         this.fragment = fragment;

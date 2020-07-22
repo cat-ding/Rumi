@@ -25,8 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.LoginActivity;
+import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.models.Post;
-import com.example.rumi.adapters.ProfilePostAdapter;
 import com.example.rumi.R;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
     private Button btnLogout, btnMessage;
 
     private RecyclerView rvPosts;
-    private ProfilePostAdapter adapter;
+    private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
 
@@ -147,7 +147,7 @@ public class ProfileFragment extends Fragment {
         });
 
         allPosts = new ArrayList<>();
-        adapter = new ProfilePostAdapter(getContext(), allPosts, this);
+        adapter = new PostsAdapter(getContext(), allPosts, this);
         rvPosts.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
