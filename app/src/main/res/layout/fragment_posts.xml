@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rlFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_border">
+
+        <ImageView
+            android:id="@+id/ivFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tvFilter"
+            app:srcCompat="@drawable/ic_baseline_tune_24" />
+
+        <TextView
+            android:id="@+id/tvFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="2dp"
+            android:text="Filters" />
+
+    </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
@@ -15,7 +41,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

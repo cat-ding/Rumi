@@ -11,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +38,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostsFragment extends Fragment {
+public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.BottomSheetListener {
 
     public static final String TAG = "PostsFragment";
     private static final int CREATE_POST_REQUEST = 55;
@@ -49,6 +51,8 @@ public class PostsFragment extends Fragment {
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private androidx.appcompat.widget.Toolbar toolbar;
     private SwipeRefreshLayout swipeContainer;
+    private ImageView ivFilter;
+    private TextView tvFilter;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -83,14 +87,26 @@ public class PostsFragment extends Fragment {
         });
 
         rvPosts = view.findViewById(R.id.rvPosts);
+        tvFilter = view.findViewById(R.id.tvFilter);
+        ivFilter = view.findViewById(R.id.ivFilter);
+        tvFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFilters();
+            }
+        });
+        ivFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFilters();
+            }
+        });
 
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts, this);
         rvPosts.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
-
-        //TODO: add endless recycler view scroll listener
 
         loadPosts();
     }
@@ -111,6 +127,11 @@ public class PostsFragment extends Fragment {
                         swipeContainer.setRefreshing(false);
                     }
                 });
+    }
+
+    private void openFilters() {
+        FiltersBottomSheetDialog filtersDialog = new FiltersBottomSheetDialog();
+        filtersDialog.show(getFragmentManager(), "filtersBottomSheetDialog");
     }
 
     @Override
@@ -162,5 +183,10 @@ public class PostsFragment extends Fragment {
                 adapter.notifyItemChanged(position);
             }
         }
+    }
+
+    @Override
+    public void sendFilterSelections() {
+        // TODO
     }
 }

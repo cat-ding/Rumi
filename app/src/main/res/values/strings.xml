@@ -9,7 +9,7 @@
         <item>Africana Studies</item>
         <item>American Studies</item>
         <item>Anthropology</item>
-        <item>Applies Mathematics</item>
+        <item>Applied Mathematics</item>
         <item>Applied Physics</item>
         <item>Arabic</item>
         <item>Archaeology</item>
@@ -18,25 +18,35 @@
         <item>Astrophysics</item>
         <item>Biochemistry</item>
         <item>Biology</item>
+        <item>Biomedical Engineering</item>
         <item>Biomedical Sciences</item>
         <item>Biopsychology</item>
         <item>Biotechnology</item>
+        <item>Chemical Engineering</item>
         <item>Chemical Physics</item>
         <item>Chemistry</item>
         <item>Child Study and Human Development</item>
         <item>Chinese</item>
         <item>Civic Studies</item>
+        <item>Civil Engineering</item>
         <item>Classical Studies</item>
         <item>Clinical Psychology</item>
         <item>Cognitive and Brain Sciences</item>
         <item>Community Health</item>
+        <item>Computer Engineering</item>
         <item>Computer Science</item>
+        <item>Data Science</item>
         <item>Drama</item>
         <item>Economics</item>
         <item>Education</item>
+        <item>Electrical Engineering</item>
+        <item>Engineering Physics</item>
         <item>Engineering Psychology / Human Factors Engineering</item>
+        <item>Engineering Science</item>
+        <item>Environmental Engineering</item>
         <item>English</item>
         <item>Environmental Geology</item>
+        <item>Environmental Health</item>
         <item>Environmental Studies and Applied Environmental Studies</item>
         <item>Film and Media Studies</item>
         <item>French</item>
@@ -55,6 +65,7 @@
         <item>Latin</item>
         <item>Latin American Studies</item>
         <item>Mathematics</item>
+        <item>Mechanical Engineering</item>
         <item>Middle Eastern Studies</item>
         <item>Music</item>
         <item>Music, Sound, and Culture</item>
