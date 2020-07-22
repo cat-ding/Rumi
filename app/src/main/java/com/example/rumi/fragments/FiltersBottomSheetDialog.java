@@ -1,6 +1,5 @@
 package com.example.rumi.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +14,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.rumi.R;
-import com.example.rumi.RegisterActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.Arrays;
 
 public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String TAG = "FiltersBottomSheetDialog";
+    public static final String SORT_DEFAULT = "Recent (Default)";
+    private static final String SORT_POPULARITY = "Popularity";
+    private static final String SORT_RENT_HIGH_TO_LOW = "Rent (High to Low)";
+    private static final String SORT_RENT_LOW_TO_HIGH = "Rent (Low to High)";
     private BottomSheetListener mListener;
 
     private TextView tvDone, tvCancel;
@@ -34,14 +37,30 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         void sendFilterSelections(String sortType);
     }
 
+    public static FiltersBottomSheetDialog newInstance(String currSort) {
+        
+        FiltersBottomSheetDialog fragment = new FiltersBottomSheetDialog();
+        Bundle args = new Bundle();
+        args.putString("currSort", currSort);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.bottom_sheet_filters, container, false);
 
-        tvDone = v.findViewById(R.id.tvDone);
-        tvCancel = v.findViewById(R.id.tvCancel);
-        spinnerSort = v.findViewById(R.id.spinnerSort);
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        tvDone = view.findViewById(R.id.tvDone);
+        tvCancel = view.findViewById(R.id.tvCancel);
+        spinnerSort = view.findViewById(R.id.spinnerSort);
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +94,7 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
             public void onNothingSelected(AdapterView<?> adapterView) { return; }
         });
 
-        return v;
+        setPreviousSelections();
     }
 
     // called when fragment is attached to a host fragment
@@ -87,5 +106,19 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement BottomSheetListener");
         }
+    }
+
+    private void setPreviousSelections() {
+        String currSort = getArguments().getString("currSort");
+        int spinnerIndex;
+        if (currSort.equals(SORT_DEFAULT))
+            spinnerIndex = 0;
+        else if (currSort.equals(SORT_POPULARITY))
+            spinnerIndex = 1;
+        else if (currSort.equals(SORT_RENT_HIGH_TO_LOW))
+            spinnerIndex = 2;
+        else
+            spinnerIndex = 3;
+        spinnerSort.setSelection(spinnerIndex);
     }
 }

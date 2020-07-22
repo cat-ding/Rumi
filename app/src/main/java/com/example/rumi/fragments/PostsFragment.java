@@ -181,7 +181,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     private void openFilters() {
-        FiltersBottomSheetDialog filtersDialog = new FiltersBottomSheetDialog();
+        FiltersBottomSheetDialog filtersDialog = FiltersBottomSheetDialog.newInstance(currSort);
         filtersDialog.setTargetFragment(PostsFragment.this, BOTTOM_SHEET_REQUEST_CODE);
         filtersDialog.show(getFragmentManager(), "FiltersBottomSheetDialog");
     }
@@ -239,6 +239,8 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
 
     @Override
     public void sendFilterSelections(final String sortType) {
+        if (sortType.equals(currSort))
+            return;
         Collections.sort(allPosts, new Comparator<Post>() {
             public int compare(Post postOne, Post postTwo) {
                 if (sortType.equals(SORT_DEFAULT)) {
@@ -259,24 +261,5 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
 
         adapter.notifyDataSetChanged();
         rvPosts.smoothScrollToPosition(0);
-//        if (sortType.equals(SORT_DEFAULT)) {
-//            Collections.sort(allPosts, new Comparator<Post>() {
-//                public int compare(Post postOne, Post postTwo) {
-//                    return postTwo.getCreatedAt().compareTo(postOne.getCreatedAt());
-//                }
-//            });
-//            currSort = SORT_DEFAULT;
-//        } else if (sortType.equals(SORT_POPULARITY)) {
-//            Collections.sort(allPosts, new Comparator<Post>() {
-//                public int compare(Post postOne, Post postTwo) {
-//                    return postTwo.getPopularity() - postOne.getPopularity();
-//                }
-//            });
-//            currSort = SORT_POPULARITY;
-//        } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
-//
-//        } else if (sortType.equals(SORT_RENT_LOW_TO_HIGH)) {
-//
-//        }
     }
 }
