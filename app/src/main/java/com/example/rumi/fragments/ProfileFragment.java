@@ -152,8 +152,6 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
 
-        //TODO: refresh feature
-
         loadPosts();
     }
 
@@ -291,7 +289,4 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
-
-
-
 }

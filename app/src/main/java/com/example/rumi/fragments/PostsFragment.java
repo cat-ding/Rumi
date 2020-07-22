@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +36,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.BottomSheetListener {
@@ -45,6 +46,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private static final int CREATE_POST_REQUEST = 55;
     public static final int LIKE_POST_REQUEST = 25;
     private static final int BOTTOM_SHEET_REQUEST_CODE = 5;
+    private static final String SORT_POPULARITY = "Popularity";
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -55,6 +57,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private SwipeRefreshLayout swipeContainer;
     private ImageView ivFilter;
     private TextView tvFilter;
+    private String currSort; // TODO
 
     public PostsFragment() {
         // Required empty public constructor
@@ -190,6 +193,13 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
 
     @Override
     public void sendFilterSelections(String sortType) {
-        // TODO
+        if (sortType.equals(SORT_POPULARITY)) {
+            Collections.sort(allPosts, new Comparator<Post>() {
+                public int compare(Post postOne, Post postTwo) {
+                    return postTwo.getPopularity() - postOne.getPopularity();
+                }
+            });
+        }
+        adapter.notifyDataSetChanged();
     }
 }
