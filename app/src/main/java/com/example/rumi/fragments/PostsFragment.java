@@ -60,7 +60,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
-    private List<Post> allPostsCopy; // TODO
+    private List<Post> allPostsCopy = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private androidx.appcompat.widget.Toolbar toolbar;
@@ -179,20 +179,28 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     private void addPostsToAdapter(QuerySnapshot queryDocumentSnapshots) {
-        Log.d(TAG, "addPostsToAdapter: ");
         adapter.clear();
         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
             Post post = documentSnapshot.toObject(Post.class);
 
             allPosts.add(post);
-//            Collections.copy(allPostsCopy, allPosts); // used to replace removed elements when filtering - NEED TO FIX
+            // perform a deep copy to use when filtering
+            allPostsCopy.clear();
+            for (Post p : allPosts) {
+                Post newPost = new Post(p.getCreatedAt(), p.getLikes(), p.getPopularity(),
+                        p.getTitle(), p.getDescription(), p.getStartMonth(), p.getUserId(),
+                        p.getNumRooms(), p.getDuration(), p.getRent(), p.isFurnished(),
+                        p.isLookingForHouse(), p.getStartDate(), p.getEndDate(), p.getPhotoUrl(),
+                        p.getPostId(), p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                allPostsCopy.add(newPost);
+            }
         }
         adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
     }
 
     private void openFilters() {
-        FiltersBottomSheetDialog filtersDialog = FiltersBottomSheetDialog.newInstance(currSort);
+        FiltersBottomSheetDialog filtersDialog = FiltersBottomSheetDialog.newInstance(currSort, currLookingFor);
         filtersDialog.setTargetFragment(PostsFragment.this, BOTTOM_SHEET_REQUEST_CODE);
         filtersDialog.show(getFragmentManager(), "FiltersBottomSheetDialog");
     }
@@ -252,8 +260,18 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     public void sendFilterSelections(final String sortType, String lookingFor) {
 
         if (!currLookingFor.equals(lookingFor)) {
-//            Collections.copy(allPosts, allPostsCopy);
-            // TODO: FIX THIS - need to repopulate arraylist with old elements after filtering out
+            allPosts.clear();
+            // perform a deep copy of old posts
+            for (Post p : allPostsCopy) {
+                Log.d(TAG, "sendFilterSelections: " + p.getTitle());
+                Post newPost = new Post(p.getCreatedAt(), p.getLikes(), p.getPopularity(),
+                        p.getTitle(), p.getDescription(), p.getStartMonth(), p.getUserId(),
+                        p.getNumRooms(), p.getDuration(), p.getRent(), p.isFurnished(),
+                        p.isLookingForHouse(), p.getStartDate(), p.getEndDate(), p.getPhotoUrl(),
+                        p.getPostId(), p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                allPosts.add(newPost);
+            }
+
             if (lookingFor.equals(LOOKING_FOR_PLACE)) {
                 for (Iterator<Post> iterator = allPosts.iterator(); iterator.hasNext(); ) {
                     if (!iterator.next().isLookingForHouse())

@@ -50,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -201,9 +202,10 @@ public class ComposeActivity extends AppCompatActivity {
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));
         numMonths = (int) Math.ceil(daysBetween / DAYS_IN_MONTH);
 
-        final Post post = new Post(title, description, startMonth, firebaseAuth.getCurrentUser().getUid(),
-                numRooms, numMonths, rent, furnished, lookingForHouse, startDate, endDate, photoUrl,
-                postId, name, address, latitude, longitude);
+        final Post post = new Post(new java.util.Date(), new ArrayList<String>(), 0, title,
+                description, startMonth, firebaseAuth.getCurrentUser().getUid(), numRooms, numMonths,
+                rent, furnished, lookingForHouse, startDate, endDate, photoUrl, postId, name, address,
+                latitude, longitude);
 
         postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

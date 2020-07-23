@@ -38,7 +38,7 @@ public class Post {
         // empty constructor required
     }
 
-    public Post(String title, String description, String startMonth, String userId, int numRooms,
+    public Post(Date createdAt, ArrayList<String> likes, int popularity, String title, String description, String startMonth, String userId, int numRooms,
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
                 String startDate, String endDate, String photoUrl, String postId,
                 String name, String address, double latitude, double longitude) {
@@ -50,7 +50,7 @@ public class Post {
         this.rent = rent;
         this.furnished = furnished;
         this.lookingForHouse = lookingForHouse;
-        this.createdAt = new java.util.Date();
+        this.createdAt = createdAt;
         this.userId = userId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -60,8 +60,8 @@ public class Post {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.likes = new ArrayList<>();
-        this.popularity = 0;
+        this.likes = likes;
+        this.popularity = popularity;
     }
 
     public String getUserId() { return userId; }

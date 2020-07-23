@@ -26,6 +26,8 @@ import java.util.List;
 public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String TAG = "FiltersBottomSheetDialog";
+    private static final String KEY_CURR_SORT = "currSort";
+    private static final String KEY_CURR_LOOKING_FOR = "currLookingFor";
     public static final String SORT_DEFAULT = "Recent (Default)";
     public static final String LOOKING_FOR_DEFAULT = "All";
     public static final String LOOKING_FOR_PLACE = "A place";
@@ -36,15 +38,17 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
     private Spinner spinnerSort;
     private String sortType = SORT_DEFAULT, lookingFor = LOOKING_FOR_DEFAULT;
     private RadioGroup radioGroupLookingFor;
+    private RadioButton radioAll, radioPlace, radioTenant;
 
     public interface BottomSheetListener {
         void sendFilterSelections(String sortType, String lookingFor);
     }
 
-    public static FiltersBottomSheetDialog newInstance(String currSort) {
+    public static FiltersBottomSheetDialog newInstance(String currSort, String currLookingFor) {
         FiltersBottomSheetDialog fragment = new FiltersBottomSheetDialog();
         Bundle args = new Bundle();
-        args.putString("currSort", currSort);
+        args.putString(KEY_CURR_SORT, currSort);
+        args.putString(KEY_CURR_LOOKING_FOR, currLookingFor);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +67,26 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         tvCancel = view.findViewById(R.id.tvCancel);
         spinnerSort = view.findViewById(R.id.spinnerSort);
         radioGroupLookingFor = view.findViewById(R.id.radioGroupLookingFor);
+        radioAll = view.findViewById(R.id.radioAll);
+        radioPlace = view.findViewById(R.id.radioPlace);
+        radioTenant = view.findViewById(R.id.radioTenant);
 
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        tvDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.sendFilterSelections(sortType, lookingFor);
+                dismiss();
+            }
+        });
+
+        // get looking for filter selection from radio group
         radioGroupLookingFor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
@@ -78,21 +101,6 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
                         lookingFor = LOOKING_FOR_TENANT;
                         break;
                 }
-            }
-        });
-
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-
-        tvDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.sendFilterSelections(sortType, lookingFor);
-                dismiss();
             }
         });
 
@@ -128,10 +136,21 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     private void setPreviousSelections() {
-        String currSort = getArguments().getString("currSort");
+        // setting sort
+        String currSort = getArguments().getString(KEY_CURR_SORT);
         int spinnerIndex = Arrays.asList((getResources().getStringArray(R.array.sort))).indexOf(currSort);
         spinnerSort.setSelection(spinnerIndex);
 
-        // TODO: add filters
+        // setting looking for radio buttons (radioAll is selected on default)
+        String currLookingFor = getArguments().getString(KEY_CURR_LOOKING_FOR);
+        if (currLookingFor.equals(LOOKING_FOR_PLACE)) {
+            radioAll.setChecked(false);
+            radioPlace.setChecked(true);
+            radioTenant.setChecked(false);
+        } else if (currLookingFor.equals(LOOKING_FOR_TENANT)) {
+            radioAll.setChecked(false);
+            radioPlace.setChecked(false);
+            radioTenant.setChecked(true);
+        }
     }
 }
