@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,26 +21,27 @@ import com.example.rumi.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String TAG = "FiltersBottomSheetDialog";
     public static final String SORT_DEFAULT = "Recent (Default)";
-    private static final String SORT_POPULARITY = "Popularity";
-    private static final String SORT_RENT_HIGH_TO_LOW = "Rent (High to Low)";
-    private static final String SORT_RENT_LOW_TO_HIGH = "Rent (Low to High)";
+    public static final String LOOKING_FOR_DEFAULT = "All";
+    public static final String LOOKING_FOR_PLACE = "A place";
+    public static final String LOOKING_FOR_TENANT = "A tenant";
     private BottomSheetListener mListener;
 
     private TextView tvDone, tvCancel;
     private Spinner spinnerSort;
-    private String sortType = "Recent (Default)";
+    private String sortType = SORT_DEFAULT, lookingFor = LOOKING_FOR_DEFAULT;
+    private RadioGroup radioGroupLookingFor;
 
     public interface BottomSheetListener {
-        void sendFilterSelections(String sortType);
+        void sendFilterSelections(String sortType, String lookingFor);
     }
 
     public static FiltersBottomSheetDialog newInstance(String currSort) {
-        
         FiltersBottomSheetDialog fragment = new FiltersBottomSheetDialog();
         Bundle args = new Bundle();
         args.putString("currSort", currSort);
@@ -49,9 +52,7 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.bottom_sheet_filters, container, false);
-
-        return v;
+        return inflater.inflate(R.layout.bottom_sheet_filters, container, false);
     }
 
     @Override
@@ -61,6 +62,24 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         tvDone = view.findViewById(R.id.tvDone);
         tvCancel = view.findViewById(R.id.tvCancel);
         spinnerSort = view.findViewById(R.id.spinnerSort);
+        radioGroupLookingFor = view.findViewById(R.id.radioGroupLookingFor);
+
+        radioGroupLookingFor.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                switch(checkedId) {
+                    case R.id.radioAll:
+                        lookingFor = LOOKING_FOR_DEFAULT;
+                        break;
+                    case R.id.radioPlace:
+                        lookingFor = LOOKING_FOR_PLACE;
+                        break;
+                    case R.id.radioTenant:
+                        lookingFor = LOOKING_FOR_TENANT;
+                        break;
+                }
+            }
+        });
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +91,7 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.sendFilterSelections(sortType);
+                mListener.sendFilterSelections(sortType, lookingFor);
                 dismiss();
             }
         });
@@ -110,15 +129,9 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private void setPreviousSelections() {
         String currSort = getArguments().getString("currSort");
-        int spinnerIndex;
-        if (currSort.equals(SORT_DEFAULT))
-            spinnerIndex = 0;
-        else if (currSort.equals(SORT_POPULARITY))
-            spinnerIndex = 1;
-        else if (currSort.equals(SORT_RENT_HIGH_TO_LOW))
-            spinnerIndex = 2;
-        else
-            spinnerIndex = 3;
+        int spinnerIndex = Arrays.asList((getResources().getStringArray(R.array.sort))).indexOf(currSort);
         spinnerSort.setSelection(spinnerIndex);
+
+        // TODO: add filters
     }
 }

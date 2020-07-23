@@ -126,7 +126,6 @@ public class ComposeActivity extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
                 LatLng latLng = place.getLatLng();
                 latitude = latLng.latitude;
                 longitude = latLng.longitude;
@@ -136,14 +135,13 @@ public class ComposeActivity extends AppCompatActivity {
 
             @Override
             public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                Log.e(TAG, "An error occurred: " + status);
             }
         });
     }
 
 
-    // onClick method for radio buttons
+    // onClick method for place radio buttons
     public void checkPlaceRadioButton(View view) {
         int radioId = radioGroupOne.getCheckedRadioButtonId();
         radioButtonHouse = findViewById(radioId);
@@ -156,6 +154,7 @@ public class ComposeActivity extends AppCompatActivity {
         }
     }
 
+    // onClick method for furnished radio buttons
     public void checkFurnishedRadioButton(View view) {
         int radioId = radioGroupFurnished.getCheckedRadioButtonId();
         radioButtonFurnished = findViewById(radioId);

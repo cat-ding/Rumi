@@ -39,7 +39,9 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.BottomSheetListener {
 
@@ -51,17 +53,24 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private static final String SORT_POPULARITY = "Popularity";
     private static final String SORT_RENT_HIGH_TO_LOW = "Rent (High to Low)";
     private static final String SORT_RENT_LOW_TO_HIGH = "Rent (Low to High)";
+    public static final String LOOKING_FOR_DEFAULT = "All";
+    public static final String LOOKING_FOR_PLACE = "A place";
+    public static final String LOOKING_FOR_TENANT = "A tenant";
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
     private List<Post> allPosts;
+    private List<Post> allPostsCopy; // TODO
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private androidx.appcompat.widget.Toolbar toolbar;
     private SwipeRefreshLayout swipeContainer;
     private ImageView ivFilter;
     private TextView tvFilter;
-    private String currSort = SORT_DEFAULT; // TODO
+
+    // to keep track of last filter selections
+    private String currSort = SORT_DEFAULT;
+    private String currLookingFor = LOOKING_FOR_DEFAULT;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -170,11 +179,13 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     private void addPostsToAdapter(QuerySnapshot queryDocumentSnapshots) {
+        Log.d(TAG, "addPostsToAdapter: ");
         adapter.clear();
         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
             Post post = documentSnapshot.toObject(Post.class);
 
             allPosts.add(post);
+//            Collections.copy(allPostsCopy, allPosts); // used to replace removed elements when filtering - NEED TO FIX
         }
         adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
@@ -238,26 +249,41 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     }
 
     @Override
-    public void sendFilterSelections(final String sortType) {
-        if (sortType.equals(currSort))
-            return;
-        Collections.sort(allPosts, new Comparator<Post>() {
-            public int compare(Post postOne, Post postTwo) {
-                if (sortType.equals(SORT_DEFAULT)) {
-                    currSort = SORT_DEFAULT;
-                    return postOne.getCreatedAt().compareTo(postTwo.getCreatedAt());
-                } else if (sortType.equals(SORT_POPULARITY)) {
-                    currSort = SORT_POPULARITY;
-                    return postTwo.getPopularity() - postOne.getPopularity();
-                } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
-                    currSort = SORT_RENT_HIGH_TO_LOW;
-                    return postTwo.getRent() - postOne.getRent();
-                } else {
-                    currSort = SORT_RENT_LOW_TO_HIGH;
-                    return postOne.getRent() - postTwo.getRent();
+    public void sendFilterSelections(final String sortType, String lookingFor) {
+
+        if (!currLookingFor.equals(lookingFor)) {
+//            Collections.copy(allPosts, allPostsCopy);
+            // TODO: FIX THIS - need to repopulate arraylist with old elements after filtering out
+            if (lookingFor.equals(LOOKING_FOR_PLACE)) {
+                for (Iterator<Post> iterator = allPosts.iterator(); iterator.hasNext(); ) {
+                    if (!iterator.next().isLookingForHouse())
+                        iterator.remove();
+                }
+            } else if (lookingFor.equals(LOOKING_FOR_TENANT)) {
+                for (Iterator<Post> iterator = allPosts.iterator(); iterator.hasNext(); ) {
+                    if (iterator.next().isLookingForHouse())
+                        iterator.remove();
                 }
             }
-        });
+            currLookingFor = lookingFor;
+        }
+
+        if (!sortType.equals(currSort)) {
+            Collections.sort(allPosts, new Comparator<Post>() {
+                public int compare(Post postOne, Post postTwo) {
+                    if (sortType.equals(SORT_DEFAULT)) {
+                        return postOne.getCreatedAt().compareTo(postTwo.getCreatedAt());
+                    } else if (sortType.equals(SORT_POPULARITY)) {
+                        return postTwo.getPopularity() - postOne.getPopularity();
+                    } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
+                        return postTwo.getRent() - postOne.getRent();
+                    } else {
+                        return postOne.getRent() - postTwo.getRent();
+                    }
+                }
+            });
+            currSort = sortType;
+        }
 
         adapter.notifyDataSetChanged();
         rvPosts.smoothScrollToPosition(0);
