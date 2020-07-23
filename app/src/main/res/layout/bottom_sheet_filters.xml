@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvLookingFor"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true">
 
@@ -126,6 +126,46 @@
                 android:textSize="16sp"/>
 
         </RadioGroup>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_border"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:id="@+id/tvDisplayNumRooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of Rooms"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/seekBarNumRooms"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tvDisplayNumRooms"
+            android:layout_centerHorizontal="true"
+            android:min="0"
+            android:max="5"/>
+
+        <TextView
+            android:id="@+id/tvNumRooms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/seekBarNumRooms"
+            android:layout_centerHorizontal="true"
+            android:text="Any"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
 
     </RelativeLayout>
 

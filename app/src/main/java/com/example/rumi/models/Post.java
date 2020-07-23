@@ -42,16 +42,18 @@ public class Post {
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
                 String startDate, String endDate, String photoUrl, String postId,
                 String name, String address, double latitude, double longitude) {
+        this.createdAt = createdAt;
+        this.likes = likes;
+        this.popularity = popularity;
         this.title = title;
         this.description = description;
         this.startMonth = startMonth;
+        this.userId = userId;
         this.numRooms = numRooms;
         this.duration = duration;
         this.rent = rent;
         this.furnished = furnished;
         this.lookingForHouse = lookingForHouse;
-        this.createdAt = createdAt;
-        this.userId = userId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.photoUrl = photoUrl;
@@ -60,8 +62,6 @@ public class Post {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.likes = likes;
-        this.popularity = popularity;
     }
 
     public String getUserId() { return userId; }

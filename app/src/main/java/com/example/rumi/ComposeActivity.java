@@ -77,7 +77,7 @@ public class ComposeActivity extends AppCompatActivity {
     private String photoUrl = "", name = "", address = "";
     private Date start, end;
     private int numRooms, rent, numMonths;
-    private boolean lookingForHouse, furnished;
+    private boolean lookingForHouse = true, furnished = true;
     private double latitude = 0, longitude = 0;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 

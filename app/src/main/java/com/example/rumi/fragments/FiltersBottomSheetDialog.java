@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,34 +22,39 @@ import com.example.rumi.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String TAG = "FiltersBottomSheetDialog";
     private static final String KEY_CURR_SORT = "currSort";
     private static final String KEY_CURR_LOOKING_FOR = "currLookingFor";
+    private static final String KEY_CURR_NUM_ROOMS = "currNumRooms";
+
     public static final String SORT_DEFAULT = "Recent (Default)";
-    public static final String LOOKING_FOR_DEFAULT = "All";
-    public static final String LOOKING_FOR_PLACE = "A place";
-    public static final String LOOKING_FOR_TENANT = "A tenant";
+    public static final int LOOKING_FOR_DEFAULT = -1; // "Any"
+    public static final int LOOKING_FOR_PLACE = 0; // "A Place"
+    public static final int LOOKING_FOR_TENANT = 1; // "A Tenant"
+    public static final int FILTER_ROOMS_ANY = 0;
     private BottomSheetListener mListener;
 
-    private TextView tvDone, tvCancel;
+    private TextView tvDone, tvCancel, tvNumRooms;
     private Spinner spinnerSort;
-    private String sortType = SORT_DEFAULT, lookingFor = LOOKING_FOR_DEFAULT;
+    private String sortType = SORT_DEFAULT;
     private RadioGroup radioGroupLookingFor;
     private RadioButton radioAll, radioPlace, radioTenant;
+    private SeekBar seekBarNumRooms;
+    private int numRooms = FILTER_ROOMS_ANY, lookingFor = LOOKING_FOR_DEFAULT;
 
     public interface BottomSheetListener {
-        void sendFilterSelections(String sortType, String lookingFor);
+        void sendFilterSelections(String sortType, int lookingFor, int filterNumRooms);
     }
 
-    public static FiltersBottomSheetDialog newInstance(String currSort, String currLookingFor) {
+    public static FiltersBottomSheetDialog newInstance(String currSort, int currLookingFor, int currNumRooms) {
         FiltersBottomSheetDialog fragment = new FiltersBottomSheetDialog();
         Bundle args = new Bundle();
         args.putString(KEY_CURR_SORT, currSort);
-        args.putString(KEY_CURR_LOOKING_FOR, currLookingFor);
+        args.putInt(KEY_CURR_LOOKING_FOR, currLookingFor);
+        args.putInt(KEY_CURR_NUM_ROOMS, currNumRooms);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,6 +76,8 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         radioAll = view.findViewById(R.id.radioAll);
         radioPlace = view.findViewById(R.id.radioPlace);
         radioTenant = view.findViewById(R.id.radioTenant);
+        seekBarNumRooms = view.findViewById(R.id.seekBarNumRooms);
+        tvNumRooms = view.findViewById(R.id.tvNumRooms);
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +89,29 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.sendFilterSelections(sortType, lookingFor);
+                mListener.sendFilterSelections(sortType, lookingFor, numRooms);
                 dismiss();
             }
+        });
+
+        seekBarNumRooms.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                if (progress == FILTER_ROOMS_ANY) {
+                    tvNumRooms.setText("Any");
+                } else if (progress == 1) {
+                    tvNumRooms.setText(progress + " room");
+                } else {
+                    tvNumRooms.setText(progress + " rooms");
+                }
+                numRooms = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
         });
 
         // get looking for filter selection from radio group
@@ -92,13 +120,13 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 switch(checkedId) {
                     case R.id.radioAll:
-                        lookingFor = LOOKING_FOR_DEFAULT;
+                        lookingFor = -1;
                         break;
                     case R.id.radioPlace:
-                        lookingFor = LOOKING_FOR_PLACE;
+                        lookingFor = 0;
                         break;
                     case R.id.radioTenant:
-                        lookingFor = LOOKING_FOR_TENANT;
+                        lookingFor = 1;
                         break;
                 }
             }
@@ -111,9 +139,6 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    return;
-                }
                 sortType = adapterView.getItemAtPosition(i).toString();
             }
 
@@ -135,6 +160,7 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         }
     }
 
+    // setting all the filters to what was set previously
     private void setPreviousSelections() {
         // setting sort
         String currSort = getArguments().getString(KEY_CURR_SORT);
@@ -142,15 +168,18 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         spinnerSort.setSelection(spinnerIndex);
 
         // setting looking for radio buttons (radioAll is selected on default)
-        String currLookingFor = getArguments().getString(KEY_CURR_LOOKING_FOR);
-        if (currLookingFor.equals(LOOKING_FOR_PLACE)) {
+        int currLookingFor = getArguments().getInt(KEY_CURR_LOOKING_FOR);
+        if (currLookingFor == LOOKING_FOR_PLACE) {
             radioAll.setChecked(false);
             radioPlace.setChecked(true);
             radioTenant.setChecked(false);
-        } else if (currLookingFor.equals(LOOKING_FOR_TENANT)) {
+        } else if (currLookingFor == LOOKING_FOR_TENANT) {
             radioAll.setChecked(false);
             radioPlace.setChecked(false);
             radioTenant.setChecked(true);
         }
+
+        // setting seekbar num rooms
+        seekBarNumRooms.setProgress(getArguments().getInt(KEY_CURR_NUM_ROOMS));
     }
 }
