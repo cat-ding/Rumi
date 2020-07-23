@@ -90,7 +90,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp">
@@ -99,22 +99,31 @@
             android:id="@+id/tvTextNumRooms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="false"
-            android:layout_centerVertical="true"
-            android:text="Number of rooms:"
+            android:layout_marginTop="10dp"
+            android:text="Number of rooms: 1"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etNumRooms"
-            android:layout_width="wrap_content"
+        <SeekBar
+            android:id="@+id/seekBarNumRooms"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_toRightOf="@+id/tvTextNumRooms"
-            android:hint="ex. 3"
-            android:textSize="16sp"
-            android:inputType="number"/>
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvTextNumRooms"
+            android:layout_marginTop="10dp"
+            android:max="5"
+            android:min="1" />
+
+<!--        <EditText-->
+<!--            android:id="@+id/etNumRooms"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_toRightOf="@+id/tvTextNumRooms"-->
+<!--            android:hint="ex. 3"-->
+<!--            android:textSize="16sp"-->
+<!--            android:inputType="number"/>-->
 
     </RelativeLayout>
 

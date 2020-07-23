@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,15 +32,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AddressComponent;
-import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -54,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -68,15 +65,15 @@ public class ComposeActivity extends AppCompatActivity {
     private RadioGroup radioGroupOne, radioGroupFurnished;
     private RadioButton radioButtonHouse, radioButtonFurnished;
     private ImageView ivImagePreview;
-    private TextView tvStartDate, tvEndDate;
-    private Button btnPost;
+    private TextView tvStartDate, tvEndDate, tvTextNumRooms;
     private AutocompleteSupportFragment autocompleteFragment;
     private RelativeLayout relativeLayoutAutocomplete;
+    private SeekBar seekBarNumRooms;
 
     private String title, description, startMonth, startDate, endDate;
     private String photoUrl = "", name = "", address = "";
     private Date start, end;
-    private int numRooms, rent, numMonths;
+    private int numRooms = 1, rent, numMonths;
     private boolean lookingForHouse = true, furnished = true;
     private double latitude = 0, longitude = 0;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -96,12 +93,26 @@ public class ComposeActivity extends AppCompatActivity {
         radioGroupOne = findViewById(R.id.radioGroupOne);
         radioGroupFurnished = findViewById(R.id.radioGroupFurnished);
         etRent = findViewById(R.id.etRent);
-        etNumRooms = findViewById(R.id.etNumRooms);
         tvStartDate = findViewById(R.id.tvStartDate);
         tvEndDate = findViewById(R.id.tvEndDate);
-        btnPost = findViewById(R.id.btnPost);
         ivImagePreview = findViewById(R.id.ivImagePreview);
         relativeLayoutAutocomplete = findViewById(R.id.relativeLayoutAutocomplete);
+        tvTextNumRooms = findViewById(R.id.tvTextNumRooms);
+        seekBarNumRooms = findViewById(R.id.seekBarNumRooms);
+
+        seekBarNumRooms.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                tvTextNumRooms.setText("Number of rooms: " + progress);
+                numRooms = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+        });
 
         setUpAddressAutoComplete();
     }
