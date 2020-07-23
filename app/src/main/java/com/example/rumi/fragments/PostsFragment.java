@@ -228,6 +228,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent = new Intent(getContext(), ComposeActivity.class);
         startActivityForResult(intent, CREATE_POST_REQUEST);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         return super.onOptionsItemSelected(item);
     }

@@ -222,7 +222,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private void openProfileFragment(String userId) {
             FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
             Fragment fragment = new ProfileFragment(userId);
-            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         }
 
         private void bindUserFields(Post post) {

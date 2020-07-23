@@ -2,6 +2,8 @@ package com.example.rumi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -95,7 +98,27 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        // onClickListeners to open ProfileFragment
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openProfileFragment(post.getUserId());
+            }
+        });
+        tvUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openProfileFragment(post.getUserId());
+            }
+        });
+
         setFields();
+    }
+
+    private void openProfileFragment(String userId) {
+        FragmentManager fragmentManager = (PostDetailActivity.this).getSupportFragmentManager();
+        Fragment fragment = new ProfileFragment(userId);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
     }
 
     private void updatePopularity(String postId, int postPopularity) {

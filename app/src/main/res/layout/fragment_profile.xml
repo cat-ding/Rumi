@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
     <include
         android:id="@+id/toolbar"
@@ -12,8 +13,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -55,7 +55,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-medium"
-        tools:text="Computer Science, Class of 2022" />
+        tools:text="Computer Science, Class of 2022"
+        android:background="#FFFFFF"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
