@@ -29,32 +29,38 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
     private static final String KEY_CURR_SORT = "currSort";
     private static final String KEY_CURR_LOOKING_FOR = "currLookingFor";
     private static final String KEY_CURR_NUM_ROOMS = "currNumRooms";
+    private static final String KEY_CURR_FURNISHED = "currFurnished";
 
     public static final String SORT_DEFAULT = "Recent (Default)";
     public static final int LOOKING_FOR_DEFAULT = -1; // "Any"
     public static final int LOOKING_FOR_PLACE = 0; // "A Place"
     public static final int LOOKING_FOR_TENANT = 1; // "A Tenant"
-    public static final int FILTER_ROOMS_ANY = 0;
+    public static final int FILTER_ROOMS_DEFAULT = 0;
+    public static final int FURNISHED_DEFAULT = -1; // include both furnished and unfurnished
+    public static final int FURNISHED_YES = 0;
+    public static final int FURNISHED_NO = 1;
     private BottomSheetListener mListener;
 
     private TextView tvDone, tvCancel, tvNumRooms;
     private Spinner spinnerSort;
     private String sortType = SORT_DEFAULT;
-    private RadioGroup radioGroupLookingFor;
-    private RadioButton radioAll, radioPlace, radioTenant;
+    private RadioGroup radioGroupLookingFor, radioGroupFurnished;
+    private RadioButton radioAll, radioPlace, radioTenant, radioBoth, radioYes, radioNo;
     private SeekBar seekBarNumRooms;
-    private int numRooms = FILTER_ROOMS_ANY, lookingFor = LOOKING_FOR_DEFAULT;
+    private int numRooms = FILTER_ROOMS_DEFAULT, lookingFor = LOOKING_FOR_DEFAULT, furnished = FURNISHED_DEFAULT;
 
     public interface BottomSheetListener {
-        void sendFilterSelections(String sortType, int lookingFor, int filterNumRooms);
+        void sendFilterSelections(String sortType, int lookingFor, int filterNumRooms, int furnished);
     }
 
-    public static FiltersBottomSheetDialog newInstance(String currSort, int currLookingFor, int currNumRooms) {
+    public static FiltersBottomSheetDialog newInstance(String currSort, int currLookingFor,
+                                                       int currNumRooms, int currFurnished) {
         FiltersBottomSheetDialog fragment = new FiltersBottomSheetDialog();
         Bundle args = new Bundle();
         args.putString(KEY_CURR_SORT, currSort);
         args.putInt(KEY_CURR_LOOKING_FOR, currLookingFor);
         args.putInt(KEY_CURR_NUM_ROOMS, currNumRooms);
+        args.putInt(KEY_CURR_FURNISHED, currFurnished);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,6 +84,10 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         radioTenant = view.findViewById(R.id.radioTenant);
         seekBarNumRooms = view.findViewById(R.id.seekBarNumRooms);
         tvNumRooms = view.findViewById(R.id.tvNumRooms);
+        radioGroupFurnished = view.findViewById(R.id.radioGroupFurnished);
+        radioBoth = view.findViewById(R.id.radioBoth);
+        radioYes = view.findViewById(R.id.radioYes);
+        radioNo = view.findViewById(R.id.radioNo);
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,15 +99,34 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         tvDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.sendFilterSelections(sortType, lookingFor, numRooms);
+                mListener.sendFilterSelections(sortType, lookingFor, numRooms, furnished);
                 dismiss();
             }
         });
 
+        // get furnished filter selection from radio group
+        radioGroupFurnished.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                switch(checkedId) {
+                    case R.id.radioBoth:
+                        furnished = -1;
+                        break;
+                    case R.id.radioYes:
+                        furnished = 0;
+                        break;
+                    case R.id.radioNo:
+                        furnished = 1;
+                        break;
+                }
+            }
+        });
+
+        // get num rooms filter selection from seekbar
         seekBarNumRooms.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                if (progress == FILTER_ROOMS_ANY) {
+                if (progress == FILTER_ROOMS_DEFAULT) {
                     tvNumRooms.setText("Any");
                 } else if (progress == 1) {
                     tvNumRooms.setText(progress + " room");
@@ -181,5 +210,17 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
         // setting seekbar num rooms
         seekBarNumRooms.setProgress(getArguments().getInt(KEY_CURR_NUM_ROOMS));
+
+        // setting furnished radio buttons (radioBoth is selected on default)
+        int currFurnished = getArguments().getInt(KEY_CURR_FURNISHED);
+        if (currFurnished == FURNISHED_YES) {
+            radioBoth.setChecked(false);
+            radioYes.setChecked(true);
+            radioNo.setChecked(false);
+        } else if (currFurnished == FURNISHED_NO) {
+            radioBoth.setChecked(false);
+            radioYes.setChecked(false);
+            radioNo.setChecked(true);
+        }
     }
 }

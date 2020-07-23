@@ -166,6 +166,58 @@
             android:textSize="16sp"
             android:textStyle="bold"/>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_border"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:id="@+id/tvFurnished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Furnished"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupFurnished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvFurnished"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true">
+
+            <RadioButton
+                android:id="@+id/radioBoth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Both"
+                android:textSize="16sp" />
+
+            <RadioButton
+                android:id="@+id/radioYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="Yes"
+                android:textSize="16sp"/>
+
+            <RadioButton
+                android:id="@+id/radioNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="No"
+                android:textSize="16sp"/>
+
+        </RadioGroup>
 
     </RelativeLayout>
 

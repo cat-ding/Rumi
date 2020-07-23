@@ -114,17 +114,6 @@
             android:max="5"
             android:min="1" />
 
-<!--        <EditText-->
-<!--            android:id="@+id/etNumRooms"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_toRightOf="@+id/tvTextNumRooms"-->
-<!--            android:hint="ex. 3"-->
-<!--            android:textSize="16sp"-->
-<!--            android:inputType="number"/>-->
-
     </RelativeLayout>
 
     <RelativeLayout

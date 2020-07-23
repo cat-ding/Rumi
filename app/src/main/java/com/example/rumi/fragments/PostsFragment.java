@@ -45,6 +45,7 @@ import java.util.function.Predicate;
 
 public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.BottomSheetListener {
 
+    // TODO: MAKE A CONSTANTS CLASS!!
     public static final String TAG = "PostsFragment";
     private static final int CREATE_POST_REQUEST = 55;
     public static final int LIKE_POST_REQUEST = 25;
@@ -59,7 +60,11 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     public static final int LOOKING_FOR_PLACE = 0; // looking for a place
     public static final int LOOKING_FOR_TENANT = 1; // looking for tenant
 
-    public static final int FILTER_ROOMS_ANY = 0; // any number of rooms
+    public static final int FILTER_ROOMS_DEFAULT = 0; // any number of rooms
+
+    public static final int FURNISHED_DEFAULT = -1; // include both furnished and unfurnished
+    public static final int FURNISHED_YES = 0;
+    public static final int FURNISHED_NO = 1;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -75,7 +80,8 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     // to keep track of last filter selections
     private String currSort = SORT_DEFAULT;
     private int currLookingFor = LOOKING_FOR_DEFAULT;
-    private int currNumRooms = FILTER_ROOMS_ANY; // 0
+    private int currNumRooms = FILTER_ROOMS_DEFAULT;
+    private int currFurnished = FURNISHED_DEFAULT;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -200,13 +206,14 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
                 allPostsCopy.add(newPost);
             }
         }
-        applyFilters(currLookingFor, currNumRooms);
+        applyFilters(currLookingFor, currNumRooms, currFurnished);
         adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
     }
 
     private void openFilters() {
-        FiltersBottomSheetDialog filtersDialog = FiltersBottomSheetDialog.newInstance(currSort, currLookingFor, currNumRooms);
+        FiltersBottomSheetDialog filtersDialog =
+                FiltersBottomSheetDialog.newInstance(currSort, currLookingFor, currNumRooms, currFurnished);
         filtersDialog.setTargetFragment(PostsFragment.this, BOTTOM_SHEET_REQUEST_CODE);
         filtersDialog.show(getFragmentManager(), "FiltersBottomSheetDialog");
     }
@@ -262,15 +269,14 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         }
     }
 
-    private void applyFilters(int filterLookingFor, int filterNumRooms) {
+    private void applyFilters(int filterLookingFor, int filterNumRooms, int filterFurnished) {
 
-        if (filterLookingFor == -1 && filterNumRooms == 0)
-            return;
-
-        boolean boolLookingForPlace = true;
-        if (filterLookingFor == LOOKING_FOR_TENANT) {
+        boolean boolLookingForPlace = true, booleanFurnished = true;
+        if (filterLookingFor == LOOKING_FOR_TENANT)
             boolLookingForPlace = false;
-        }
+        if (filterFurnished == FURNISHED_NO)
+            booleanFurnished = false;
+
         Iterator<Post> iterator = allPosts.iterator();
         while (iterator.hasNext()) {
             Post p = iterator.next();
@@ -283,15 +289,21 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
             if (filterLookingFor != -1) {
                 if (!(p.isLookingForHouse() == boolLookingForPlace)) {
                     iterator.remove();
+                    continue;
+                }
+            }
+            if (filterFurnished != -1) {
+                if (!(p.isFurnished() == booleanFurnished)) {
+                    iterator.remove();
                 }
             }
         }
     }
 
     @Override
-    public void sendFilterSelections(final String sortType, int lookingFor, int filterNumRooms) {
+    public void sendFilterSelections(final String sortType, int filterLookingFor, int filterNumRooms, int filterFurnished) {
 
-        if (currLookingFor != lookingFor || currNumRooms != filterNumRooms) {
+        if (currLookingFor != filterLookingFor || currNumRooms != filterNumRooms || currFurnished != filterFurnished) {
             allPosts.clear();
             // perform a deep copy of old posts
             for (Post p : allPostsCopy) {
@@ -303,9 +315,13 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
                 allPosts.add(newPost);
             }
 
-            applyFilters(lookingFor, filterNumRooms);
-            currLookingFor = lookingFor;
+            if (filterLookingFor != LOOKING_FOR_DEFAULT
+                    || filterNumRooms != FILTER_ROOMS_DEFAULT
+                    || filterFurnished != FURNISHED_DEFAULT)
+                applyFilters(filterLookingFor, filterNumRooms, filterFurnished);
+            currLookingFor = filterLookingFor;
             currNumRooms = filterNumRooms;
+            currFurnished = filterFurnished;
         }
 
         Collections.sort(allPosts, new Comparator<Post>() {
