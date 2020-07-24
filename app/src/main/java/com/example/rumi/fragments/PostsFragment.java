@@ -193,6 +193,7 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         adapter.clear();
         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
             Post post = documentSnapshot.toObject(Post.class);
+            post.setPostId(documentSnapshot.getId());
 
             allPosts.add(post);
             // perform a deep copy to use when filtering
@@ -202,7 +203,8 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
                         p.getTitle(), p.getDescription(), p.getStartMonth(), p.getUserId(),
                         p.getNumRooms(), p.getDuration(), p.getRent(), p.isFurnished(),
                         p.isLookingForHouse(), p.getStartDate(), p.getEndDate(), p.getPhotoUrl(),
-                        p.getPostId(), p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                        p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                newPost.setPostId(p.getPostId());
                 allPostsCopy.add(newPost);
             }
         }
@@ -312,7 +314,8 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
                         p.getTitle(), p.getDescription(), p.getStartMonth(), p.getUserId(),
                         p.getNumRooms(), p.getDuration(), p.getRent(), p.isFurnished(),
                         p.isLookingForHouse(), p.getStartDate(), p.getEndDate(), p.getPhotoUrl(),
-                        p.getPostId(), p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                        p.getName(), p.getAddress(), p.getLatitude(), p.getLongitude());
+                newPost.setPostId(p.getPostId());
                 allPosts.add(newPost);
             }
 

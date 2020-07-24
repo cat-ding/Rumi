@@ -36,6 +36,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -80,8 +81,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private String postId = UUID.randomUUID().toString();
-    private DocumentReference postRef = db.collection(Post.KEY_POSTS).document(postId);
+    private CollectionReference postRef = db.collection(Post.KEY_POSTS);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,13 +210,14 @@ public class ComposeActivity extends AppCompatActivity {
 
         final Post post = new Post(new java.util.Date(), new ArrayList<String>(), 0, title,
                 description, startMonth, firebaseAuth.getCurrentUser().getUid(), numRooms, numMonths,
-                rent, furnished, lookingForHouse, startDate, endDate, photoUrl, postId, name, address,
+                rent, furnished, lookingForHouse, startDate, endDate, photoUrl, name, address,
                 latitude, longitude);
 
-        postRef.set(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+        postRef.add(post).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(ComposeActivity.this, "Post created!", Toast.LENGTH_SHORT).show();
+                post.setPostId(documentReference.getId());
                 Intent intent = new Intent();
                 intent.putExtra("newPost", Parcels.wrap(post));
                 setResult(RESULT_OK, intent);

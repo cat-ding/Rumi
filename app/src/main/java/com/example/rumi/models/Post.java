@@ -27,20 +27,25 @@ public class Post {
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
 
-    public String title, description, startMonth, userId, startDate, endDate, photoUrl, postId,
+    public String title, description, startMonth, userId, startDate, endDate, photoUrl,
             name, address;
     public int numRooms, duration, rent, popularity;
     public boolean furnished, lookingForHouse;
     public Date createdAt;
     public double latitude, longitude;
     public ArrayList<String> likes;
+
+    @Exclude
+    public String postId;
+
     public Post() {
         // empty constructor required
     }
 
-    public Post(Date createdAt, ArrayList<String> likes, int popularity, String title, String description, String startMonth, String userId, int numRooms,
+    public Post(Date createdAt, ArrayList<String> likes, int popularity, String title,
+                String description, String startMonth, String userId, int numRooms,
                 int duration, int rent, boolean furnished, boolean lookingForHouse,
-                String startDate, String endDate, String photoUrl, String postId,
+                String startDate, String endDate, String photoUrl,
                 String name, String address, double latitude, double longitude) {
         this.createdAt = createdAt;
         this.likes = likes;
@@ -57,7 +62,6 @@ public class Post {
         this.startDate = startDate;
         this.endDate = endDate;
         this.photoUrl = photoUrl;
-        this.postId = postId;
         this.name = name;
         this.address = address;
         this.latitude = latitude;

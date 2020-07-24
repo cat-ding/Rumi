@@ -123,7 +123,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
                         if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
-                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                            Glide.with(context.getApplicationContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
 
                     } else {
@@ -147,6 +147,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                Log.d(TAG, "onClick: " + comments.get(getAdapterPosition()).getCommentId());
                                 commentsRef.document(comments.get(getAdapterPosition()).getCommentId()).delete();
                                 comments.remove(getAdapterPosition());
                                 notifyItemRemoved(getAdapterPosition());

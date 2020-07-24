@@ -29,17 +29,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.internal.$Gson$Preconditions;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.BlockingDeque;
 
 public class CommentsActivity extends AppCompatActivity {
 
@@ -100,6 +103,7 @@ public class CommentsActivity extends AppCompatActivity {
                         adapter.clear();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Comment comment = documentSnapshot.toObject(Comment.class);
+                            comment.setCommentId(documentSnapshot.getId());
                             allComments.add(comment);
                         }
                         adapter.notifyDataSetChanged();
@@ -109,13 +113,14 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void postComment(String body) {
         postPopularity++;
-        final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(),
-                UUID.randomUUID().toString(), body);
-        commentsRef.document().set(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
+        final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(), body);
+        commentsRef.add(comment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(CommentsActivity.this, "Comment created!", Toast.LENGTH_SHORT).show();
-                queryComments();
+                comment.setCommentId(documentReference.getId());
+                allComments.add(comment);
+                adapter.notifyItemInserted(allComments.size() - 1);
             }
         });
         postsRef.document(postId).update(Post.KEY_POPULARITY, postPopularity).addOnFailureListener(new OnFailureListener() {

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -91,7 +92,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues, tvNumLikes;
         private ImageView ivProfileImage, ivImage, ivLike, ivComment, ivHeartAnim;
@@ -117,6 +118,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             final Drawable drawable = ivHeartAnim.getDrawable();
 
+            // setting single tap and double tap listeners
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                     @Override
@@ -128,7 +130,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             likePost(posts.get(getAdapterPosition()));
                         }
                         return super.onDoubleTap(e);
+                    }
+
+                    @Override
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+                        int position = getAdapterPosition();
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            Post post = posts.get(position);
+                            Intent intent = new Intent(context, PostDetailActivity.class);
+                            intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                            fragment.startActivityForResult(intent, REQUEST_CODE);
+                            ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         }
+                        return super.onSingleTapConfirmed(e);
+                    }
                 });
 
                 @Override
@@ -137,8 +153,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     return true;
                 }
             });
-
-            itemView.setOnClickListener(this);
         }
 
         public void bind(final Post post) {
@@ -272,19 +286,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     }
                 }
             });
-        }
-
-        @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition();
-
-            if (position != RecyclerView.NO_POSITION) {
-                Post post = posts.get(position);
-                Intent intent = new Intent(context, PostDetailActivity.class);
-                intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                fragment.startActivityForResult(intent, REQUEST_CODE);
-                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
         }
     }
 }
