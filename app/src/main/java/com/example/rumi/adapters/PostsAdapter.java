@@ -250,6 +250,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Intent intent = new Intent(context, PostDetailActivity.class);
                 intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
                 fragment.startActivityForResult(intent, REQUEST_CODE);
+                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.example.rumi.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +40,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     private Context context;
     private List<Comment> comments;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
+    private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
 
     public CommentsAdapter(Context context, List<Comment> comments) {
         this.context = context;
@@ -74,7 +79,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         TextView tvBody;
         TextView tvUserName;
         ImageView ivProfileImage;
@@ -85,6 +90,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             tvBody = itemView.findViewById(R.id.tvBody);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+
+            itemView.setOnLongClickListener(this);
         }
 
         public void bind(final Comment comment) {
@@ -128,6 +135,28 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             FragmentManager fragmentManager = ((CommentsActivity)context).getSupportFragmentManager();
             Fragment fragment = new ProfileFragment(userId);
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+        }
+
+        private void deleteComment(Comment comment) {
+            commentsRef.document(comment.getCommentId()).delete();
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (comments.get(getAdapterPosition()).getUserId().equals(firebaseAuth.getCurrentUser().getUid())) {
+                new AlertDialog.Builder(context)
+                        .setMessage("Do you want to delete this comment?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                commentsRef.document(comments.get(getAdapterPosition()).getCommentId()).delete();
+                                comments.remove(getAdapterPosition());
+                                notifyItemRemoved(getAdapterPosition());
+                            }})
+                        .setNegativeButton("No", null).show();
+            }
+
+            return true;
         }
     }
 }

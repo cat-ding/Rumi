@@ -17,17 +17,18 @@ public class Comment {
     public static final String KEY_BODY = "body";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
-    public String postId, userId, body;
+    public String postId, userId, commentId, body;
     public Date createdAt;
 
     public Comment() {
         this.createdAt = new java.util.Date();
     }
 
-    public Comment(String postId, String userId, String body) {
+    public Comment(String postId, String userId, String commentId, String body) {
         this.createdAt = new java.util.Date();
         this.postId = postId;
         this.userId = userId;
+        this.commentId = commentId;
         this.body = body;
     }
 
@@ -49,6 +50,14 @@ public class Comment {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     public String getBody() {

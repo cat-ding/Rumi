@@ -2,10 +2,14 @@ package com.example.rumi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +39,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CommentsActivity extends AppCompatActivity {
 
@@ -104,7 +109,8 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void postComment(String body) {
         postPopularity++;
-        final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(), body);
+        final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(),
+                UUID.randomUUID().toString(), body);
         commentsRef.document().set(comment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
