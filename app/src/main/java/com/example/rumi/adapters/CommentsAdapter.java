@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -135,10 +137,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             FragmentManager fragmentManager = ((CommentsActivity)context).getSupportFragmentManager();
             Fragment fragment = new ProfileFragment(userId);
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
-        }
-
-        private void deleteComment(Comment comment) {
-            commentsRef.document(comment.getCommentId()).delete();
         }
 
         @Override

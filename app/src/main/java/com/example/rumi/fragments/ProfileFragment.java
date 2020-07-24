@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,12 +101,12 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         rvPosts = view.findViewById(R.id.rvPosts);
 
+        // configure swipe refresh container
         swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -112,8 +114,6 @@ public class ProfileFragment extends Fragment {
                 loadPosts();
             }
         });
-
-        getUserInfo();
 
         // show logout and change photo buttons, hide message button
         if (firebaseAuth.getCurrentUser().getUid().equals(userId)) {
@@ -152,6 +152,7 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(layoutManager);
 
+        getUserInfo();
         loadPosts();
     }
 

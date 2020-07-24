@@ -194,10 +194,6 @@ public class ComposeActivity extends AppCompatActivity {
             Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
             etRent.requestFocus();
             return;
-        } else if (etNumRooms.getText().toString().isEmpty()) {
-            Toast.makeText(ComposeActivity.this, "Number of rooms is required!", Toast.LENGTH_SHORT).show();
-            etNumRooms.requestFocus();
-            return;
         } else if (tvStartDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Start date is required!", Toast.LENGTH_SHORT).show();
             return;
@@ -207,7 +203,6 @@ public class ComposeActivity extends AppCompatActivity {
         }
 
         rent = Integer.parseInt(etRent.getText().toString());
-        numRooms = Integer.parseInt(etNumRooms.getText().toString());
 
         // calculate number of months between two dates, rounded up to the nearest whole month
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));
