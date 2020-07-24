@@ -47,8 +47,8 @@ import java.util.concurrent.BlockingDeque;
 public class CommentsActivity extends AppCompatActivity {
 
     public static final String TAG = "CommentsActivity";
+    public static int postPopularity;
     private String postId;
-    private int postPopularity;
     private RecyclerView rvComments;
     private CommentsAdapter adapter;
     private List<Comment> allComments;

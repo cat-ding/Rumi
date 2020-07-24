@@ -1,11 +1,17 @@
 package com.example.rumi.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.R;
 import com.example.rumi.models.Post;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,25 +32,37 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class RentalsFragment extends Fragment implements OnMapReadyCallback{
+import java.util.Arrays;
+import java.util.Locale;
 
-    public static final String TAG = "RentalsFragment";
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback{
+
+    public static final String TAG = "MapFragment";
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    public static final float ZOOM_LEVEL = 15;
 
     private final static String KEY_LOCATION = "location";
 
     private MapView mapView;
     private GoogleMap googleMap;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private RelativeLayout relativeLayoutAutocomplete;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
-    public RentalsFragment() {
+    public MapFragment() {
         // Required empty public constructor
     }
 
@@ -49,15 +70,47 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rentals, container, false);
+        return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.map);
+        relativeLayoutAutocomplete = view.findViewById(R.id.relativeLayoutAutocomplete);
 
         initGoogleMap(savedInstanceState);
+        setUpAddressAutoComplete();
+    }
+
+    private void setUpAddressAutoComplete() {
+        if (!Places.isInitialized()) {
+            Places.initialize(getActivity().getApplicationContext(), getString(R.string.map_key), Locale.US);
+        }
+
+        // Initialize the AutocompleteSupportFragment.
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocompleteFragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                LatLng latLng = place.getLatLng();
+                CameraUpdate center = CameraUpdateFactory.newLatLng(latLng);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL);
+                googleMap.moveCamera(center);
+                googleMap.animateCamera(zoom);
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.e(TAG, "An error occurred: " + status);
+            }
+        });
     }
 
     private void initGoogleMap(Bundle savedInstanceState) {
@@ -80,11 +133,29 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
         }
         map.setMyLocationEnabled(true);
         googleMap = map;
+
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
+        locationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL);
+                    googleMap.moveCamera(center);
+                    googleMap.animateCamera(zoom);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         setMarkers();
     }
 
     private void setMarkers() {
-
         postsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -97,15 +168,6 @@ public class RentalsFragment extends Fragment implements OnMapReadyCallback{
                                 .title(post.getName()));
                     }
                 }
-
-                // KEEPING AS REFERENCE FOR WHEN USER IS ABLE TO INPUT A SPECIFIC LOCATION AND
-                // NEEDS CAMERA ZOOM
-//                CameraUpdate center=
-//                        CameraUpdateFactory.newLatLng(new LatLng(latitude,
-//                                longitude));
-//                CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
-//                googleMap.moveCamera(center);
-//                googleMap.animateCamera(zoom);
 
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -28,6 +28,7 @@ import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -45,6 +46,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
+    private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     public CommentsAdapter(Context context, List<Comment> comments) {
         this.context = context;
@@ -141,14 +143,24 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         @Override
         public boolean onLongClick(View view) {
+            final Comment commentToDelete = comments.get(getAdapterPosition());
             if (comments.get(getAdapterPosition()).getUserId().equals(firebaseAuth.getCurrentUser().getUid())) {
                 new AlertDialog.Builder(context)
                         .setMessage("Do you want to delete this comment?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Log.d(TAG, "onClick: " + comments.get(getAdapterPosition()).getCommentId());
-                                commentsRef.document(comments.get(getAdapterPosition()).getCommentId()).delete();
+
+                                commentsRef.document(commentToDelete.getCommentId()).delete();
+                                CommentsActivity.postPopularity--;
+                                postsRef.document(commentToDelete.getPostId()).update(Post.KEY_POPULARITY,
+                                        CommentsActivity.postPopularity).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "onFailure: unable to update popularity", e.getCause());
+                                    }
+                                });
+
                                 comments.remove(getAdapterPosition());
                                 notifyItemRemoved(getAdapterPosition());
                             }})

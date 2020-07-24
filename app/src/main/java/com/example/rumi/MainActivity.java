@@ -15,14 +15,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.rumi.fragments.MapFragment;
 import com.example.rumi.fragments.MessagesFragment;
 import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
-import com.example.rumi.fragments.RentalsFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new PostsFragment();
                         break;
                     case R.id.action_browse:
-                        fragment = new RentalsFragment();
+                        fragment = new MapFragment();
                         break;
                     case R.id.action_messages:
                         fragment = new MessagesFragment();
