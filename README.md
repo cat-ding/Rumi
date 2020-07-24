@@ -17,7 +17,7 @@
     - Real Estate
 - **Mobile:** 
     - UI that easily navigates house search, roommate search, sublet search according to your interests. Easy in app messaging system. Easy camera access to take and attach photos to posts.
-- **Story:** Tufts housing crisis is pretty real - only two years guaranteed housing which means a huge portion of upperclassmen look for or are forced to look for off campus housing, which also comes with its fair share of difficulties. These include:
+- **Story:** Tuft has only two years guaranteed housing which means a huge portion of upperclassmen look for or are forced to look for off campus housing, which also comes with its fair share of difficulties. These include:
     - Students who go home for the summer and need someone to stay at their place and sublet for those months since they signed a 12 month lease
     - Students want to stick with friends, but may not have the correct number of people for their desired residence
     - People coming to the campus community from outside for a temporary research or internship position need a place to stay
