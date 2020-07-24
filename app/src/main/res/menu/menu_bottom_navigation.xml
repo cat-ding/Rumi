@@ -4,13 +4,18 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/action_home"
-        android:icon="@drawable/ic_baseline_filter_vintage_24"
+        android:icon="@drawable/ic_baseline_home_24"
         android:title="Home"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_browse"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:title="Browse"
+        android:id="@+id/action_match"
+        android:icon="@drawable/ic_baseline_mood_24"
+        android:title="Match"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="Map"
         app:showAsAction="always" />
 
     <item

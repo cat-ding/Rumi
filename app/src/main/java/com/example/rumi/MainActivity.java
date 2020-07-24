@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.rumi.fragments.MapFragment;
+import com.example.rumi.fragments.MatchFragment;
 import com.example.rumi.fragments.MessagesFragment;
 import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
@@ -57,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_home:
                         fragment = new PostsFragment();
                         break;
-                    case R.id.action_browse:
+                    case R.id.action_match:
+                        fragment = new MatchFragment();
+                        break;
+                    case R.id.action_map:
                         fragment = new MapFragment();
                         break;
                     case R.id.action_messages:

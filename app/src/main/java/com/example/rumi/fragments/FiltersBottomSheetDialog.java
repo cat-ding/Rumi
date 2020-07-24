@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.rumi.FilterConstants;
 import com.example.rumi.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -26,28 +27,21 @@ import java.util.Arrays;
 public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
     private static final String TAG = "FiltersBottomSheetDialog";
+
     private static final String KEY_CURR_SORT = "currSort";
     private static final String KEY_CURR_LOOKING_FOR = "currLookingFor";
     private static final String KEY_CURR_NUM_ROOMS = "currNumRooms";
     private static final String KEY_CURR_FURNISHED = "currFurnished";
-
-    public static final String SORT_DEFAULT = "Recent (Default)";
-    public static final int LOOKING_FOR_DEFAULT = -1; // "Any"
-    public static final int LOOKING_FOR_PLACE = 0; // "A Place"
-    public static final int LOOKING_FOR_TENANT = 1; // "A Tenant"
-    public static final int FILTER_ROOMS_DEFAULT = 0;
-    public static final int FURNISHED_DEFAULT = -1; // include both furnished and unfurnished
-    public static final int FURNISHED_YES = 0;
-    public static final int FURNISHED_NO = 1;
     private BottomSheetListener mListener;
 
     private TextView tvDone, tvCancel, tvNumRooms;
     private Spinner spinnerSort;
-    private String sortType = SORT_DEFAULT;
+    private String sortType = FilterConstants.SORT_DEFAULT;
     private RadioGroup radioGroupLookingFor, radioGroupFurnished;
     private RadioButton radioAll, radioPlace, radioTenant, radioBoth, radioYes, radioNo;
     private SeekBar seekBarNumRooms;
-    private int numRooms = FILTER_ROOMS_DEFAULT, lookingFor = LOOKING_FOR_DEFAULT, furnished = FURNISHED_DEFAULT;
+    private int numRooms = FilterConstants.FILTER_ROOMS_DEFAULT,
+            lookingFor = FilterConstants.LOOKING_FOR_DEFAULT, furnished = FilterConstants.FURNISHED_DEFAULT;
 
     public interface BottomSheetListener {
         void sendFilterSelections(String sortType, int lookingFor, int filterNumRooms, int furnished);
@@ -126,7 +120,7 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
         seekBarNumRooms.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                if (progress == FILTER_ROOMS_DEFAULT) {
+                if (progress == FilterConstants.FILTER_ROOMS_DEFAULT) {
                     tvNumRooms.setText("Any");
                 } else if (progress == 1) {
                     tvNumRooms.setText(progress + " room");
@@ -198,11 +192,11 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
         // setting looking for radio buttons (radioAll is selected on default)
         int currLookingFor = getArguments().getInt(KEY_CURR_LOOKING_FOR);
-        if (currLookingFor == LOOKING_FOR_PLACE) {
+        if (currLookingFor == FilterConstants.LOOKING_FOR_PLACE) {
             radioAll.setChecked(false);
             radioPlace.setChecked(true);
             radioTenant.setChecked(false);
-        } else if (currLookingFor == LOOKING_FOR_TENANT) {
+        } else if (currLookingFor == FilterConstants.LOOKING_FOR_TENANT) {
             radioAll.setChecked(false);
             radioPlace.setChecked(false);
             radioTenant.setChecked(true);
@@ -213,11 +207,11 @@ public class FiltersBottomSheetDialog extends BottomSheetDialogFragment {
 
         // setting furnished radio buttons (radioBoth is selected on default)
         int currFurnished = getArguments().getInt(KEY_CURR_FURNISHED);
-        if (currFurnished == FURNISHED_YES) {
+        if (currFurnished == FilterConstants.FURNISHED_YES) {
             radioBoth.setChecked(false);
             radioYes.setChecked(true);
             radioNo.setChecked(false);
-        } else if (currFurnished == FURNISHED_NO) {
+        } else if (currFurnished == FilterConstants.FURNISHED_NO) {
             radioBoth.setChecked(false);
             radioYes.setChecked(false);
             radioNo.setChecked(true);

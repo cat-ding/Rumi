@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.rumi.ComposeActivity;
+import com.example.rumi.FilterConstants;
 import com.example.rumi.models.Post;
 import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.R;
@@ -45,26 +46,10 @@ import java.util.function.Predicate;
 
 public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.BottomSheetListener {
 
-    // TODO: MAKE A CONSTANTS CLASS!!
     public static final String TAG = "PostsFragment";
     private static final int CREATE_POST_REQUEST = 55;
     public static final int LIKE_POST_REQUEST = 25;
     private static final int BOTTOM_SHEET_REQUEST_CODE = 5;
-
-    public static final String SORT_DEFAULT = "Recent (Default)";
-    private static final String SORT_POPULARITY = "Popularity";
-    private static final String SORT_RENT_HIGH_TO_LOW = "Rent (High to Low)";
-    private static final String SORT_RENT_LOW_TO_HIGH = "Rent (Low to High)";
-
-    public static final int LOOKING_FOR_DEFAULT = -1; // any
-    public static final int LOOKING_FOR_PLACE = 0; // looking for a place
-    public static final int LOOKING_FOR_TENANT = 1; // looking for tenant
-
-    public static final int FILTER_ROOMS_DEFAULT = 0; // any number of rooms
-
-    public static final int FURNISHED_DEFAULT = -1; // include both furnished and unfurnished
-    public static final int FURNISHED_YES = 0;
-    public static final int FURNISHED_NO = 1;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -78,10 +63,10 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private TextView tvFilter;
 
     // to keep track of last filter selections
-    private String currSort = SORT_DEFAULT;
-    private int currLookingFor = LOOKING_FOR_DEFAULT;
-    private int currNumRooms = FILTER_ROOMS_DEFAULT;
-    private int currFurnished = FURNISHED_DEFAULT;
+    private String currSort = FilterConstants.SORT_DEFAULT;
+    private int currLookingFor = FilterConstants.LOOKING_FOR_DEFAULT;
+    private int currNumRooms = FilterConstants.FILTER_ROOMS_DEFAULT;
+    private int currFurnished = FilterConstants.FURNISHED_DEFAULT;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -111,13 +96,13 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (currSort.equals(SORT_DEFAULT)) {
+                if (currSort.equals(FilterConstants.SORT_DEFAULT)) {
                     loadPosts();
-                } else if (currSort.equals(SORT_POPULARITY)) {
+                } else if (currSort.equals(FilterConstants.SORT_POPULARITY)) {
                     loadPostsPopularity();
-                } else if (currSort.equals(SORT_RENT_HIGH_TO_LOW)) {
+                } else if (currSort.equals(FilterConstants.SORT_RENT_HIGH_TO_LOW)) {
                     loadPostsHighToLow();
-                } else if (currSort.equals(SORT_RENT_LOW_TO_HIGH)) {
+                } else if (currSort.equals(FilterConstants.SORT_RENT_LOW_TO_HIGH)) {
                     loadPostsLowToHigh();
                 }
             }
@@ -275,9 +260,9 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
     private void applyFilters(int filterLookingFor, int filterNumRooms, int filterFurnished) {
 
         boolean boolLookingForPlace = true, booleanFurnished = true;
-        if (filterLookingFor == LOOKING_FOR_TENANT)
+        if (filterLookingFor == FilterConstants.LOOKING_FOR_TENANT)
             boolLookingForPlace = false;
-        if (filterFurnished == FURNISHED_NO)
+        if (filterFurnished == FilterConstants.FURNISHED_NO)
             booleanFurnished = false;
 
         Iterator<Post> iterator = allPosts.iterator();
@@ -319,9 +304,9 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
                 allPosts.add(newPost);
             }
 
-            if (filterLookingFor != LOOKING_FOR_DEFAULT
-                    || filterNumRooms != FILTER_ROOMS_DEFAULT
-                    || filterFurnished != FURNISHED_DEFAULT)
+            if (filterLookingFor != FilterConstants.LOOKING_FOR_DEFAULT
+                    || filterNumRooms != FilterConstants.FILTER_ROOMS_DEFAULT
+                    || filterFurnished != FilterConstants.FURNISHED_DEFAULT)
                 applyFilters(filterLookingFor, filterNumRooms, filterFurnished);
             currLookingFor = filterLookingFor;
             currNumRooms = filterNumRooms;
@@ -330,11 +315,11 @@ public class PostsFragment extends Fragment implements FiltersBottomSheetDialog.
 
         Collections.sort(allPosts, new Comparator<Post>() {
             public int compare(Post postOne, Post postTwo) {
-                if (sortType.equals(SORT_DEFAULT)) {
+                if (sortType.equals(FilterConstants.SORT_DEFAULT)) {
                     return postTwo.getCreatedAt().compareTo(postOne.getCreatedAt());
-                } else if (sortType.equals(SORT_POPULARITY)) {
+                } else if (sortType.equals(FilterConstants.SORT_POPULARITY)) {
                     return postTwo.getPopularity() - postOne.getPopularity();
-                } else if (sortType.equals(SORT_RENT_HIGH_TO_LOW)) {
+                } else if (sortType.equals(FilterConstants.SORT_RENT_HIGH_TO_LOW)) {
                     return postTwo.getRent() - postOne.getRent();
                 } else {
                     return postOne.getRent() - postTwo.getRent();
