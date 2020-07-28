@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,24 +20,31 @@ import com.example.rumi.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+import java.util.ArrayList;
+
 public class MatchDialogThree extends DialogFragment {
 
     public static final String TAG = "MatchDialogThree";
+    public static final String KEY_CURR_ACTIVITIES = "currActivities";
+    public static final String KEY_CURR_HOBBIES = "currHobbies";
     private PageThreeListener mListener;
 
-    private ChipGroup chipGroupActivities, chipGroupHobbies, chipGroupEntertainment;
-    private Button btnAddActivity, btnAddHobby, btnAddEntertainment;
-    private EditText etActivity, etHobby, etEntertainment;
+    private ChipGroup chipGroupActivities, chipGroupHobbies;
+    private Button btnAddActivity, btnAddHobby;
+    private EditText etActivity, etHobby;
+
+    private ArrayList<String> activities = new ArrayList<>(), hobbies = new ArrayList<>();
 
     public interface PageThreeListener {
-        void sendPageThreeInputs(int nextPage);
+        void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies);
     }
 
-    public static MatchDialogThree newInstance() {
+    public static MatchDialogThree newInstance(ArrayList<String> currActivities, ArrayList<String> currHobbies) {
 
         Bundle args = new Bundle();
         MatchDialogThree fragment = new MatchDialogThree();
-
+        args.putStringArrayList(KEY_CURR_ACTIVITIES, currActivities);
+        args.putStringArrayList(KEY_CURR_HOBBIES, currHobbies);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +63,7 @@ public class MatchDialogThree extends DialogFragment {
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.sendPageThreeInputs(MatchConstants.PAGE_TWO);
+                        mListener.sendPageThreeInputs(MatchConstants.PAGE_TWO, activities, hobbies);
                         dismiss();
                     }
                 });
@@ -78,50 +83,77 @@ public class MatchDialogThree extends DialogFragment {
         btnAddActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tag = etActivity.getText().toString().trim();
+                final String tag = etActivity.getText().toString().trim().toLowerCase();
                 if (tag.isEmpty())
                     return;
-
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
-                chip.setText(tag);
-                chipGroupActivities.addView(chip);
+                if (activities.contains(tag)) {
+                    Toast.makeText(getContext(), "Can't add a duplicate activity!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                activities.add(tag);
+                addActivityChip(tag);
                 etActivity.getText().clear();
-
-                chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        chipGroupActivities.removeView(view);
-                    }
-                });
             }
         });
 
         btnAddHobby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tag = etHobby.getText().toString().trim();
+                String tag = etHobby.getText().toString().trim().toLowerCase();
                 if (tag.isEmpty())
                     return;
-
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
-                chip.setText(tag);
-                chipGroupHobbies.addView(chip);
+                if (hobbies.contains(tag)) {
+                    Toast.makeText(getContext(), "Can't add a duplicate hobby!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                hobbies.add(tag);
+                addHobbyChip(tag);
                 etHobby.getText().clear();
+            }
+        });
+    }
 
-                chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        chipGroupHobbies.removeView(view);
-                    }
-                });
+    private void addHobbyChip(final String toAdd) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
+        chip.setText(toAdd);
+        chipGroupHobbies.addView(chip);
+
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chipGroupHobbies.removeView(view);
+                hobbies.remove(toAdd);
+            }
+        });
+    }
+
+    private void addActivityChip(final String toAdd) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
+        chip.setText(toAdd);
+        chipGroupActivities.addView(chip);
+
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chipGroupActivities.removeView(view);
+                activities.remove(toAdd);
             }
         });
     }
 
     private void setPreviousValues() {
-        // TODO
+        activities = getArguments().getStringArrayList(KEY_CURR_ACTIVITIES);
+        hobbies = getArguments().getStringArrayList(KEY_CURR_HOBBIES);
+
+        for (String activity : activities)
+        {
+            addActivityChip(activity);
+        }
+        for (String hobby : hobbies) {
+            addHobbyChip(hobby);
+        }
     }
 
     // overrides the next button so that dialog doesn't dismiss if all fields are not answered
@@ -134,11 +166,7 @@ public class MatchDialogThree extends DialogFragment {
             postiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    if (true) { // CHANGE
-//                        Toast.makeText(getContext(), "Please answer all the questions!", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-                    mListener.sendPageThreeInputs(MatchConstants.PAGE_FOUR);
+                    mListener.sendPageThreeInputs(MatchConstants.PAGE_FOUR, activities, hobbies);
                     dismiss();
                 }
             });

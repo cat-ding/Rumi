@@ -3,11 +3,11 @@ package com.example.rumi.fragments;
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +19,9 @@ import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
+import com.google.api.LogDescriptor;
+
+import java.util.ArrayList;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
                                                        MatchDialogTwo.PageTwoListener,
@@ -33,6 +36,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private MatchConstants.Guests currGuestsPref = null;
     private MatchConstants.Clean currCleanPref = null;
     private MatchConstants.Temperature currTempPref = null;
+    private ArrayList<String> currActivities = new ArrayList<>();
+    private ArrayList<String> currHobbies = new ArrayList<>();
 
     private Button btnMatch;
 
@@ -108,7 +113,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     @Override
-    public void sendPageThreeInputs(int nextPage) {
+    public void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies) {
+        currActivities = activities;
+        currHobbies = hobbies;
         if (nextPage == MatchConstants.PAGE_TWO) {
             openMatchDialogTwo();
         } else if (nextPage == MatchConstants.PAGE_FOUR) {
@@ -138,13 +145,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     private void openMatchDialogThree() {
-        MatchDialogThree dialog = MatchDialogThree.newInstance();
+        MatchDialogThree dialog = MatchDialogThree.newInstance(currActivities, currHobbies);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogThree");
     }
 
     private void openMatchDialogFour() {
-        Toast.makeText(getContext(), "FOUR", Toast.LENGTH_SHORT).show();
         MatchDialogFour dialog = MatchDialogFour.newInstance();
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFour");
