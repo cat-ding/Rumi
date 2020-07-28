@@ -39,44 +39,46 @@
         - [x] Ability to compose a new post
         - [x] View user profile by tapping on photo
         - [x] Ability to take a picture for the post through the app
-    - [ ] Real estate browing screen (use of real estate API that displays house images, address, landlord contact info, number beds, number bathrooms, etc.)
+    - [x] Compose activity allows for input for: title, description, what you're looking for (place or people), number of rooms, rent, furnished or not, duration, and picture
     - [x] A profile tab displaying personal info
-    - [x] Profile screens for other users with ability to message them in app
-    - [ ] Messaging screen
+    - [x] Profile screens
 - Your app interacts with a database (e.g. Parse) 
-    - Firebase (decided to learn this over using Parse despite Parse being more familiar, since I wanted to learn more about noSQL databases and overall it seemed like a useful and interesting skill to learn)
+    - [x] Firebase (decided to learn this over using Parse despite Parse being more familiar, since I wanted to learn more about noSQL databases and overall it seemed like a useful and interesting skill to learn)
 - [x] You can log in/log out of your app as a user
 - [x] You can sign up with a new user profile with information for name, major, year, profile picture
 - [x] Somewhere in your app you can use the camera to take a picture and do something with the picture
-    - You can take a pictures of your house to attach to your post
+    - [x] You can take a pictures of your house to attach to your post
     - [x] Take a profile photo
 - Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
-    - Google Maps - view house locations (Use Firestore Geoqueries)
+    - [x] Google Maps - view addresses from posts in a map
+    - [x] Google Places - autocomplete addresses
 - Your app contains at least one more complex algorithm (talk over this with your manager)
-    - [ ] Calculate a weighted walking score to particular places on campus
+    - [ ] Roommate recommendation page where you fill out a survey and get matched to others with similar preferences
+        - This feature will take all the users that have filled out the survey and calculate a compatibility score for each of them. This is inefficient once number of users gets very large, but given the time constraints on this project, I have decided to do it this way. In the future, I would first make a subset of users based on mutual friends, interests, or whatever the user deems to be most important, then calculate compatibility on the subset.
+    - [ ] Selection algorithm for rank finding within this page that gets the top 5 most compatible
 - Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
-    - [ ] For house search you can like other’s posts (double tap)
-    - [ ] (possibly) Long press to save a post
+    - [x] Double tap to like a post
+    - [x] Long press to delete a comment
 - Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
-    - [ ] On profile screen scrolling up to see posts will scroll away the user information to the top
+    - [x] When you double tap to like a post a heart animation pops up
+    - [x] Activities slide to right or left out of screen when entering and exiting an activity (compose and detail view)
 - Your app incorporates an external library to add visual polish
     - Material design for visual polish
     
 **Optional Nice-to-have Stories**
+- [x] Sort through the posts by popularity, recent, rent hi-lo and lo-hi
+- [x] Filter posts by number of rooms, what you're looking for (place or people), furnished or not
+- [ ] Chat fragment
 - [ ] Ability to attach photos to posts (instead of taking a picture you can select from your device's photos)
 - [ ] Need a referral code from someone already in the community to make an account
-- [ ] A recommendations page where a complex algorithm is used to match and recommend people based on similar qualities
 - [ ] Tab for your house once you found people
   - [ ] Shared payments, bills (utilities, furniture, etc)
   - [ ] Reminder system
   - [ ] Venmo housemates
   - [ ] Store important documents
   - [ ] Access landlord, utilities, etc contact info
-- [ ] Different layout for parent accounts
-- [ ] Sort through the posts by popularity or recent
-- [ ] Sort through posts by customizable filter
-- [ ] Add endless scroll
 - [ ] Add indeterminate progress bar for loading
+- [ ] Calculate a walking score to particular places on campus
 
 ### 2. Screen Archetypes
 
@@ -262,9 +264,6 @@
 - Saved posts screen
     - (Read/GET) Query all user's saved posts to display
     - (Update/USER) Unsave a post under the current user
-
-#### Basic snippets for each Parse network request
-TODO
 
 #### Existing API Endpoints
 
