@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -18,15 +19,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 
-public class MatchDialog extends AppCompatDialogFragment {
+public class MatchDialogOne extends AppCompatDialogFragment {
 
-    public static final String TAG = "MatchDialog";
+    public static final String TAG = "MatchDialogOne";
     public static final String KEY_PAGE_NUM = "pageNum";
     private PageOneListener mListener;
-
-    public static final int PAGE_ZERO = 0;
-    public static final int PAGE_ONE = 1;
-    public static final int PAGE_TWO = 2;
 
     private int pageNum = 1;
 
@@ -44,12 +41,10 @@ public class MatchDialog extends AppCompatDialogFragment {
         void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref);
     }
 
-    public static MatchDialog newInstance(int pageNum) {
+    public static MatchDialogOne newInstance() {
         
         Bundle args = new Bundle();
-        MatchDialog fragment = new MatchDialog();
-
-        args.putInt(KEY_PAGE_NUM, pageNum);
+        MatchDialogOne fragment = new MatchDialogOne();
 
         fragment.setArguments(args);
         return fragment;
@@ -61,36 +56,16 @@ public class MatchDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        pageNum = getArguments().getInt(KEY_PAGE_NUM);
-
-        if (pageNum == PAGE_ONE) {
-            View view = inflater.inflate(R.layout.dialog_pageone, null, false);
-            findPageOneViews(view);
-            builder.setView(view).setTitle("Room Use").setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (!getPageOneInputs())
-                        return;
-                    mListener.sendPageOneInputs(PAGE_TWO, housePref, weekendPref, guestsPref);
-                    dismiss();
-                }
-            }).setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    mListener.sendPageOneInputs(PAGE_ZERO, housePref, weekendPref, guestsPref);
-                    dismiss();
-                }
-            });
-        } else { // PAGE TWO
-            View view = inflater.inflate(R.layout.dialog_pagetwo, null, false);
-            builder.setView(view).setTitle("Room Care").setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    mListener.sendPageOneInputs(PAGE_ONE, housePref, weekendPref, guestsPref);
-                    dismiss();
-                }
-            });
-        }
+        View view = inflater.inflate(R.layout.dialog_pageone, null, false);
+        findPageOneViews(view);
+        builder.setView(view).setTitle("Room Use").setPositiveButton("Next", null)
+                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mListener.sendPageOneInputs(MatchConstants.PAGE_ZERO, housePref, weekendPref, guestsPref);
+                        dismiss();
+                    }
+                });
         return builder.create();
     }
 
@@ -115,19 +90,15 @@ public class MatchDialog extends AppCompatDialogFragment {
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 switch(checkedId) {
                     case R.id.radioQuiet:
-                        Toast.makeText(getContext(), "QUIET", Toast.LENGTH_SHORT).show();
                         housePref = MatchConstants.House.QUIET;
                         break;
                     case R.id.radioSocial:
-                        Toast.makeText(getContext(), "SOCIAL", Toast.LENGTH_SHORT).show();
                         housePref = MatchConstants.House.SOCIAL;
                         break;
                     case R.id.radioWeekCombo:
-                        Toast.makeText(getContext(), "COMBO", Toast.LENGTH_SHORT).show();
                         housePref = MatchConstants.House.COMBO;
                         break;
                     case R.id.radioWeekNoPreference:
-                        Toast.makeText(getContext(), "NOPREF", Toast.LENGTH_SHORT).show();
                         housePref = MatchConstants.House.NO_PREFERENCE;
                 }
             }
@@ -178,6 +149,25 @@ public class MatchDialog extends AppCompatDialogFragment {
         return true; // nothing left blank
     }
 
+    // overrides the next button so that dialog doesn't dismiss if all fields are not answered
+    @Override
+    public void onStart() {
+        super.onStart();
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+            Button postiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            postiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!getPageOneInputs())
+                        return;
+                    mListener.sendPageOneInputs(MatchConstants.PAGE_TWO, housePref, weekendPref, guestsPref);
+                    dismiss();
+                }
+            });
+        }
+    }
+
     // called when fragment is attached to a host fragment
     @Override
     public void onAttach(@NonNull Context context) {
@@ -185,7 +175,7 @@ public class MatchDialog extends AppCompatDialogFragment {
         try {
             mListener = (PageOneListener) getTargetFragment();
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement MatchDialog");
+            throw new ClassCastException(context.toString() + " must implement MatchDialogOne");
         }
     }
 }

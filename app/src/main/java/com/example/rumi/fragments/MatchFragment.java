@@ -3,12 +3,10 @@ package com.example.rumi.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,16 +14,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
-import com.example.rumi.dialogs.MatchDialog;
+import com.example.rumi.dialogs.MatchDialogOne;
+import com.example.rumi.dialogs.MatchDialogTwo;
 
-public class MatchFragment extends Fragment implements MatchDialog.PageOneListener {
+public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener, MatchDialogTwo.PageTwoListener {
 
     public static final String TAG = "MatchFragment";
     private static final int PAGE_ONE_REQUEST_CODE = 11;
-
-    public static final int PAGE_ONE = 1;
-    public static final int PAGE_TWO = 2;
-    public static final int PAGE_THREE = 3;
 
     private Button btnMatch;
 
@@ -61,29 +56,41 @@ public class MatchFragment extends Fragment implements MatchDialog.PageOneListen
                         " we'll do our best to suggest other users with similar qualities!")
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        MatchDialog matchDialog = MatchDialog.newInstance(PAGE_ONE);
-                        matchDialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
-                        matchDialog.show(getFragmentManager(), "MatchDialog");
+                        MatchDialogOne matchDialogOne = MatchDialogOne.newInstance();
+                        matchDialogOne.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
+                        matchDialogOne.show(getFragmentManager(), "MatchDialogOne");
                     }}).setNegativeButton("No thanks", null).show();
     }
 
     @Override
     public void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
-        Toast.makeText(getContext(), "housePref: " + housePref
-                + "\nweekendPref: " + weekendPref
-                + "\nguestsPref: " + guestsPref, Toast.LENGTH_SHORT).show();
-        if (nextPage == 0)
+        if (nextPage == MatchConstants.PAGE_ZERO)
             launchMatchingDialog();
-        else if (nextPage == 1) {
-            openSpecifiedDialog(PAGE_ONE);
-        } else if (nextPage == 2) {
-            openSpecifiedDialog(PAGE_TWO);
+        else if (nextPage == MatchConstants.PAGE_ONE) {
+            openMatchDialogOne();
+        } else if (nextPage == MatchConstants.PAGE_TWO) {
+            openMatchDialogTwo();
         }
     }
 
-    private void openSpecifiedDialog(int pageNum) {
-        MatchDialog matchDialog = MatchDialog.newInstance(pageNum);
-        matchDialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
-        matchDialog.show(getFragmentManager(), "MatchDialog");
+    @Override
+    public void sendPageTwoInputs(int nextPage) {
+        if (nextPage == MatchConstants.PAGE_ONE) {
+            openMatchDialogOne();
+        } else if (nextPage == MatchConstants.PAGE_THREE) {
+            // TODO
+        }
+    }
+
+    private void openMatchDialogOne() {
+        MatchDialogOne dialog = MatchDialogOne.newInstance();
+        dialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogOne");
+    }
+
+    private void openMatchDialogTwo() {
+        MatchDialogTwo dialog = MatchDialogTwo.newInstance();
+        dialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogOne");
     }
 }
