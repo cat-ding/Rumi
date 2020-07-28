@@ -28,9 +28,6 @@ public class MatchDialogOne extends AppCompatDialogFragment {
 
     private PageOneListener mListener;
 
-    private int pageNum = 1;
-
-    // for page one - room use
     private RadioGroup radioGroupHousePreference, radioGroupWeekend, radioGroupGuests;
     private RadioButton radioQuiet, radioSocial, radioWeekCombo, radioWeekNoPreference;
     private RadioButton radioParty, radioHang, radioWeekendQuiet, radioNotHome;
@@ -66,7 +63,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_pageone, null, false);
         findViews(view);
         setPreviousValues();
-        builder.setView(view).setTitle("Room Use").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("General Use").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

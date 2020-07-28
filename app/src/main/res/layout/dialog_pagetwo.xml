@@ -3,6 +3,99 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvCleanliness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="My current space is / I prefer shared spaces that are:"
+        android:textColor="@color/quantum_black_100"/>
 
+    <RadioGroup
+        android:id="@+id/radioGroupClean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvCleanliness">
+
+        <RadioButton
+            android:id="@+id/radioAlwaysClean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Always neat and clean"/>
+
+        <RadioButton
+            android:id="@+id/radioFairlyClean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fairly neat and clean; some clutter is okay"/>
+
+        <RadioButton
+            android:id="@+id/radioMessy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Messy"/>
+
+        <RadioButton
+            android:id="@+id/radioCleanNoPref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No preference"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/radioGroupClean"
+        android:text="My ideal temperature is:"
+        android:textColor="@color/quantum_black_100" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvTemperature">
+
+        <RadioButton
+            android:id="@+id/radioCold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cold"/>
+
+        <RadioButton
+            android:id="@+id/radioFairlyCold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fairly Cold"/>
+
+        <RadioButton
+            android:id="@+id/radioFairlyWarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fairly Warm"/>
+
+        <RadioButton
+            android:id="@+id/radioWarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Warm"/>
+
+        <RadioButton
+            android:id="@+id/radioTempNoPref"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No preference"/>
+
+    </RadioGroup>
 
 </RelativeLayout>

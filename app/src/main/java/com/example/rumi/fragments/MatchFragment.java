@@ -15,16 +15,19 @@ import androidx.fragment.app.Fragment;
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 import com.example.rumi.dialogs.MatchDialogOne;
+import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
 
-public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener, MatchDialogTwo.PageTwoListener {
+public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener, MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener {
 
     public static final String TAG = "MatchFragment";
-    private static final int PAGE_ONE_REQUEST_CODE = 11;
+    private static final int MATCH_REQUEST_CODE = 11;
 
     private MatchConstants.House currHousePref = null;
     private MatchConstants.Weekend currWeekendPref = null;
     private MatchConstants.Guests currGuestsPref = null;
+    private MatchConstants.Clean currCleanPref = null;
+    private MatchConstants.Temperature currTempPref = null;
 
     private Button btnMatch;
 
@@ -61,9 +64,17 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         MatchDialogOne matchDialogOne = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
-                        matchDialogOne.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
+                        matchDialogOne.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
                         matchDialogOne.show(getFragmentManager(), "MatchDialogOne");
-                    }}).setNegativeButton("No thanks", null).show();
+                    }})
+                .setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        currHousePref = null;
+                        currWeekendPref = null;
+                        currGuestsPref = null;
+                    }
+                }).show();
     }
 
     @Override
@@ -79,23 +90,40 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     @Override
-    public void sendPageTwoInputs(int nextPage) {
+    public void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref, MatchConstants.Temperature tempPref) {
+        currCleanPref = cleanPref;
+        currTempPref = tempPref;
         if (nextPage == MatchConstants.PAGE_ONE) {
             openMatchDialogOne();
         } else if (nextPage == MatchConstants.PAGE_THREE) {
-            // TODO
+            openMatchDialogThree();
+        }
+    }
+
+    @Override
+    public void sendPageThreeInputs(int nextPage) {
+        if (nextPage == MatchConstants.PAGE_TWO) {
+            openMatchDialogTwo();
+        } else if (nextPage == MatchConstants.PAGE_THREE) {
+            // TODO: open page 4
         }
     }
 
     private void openMatchDialogOne() {
         MatchDialogOne dialog = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
-        dialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogOne");
     }
 
     private void openMatchDialogTwo() {
-        MatchDialogTwo dialog = MatchDialogTwo.newInstance();
-        dialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
-        dialog.show(getFragmentManager(), "MatchDialogOne");
+        MatchDialogTwo dialog = MatchDialogTwo.newInstance(currCleanPref, currTempPref);
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogTwo");
+    }
+
+    private void openMatchDialogThree() {
+        MatchDialogThree dialog = MatchDialogThree.newInstance();
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogThree");
     }
 }
