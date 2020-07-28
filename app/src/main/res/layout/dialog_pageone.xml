@@ -1,11 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tvHousePreference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PAGE_ONE"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="During the week, I prefer my house to be:"
+        android:textColor="@color/quantum_black_100"/>
 
-</LinearLayout>
+    <RadioGroup
+        android:id="@+id/radioGroupHousePreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvHousePreference">
+
+        <RadioButton
+            android:id="@+id/radioQuiet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A quiet place to study"/>
+
+        <RadioButton
+            android:id="@+id/radioSocial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A social place for friends to hang out"/>
+
+        <RadioButton
+            android:id="@+id/radioWeekCombo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Combination of social and quiet"/>
+
+        <RadioButton
+            android:id="@+id/radioWeekNoPreference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No preference"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvWeekendPreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/radioGroupHousePreference"
+        android:text="During the weekend, I prefer the house to be:"
+        android:textColor="@color/quantum_black_100"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupWeekend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvWeekendPreference">
+
+        <RadioButton
+            android:id="@+id/radioParty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A wild party place"/>
+
+        <RadioButton
+            android:id="@+id/radioHang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A social place for friends to hang out"/>
+
+        <RadioButton
+            android:id="@+id/radioWeekendQuiet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A quiet place to study"/>
+
+        <RadioButton
+            android:id="@+id/radioNotHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I’m not home during the weekend/no preference"/>
+
+    </RadioGroup>
+
+    <TextView
+    android:id="@+id/tvOvernightGuests"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_below="@+id/radioGroupWeekend"
+    android:text="When it comes to overnight guests:"
+    android:textColor="@color/quantum_black_100" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupGuests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvOvernightGuests">
+
+        <RadioButton
+            android:id="@+id/radioOccasionalGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I’m okay with the occasional overnight guest"/>
+
+        <RadioButton
+            android:id="@+id/radioNoGuests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I prefer no overnight guests"/>
+
+        <RadioButton
+            android:id="@+id/radioGuestsNoPreference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No preference"/>
+
+    </RadioGroup>
+
+</RelativeLayout>

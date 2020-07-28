@@ -3,15 +3,18 @@ package com.example.rumi.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 import com.example.rumi.dialogs.MatchDialog;
 
@@ -65,7 +68,10 @@ public class MatchFragment extends Fragment implements MatchDialog.PageOneListen
     }
 
     @Override
-    public void sendPageOneInputs(int nextPage) {
+    public void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
+        Toast.makeText(getContext(), "housePref: " + housePref
+                + "\nweekendPref: " + weekendPref
+                + "\nguestsPref: " + guestsPref, Toast.LENGTH_SHORT).show();
         if (nextPage == 0)
             launchMatchingDialog();
         else if (nextPage == 1) {
