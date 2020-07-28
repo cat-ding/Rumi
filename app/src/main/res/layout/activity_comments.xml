@@ -38,22 +38,20 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="94dp"
             android:layout_marginBottom="9dp"
-            android:ems="10"
+            android:ems="9"
             android:inputType="textMultiLine"
             tools:text="Add a comment..." />
 
         <Button
             android:id="@+id/btnPost"
-            android:layout_width="72dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="-45dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#3897F1"
-            android:text="Post"
-            android:textColor="#FFFFFF" />
+            android:text="Post" />
 
     </RelativeLayout>
 

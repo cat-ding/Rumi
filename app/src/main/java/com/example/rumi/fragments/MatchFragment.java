@@ -1,12 +1,13 @@
 package com.example.rumi.fragments;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,11 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
+import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
 
-public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener, MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener {
+public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
+                                                       MatchDialogTwo.PageTwoListener,
+                                                       MatchDialogThree.PageThreeListener,
+        MatchDialogFour.PageFourListener {
 
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
@@ -73,6 +78,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         currHousePref = null;
                         currWeekendPref = null;
                         currGuestsPref = null;
+                        currCleanPref = null;
+                        currTempPref = null;
                     }
                 }).show();
     }
@@ -104,8 +111,17 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public void sendPageThreeInputs(int nextPage) {
         if (nextPage == MatchConstants.PAGE_TWO) {
             openMatchDialogTwo();
-        } else if (nextPage == MatchConstants.PAGE_THREE) {
-            // TODO: open page 4
+        } else if (nextPage == MatchConstants.PAGE_FOUR) {
+            openMatchDialogFour();
+        }
+    }
+
+    @Override
+    public void sendPageFourInputs(int nextPage) {
+        if (nextPage == MatchConstants.PAGE_THREE) {
+            openMatchDialogThree();
+        } else if (nextPage == MatchConstants.PAGE_FIVE) {
+            // TODO: open page 5
         }
     }
 
@@ -125,5 +141,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         MatchDialogThree dialog = MatchDialogThree.newInstance();
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogThree");
+    }
+
+    private void openMatchDialogFour() {
+        Toast.makeText(getContext(), "FOUR", Toast.LENGTH_SHORT).show();
+        MatchDialogFour dialog = MatchDialogFour.newInstance();
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogFour");
     }
 }

@@ -1,5 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvActivites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What are some of your on-campus activities? (i.e. sports, clubs, etc.)"
+        android:textColor="@color/quantum_black_100"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupActivities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvActivites"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        app:chipSpacingVertical="-10dp"/>
+
+    <EditText
+        android:id="@+id/etActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chipGroupActivities"
+        android:layout_marginStart="10dp"
+        android:hint="Enter on-campus activity"
+        android:ems="13"
+        android:inputType="textCapSentences"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/btnAddActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toRightOf="@+id/etActivity"
+        android:layout_below="@+id/chipGroupActivities"
+        android:text="Add" />
+
+    <TextView
+        android:id="@+id/tvHobbies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What are some of your hobbies? (i.e. fashion, travel, etc.)"
+        android:layout_below="@+id/etActivity"
+        android:textColor="@color/quantum_black_100"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupHobbies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHobbies"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        app:chipSpacingVertical="-10dp"/>
+
+    <EditText
+        android:id="@+id/etHobby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chipGroupHobbies"
+        android:layout_marginStart="10dp"
+        android:hint="Enter hobby or interest"
+        android:ems="13"
+        android:inputType="textCapSentences"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/btnAddHobby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toRightOf="@+id/etHobby"
+        android:layout_below="@+id/chipGroupHobbies"
+        android:text="Add"/>
+
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ public class MatchConstants {
     public static final int PAGE_TWO = 2;
     public static final int PAGE_THREE = 3;
     public static final int PAGE_FOUR = 4;
+    public static final int PAGE_FIVE = 5;
 
     // MatchDialogOne
     public enum House {

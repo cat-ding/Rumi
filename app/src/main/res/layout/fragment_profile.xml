@@ -67,23 +67,22 @@
 
             <Button
                 android:id="@+id/btnLogout"
-                android:layout_width="75dp"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Logout"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:visibility="gone" />
+                android:textSize="12sp"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/btnMessage"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:background="#3897F1"
                 android:text="Message"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="#FFFFFF" />
+                android:textSize="12sp" />
 
 
         </RelativeLayout>

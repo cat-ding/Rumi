@@ -24,25 +24,25 @@
         <RadioButton
             android:id="@+id/radioAlwaysClean"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Always neat and clean"/>
 
         <RadioButton
             android:id="@+id/radioFairlyClean"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Fairly neat and clean; some clutter is okay"/>
 
         <RadioButton
             android:id="@+id/radioMessy"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Messy"/>
 
         <RadioButton
             android:id="@+id/radioCleanNoPref"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="No preference"/>
 
     </RadioGroup>
@@ -69,31 +69,31 @@
         <RadioButton
             android:id="@+id/radioCold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Cold"/>
 
         <RadioButton
             android:id="@+id/radioFairlyCold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Fairly Cold"/>
 
         <RadioButton
             android:id="@+id/radioFairlyWarm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Fairly Warm"/>
 
         <RadioButton
             android:id="@+id/radioWarm"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Warm"/>
 
         <RadioButton
             android:id="@+id/radioTempNoPref"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="No preference"/>
 
     </RadioGroup>

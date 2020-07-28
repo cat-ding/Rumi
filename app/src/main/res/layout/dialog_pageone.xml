@@ -11,7 +11,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:text="During the week, I prefer my house to be:"
-        android:textColor="@color/quantum_black_100"/>
+        android:textColor="@color/quantum_black_100" />
 
     <RadioGroup
         android:id="@+id/radioGroupHousePreference"
@@ -24,25 +24,25 @@
         <RadioButton
             android:id="@+id/radioQuiet"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="A quiet place to study"/>
 
         <RadioButton
             android:id="@+id/radioSocial"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="A social place for friends to hang out"/>
 
         <RadioButton
             android:id="@+id/radioWeekCombo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="Combination of social and quiet"/>
 
         <RadioButton
             android:id="@+id/radioWeekNoPreference"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="No preference"/>
 
     </RadioGroup>
@@ -69,25 +69,25 @@
         <RadioButton
             android:id="@+id/radioParty"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="A wild party place"/>
 
         <RadioButton
             android:id="@+id/radioHang"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="A social place for friends to hang out"/>
 
         <RadioButton
             android:id="@+id/radioWeekendQuiet"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="A quiet place to study"/>
 
         <RadioButton
             android:id="@+id/radioNotHome"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="I’m not home during the weekend/no preference"/>
 
     </RadioGroup>
@@ -114,19 +114,19 @@
         <RadioButton
             android:id="@+id/radioOccasionalGuest"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="I’m okay with the occasional overnight guest"/>
 
         <RadioButton
             android:id="@+id/radioNoGuests"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="I prefer no overnight guests"/>
 
         <RadioButton
             android:id="@+id/radioGuestsNoPreference"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:text="No preference"/>
 
     </RadioGroup>

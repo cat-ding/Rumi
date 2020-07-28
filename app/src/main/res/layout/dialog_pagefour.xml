@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/tvEntertainment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What entertainment do you enjoy? (i.e. TV shows, books, etc.)"
+        android:layout_below="@+id/etHobby"
+        android:textColor="@color/quantum_black_100"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupEntertainment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEntertainment"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:chipSpacingVertical="-10dp"/>
+
+    <EditText
+        android:id="@+id/etEntertainment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chipGroupEntertainment"
+        android:layout_marginStart="10dp"
+        android:ems="13"
+        android:hint="Enter entertainment"
+        android:inputType="textCapSentences"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/btnAddEntertainment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toRightOf="@+id/etEntertainment"
+        android:layout_below="@+id/chipGroupEntertainment"
+        android:text="Add"/>
+
+    <TextView
+        android:id="@+id/tvMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/etEntertainment"
+        android:text="Select your musical preferences:"
+        android:textColor="@color/quantum_black_100"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvMusic"
+        app:chipSpacingVertical="-10dp"
+        android:layout_marginStart="10dp">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Pop" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Rock" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Alternative" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Rap" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Jazz" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="R&amp;B" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Hip-Hop" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Classical" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Country" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Electronic" />
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Other" />
+
+    </com.google.android.material.chip.ChipGroup>
+</RelativeLayout>
