@@ -22,6 +22,10 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public static final String TAG = "MatchFragment";
     private static final int PAGE_ONE_REQUEST_CODE = 11;
 
+    private MatchConstants.House currHousePref = null;
+    private MatchConstants.Weekend currWeekendPref = null;
+    private MatchConstants.Guests currGuestsPref = null;
+
     private Button btnMatch;
 
     public MatchFragment() {
@@ -56,7 +60,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         " we'll do our best to suggest other users with similar qualities!")
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        MatchDialogOne matchDialogOne = MatchDialogOne.newInstance();
+                        MatchDialogOne matchDialogOne = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
                         matchDialogOne.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
                         matchDialogOne.show(getFragmentManager(), "MatchDialogOne");
                     }}).setNegativeButton("No thanks", null).show();
@@ -64,10 +68,11 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     @Override
     public void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
-        if (nextPage == MatchConstants.PAGE_ZERO)
+        currHousePref = housePref;
+        currWeekendPref = weekendPref;
+        currGuestsPref = guestsPref;
+        if (nextPage == MatchConstants.PAGE_ZERO) {
             launchMatchingDialog();
-        else if (nextPage == MatchConstants.PAGE_ONE) {
-            openMatchDialogOne();
         } else if (nextPage == MatchConstants.PAGE_TWO) {
             openMatchDialogTwo();
         }
@@ -83,7 +88,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     private void openMatchDialogOne() {
-        MatchDialogOne dialog = MatchDialogOne.newInstance();
+        MatchDialogOne dialog = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
         dialog.setTargetFragment(MatchFragment.this, PAGE_ONE_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogOne");
     }

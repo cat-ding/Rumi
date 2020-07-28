@@ -22,7 +22,10 @@ import com.example.rumi.R;
 public class MatchDialogOne extends AppCompatDialogFragment {
 
     public static final String TAG = "MatchDialogOne";
-    public static final String KEY_PAGE_NUM = "pageNum";
+    public static final String KEY_CURR_HOUSE_PREF = "currHousePref";
+    public static final String KEY_CURR_WEEKEND_PREF = "currWeekendPref";
+    public static final String KEY_CURR_GUESTS_PREF = "currGuestsPref";
+
     private PageOneListener mListener;
 
     private int pageNum = 1;
@@ -38,14 +41,18 @@ public class MatchDialogOne extends AppCompatDialogFragment {
 
 
     public interface PageOneListener {
-        void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref);
+        void sendPageOneInputs(int nextPage, MatchConstants.House housePref,
+                               MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref);
     }
 
-    public static MatchDialogOne newInstance() {
-        
+    public static MatchDialogOne newInstance(MatchConstants.House currHousePref,
+                                             MatchConstants.Weekend currWeekendPref,
+                                             MatchConstants.Guests currGuestsPref) {
         Bundle args = new Bundle();
         MatchDialogOne fragment = new MatchDialogOne();
-
+        args.putSerializable(KEY_CURR_HOUSE_PREF, currHousePref);
+        args.putSerializable(KEY_CURR_WEEKEND_PREF, currWeekendPref);
+        args.putSerializable(KEY_CURR_GUESTS_PREF, currGuestsPref);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +64,8 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View view = inflater.inflate(R.layout.dialog_pageone, null, false);
-        findPageOneViews(view);
+        findViews(view);
+        setPreviousValues();
         builder.setView(view).setTitle("Room Use").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
@@ -69,7 +77,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    private void findPageOneViews(View view) {
+    private void findViews(View view) {
         radioGroupHousePreference = view.findViewById(R.id.radioGroupHousePreference);
         radioGroupWeekend = view.findViewById(R.id.radioGroupWeekend);
         radioGroupGuests = view.findViewById(R.id.radioGroupGuests);
@@ -140,13 +148,75 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         });
     }
 
-    // returns false if at least one field is blank
-    private boolean getPageOneInputs() {
-        if (housePref == null || weekendPref == null || guestsPref == null) {
-            Toast.makeText(getContext(), "Please answer all the questions!", Toast.LENGTH_SHORT).show();
-            return false;
+    private void setPreviousValues() {
+        housePref = (MatchConstants.House) getArguments().getSerializable(KEY_CURR_HOUSE_PREF);
+        weekendPref = (MatchConstants.Weekend) getArguments().getSerializable(KEY_CURR_WEEKEND_PREF);
+        guestsPref = (MatchConstants.Guests) getArguments().getSerializable(KEY_CURR_GUESTS_PREF);
+
+        if (housePref != null) {
+            if (housePref == MatchConstants.House.QUIET) {
+                radioQuiet.setChecked(true);
+                radioSocial.setChecked(false);
+                radioWeekCombo.setChecked(false);
+                radioWeekNoPreference.setChecked(false);
+            } else if (housePref == MatchConstants.House.SOCIAL) {
+                radioQuiet.setChecked(false);
+                radioSocial.setChecked(true);
+                radioWeekCombo.setChecked(false);
+                radioWeekNoPreference.setChecked(false);
+            } else if (housePref == MatchConstants.House.COMBO) {
+                radioQuiet.setChecked(false);
+                radioSocial.setChecked(false);
+                radioWeekCombo.setChecked(true);
+                radioWeekNoPreference.setChecked(false);
+            } else {
+                radioQuiet.setChecked(false);
+                radioSocial.setChecked(false);
+                radioWeekCombo.setChecked(false);
+                radioWeekNoPreference.setChecked(true);
+            }
         }
-        return true; // nothing left blank
+
+        if (weekendPref != null) {
+            if (weekendPref == MatchConstants.Weekend.PARTY) {
+                radioParty.setChecked(true);
+                radioHang.setChecked(false);
+                radioWeekendQuiet.setChecked(false);
+                radioNotHome.setChecked(false);
+            } else if (weekendPref == MatchConstants.Weekend.HANG) {
+                radioParty.setChecked(false);
+                radioHang.setChecked(true);
+                radioWeekendQuiet.setChecked(false);
+                radioNotHome.setChecked(false);
+            } else if (weekendPref == MatchConstants.Weekend.QUIET) {
+                radioParty.setChecked(false);
+                radioHang.setChecked(false);
+                radioWeekendQuiet.setChecked(true);
+                radioNotHome.setChecked(false);
+            } else {
+                radioParty.setChecked(false);
+                radioHang.setChecked(false);
+                radioWeekendQuiet.setChecked(false);
+                radioNotHome.setChecked(true);
+            }
+        }
+
+        if (guestsPref != null) {
+            if (guestsPref == MatchConstants.Guests.OCCASIONAL) {
+                radioOccasionalGuest.setChecked(true);
+                radioNoGuests.setChecked(false);
+                radioGuestsNoPreference.setChecked(false);
+            } else if (guestsPref == MatchConstants.Guests.NO_GUESTS) {
+                radioOccasionalGuest.setChecked(false);
+                radioNoGuests.setChecked(true);
+                radioGuestsNoPreference.setChecked(false);
+            } else {
+                radioOccasionalGuest.setChecked(false);
+                radioNoGuests.setChecked(false);
+                radioGuestsNoPreference.setChecked(true);
+            }
+        }
+
     }
 
     // overrides the next button so that dialog doesn't dismiss if all fields are not answered
@@ -159,8 +229,10 @@ public class MatchDialogOne extends AppCompatDialogFragment {
             postiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!getPageOneInputs())
+                    if (housePref == null || weekendPref == null || guestsPref == null) {
+                        Toast.makeText(getContext(), "Please answer all the questions!", Toast.LENGTH_SHORT).show();
                         return;
+                    }
                     mListener.sendPageOneInputs(MatchConstants.PAGE_TWO, housePref, weekendPref, guestsPref);
                     dismiss();
                 }
