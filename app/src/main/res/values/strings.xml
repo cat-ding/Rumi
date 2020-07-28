@@ -100,4 +100,18 @@
         <item>Rent (High to Low)</item>
         <item>Rent (Low to High)</item>
     </string-array>
+
+    <string-array name="music">
+        <item>pop</item>
+        <item>rock</item>
+        <item>alternative</item>
+        <item>rap</item>
+        <item>jazz</item>
+        <item>r&amp;b</item>
+        <item>hip-hop</item>
+        <item>classical</item>
+        <item>country</item>
+        <item>dance/edm</item>
+        <item>electronic</item>
+    </string-array>
 </resources>

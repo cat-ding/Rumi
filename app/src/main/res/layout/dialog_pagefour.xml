@@ -54,67 +54,33 @@
         android:textColor="@color/quantum_black_100"/>
 
     <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupMusic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvMusic"
         app:chipSpacingVertical="-10dp"
         android:layout_marginStart="10dp">
 
-        <com.google.android.material.chip.Chip
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Pop" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Rock" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Alternative" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Rap" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Jazz" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="R&amp;B" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Hip-Hop" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Classical" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Country" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Electronic" />
-        <com.google.android.material.chip.Chip
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="Other" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Add"
+                android:textSize="16dp"/>
+
+            <ImageView
+                android:id="@+id/ivAddMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/etMusic"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/ic_baseline_check_24" />
+
+        </RelativeLayout>
 
     </com.google.android.material.chip.ChipGroup>
 </RelativeLayout>

@@ -21,6 +21,7 @@ import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
 import com.google.api.LogDescriptor;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
@@ -38,6 +39,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private MatchConstants.Temperature currTempPref = null;
     private ArrayList<String> currActivities = new ArrayList<>();
     private ArrayList<String> currHobbies = new ArrayList<>();
+    private ArrayList<String> currEntertainment = new ArrayList<>();
+    private ArrayList<String> currMusic = new ArrayList<>();
 
     private Button btnMatch;
 
@@ -124,7 +127,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     @Override
-    public void sendPageFourInputs(int nextPage) {
+    public void sendPageFourInputs(int nextPage, ArrayList<String> entertainment, ArrayList<String> music) {
+        currEntertainment = entertainment;
+        currMusic = music;
         if (nextPage == MatchConstants.PAGE_THREE) {
             openMatchDialogThree();
         } else if (nextPage == MatchConstants.PAGE_FIVE) {
@@ -151,7 +156,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     private void openMatchDialogFour() {
-        MatchDialogFour dialog = MatchDialogFour.newInstance();
+        MatchDialogFour dialog = MatchDialogFour.newInstance(currEntertainment, currMusic);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFour");
     }
