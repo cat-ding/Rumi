@@ -19,6 +19,7 @@ import com.example.rumi.R;
 import com.example.rumi.dialogs.MatchDialogFive;
 import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
+import com.example.rumi.dialogs.MatchDialogSix;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
 import com.google.api.LogDescriptor;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
         MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener,
-        MatchDialogFour.PageFourListener, MatchDialogFive.PageFiveListener {
+        MatchDialogFour.PageFourListener, MatchDialogFive.PageFiveListener, MatchDialogSix.PageSixListener {
 
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
@@ -46,6 +47,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private MatchConstants.GenderPref currGenderPref = null;
     private MatchConstants.Smoke currSmoke = null;
     private String currSelfIdentifyGender = "";
+    private String currDescription = "";
 
     private Button btnMatch;
 
@@ -101,6 +103,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         currGenderPref = null;
                         currSmoke = null;
                         currSelfIdentifyGender = "";
+                        currDescription = "";
                     }
                 }).show();
     }
@@ -159,10 +162,6 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public void sendPageFiveInputs(int nextPage, MatchConstants.Gender gender,
                                    String selfIdentifyGender, MatchConstants.GenderPref genderPref,
                                    MatchConstants.Smoke smoke) {
-//        Log.d(TAG, "gender: " + gender.name());
-        Log.d(TAG, "self: " + selfIdentifyGender);
-//        Log.d(TAG, "pref: " + genderPref.name());
-//        Log.d(TAG, "smoke: " + smoke.toString());
         currGender = gender;
         currGenderPref = genderPref;
         currSmoke = smoke;
@@ -170,7 +169,17 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (nextPage == MatchConstants.PAGE_FOUR) {
             openMatchDialogFour();
         } else if (nextPage == MatchConstants.PAGE_SIX) {
-            // TODO:
+            openMatchDialogSix();
+        }
+    }
+
+    @Override
+    public void sendPageSixInputs(int nextPage, String description) {
+        currDescription = description;
+        if (nextPage == MatchConstants.PAGE_FIVE) {
+            openMatchDialogFive();
+        } else { // end
+            // TODO: upload responses to firebase + calculate combatibility
         }
     }
 
@@ -203,5 +212,11 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 currGenderPref, currSmoke);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFive");
+    }
+
+    private void openMatchDialogSix() {
+        MatchDialogSix dialog = MatchDialogSix.newInstance(currDescription);
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogSix");
     }
 }
