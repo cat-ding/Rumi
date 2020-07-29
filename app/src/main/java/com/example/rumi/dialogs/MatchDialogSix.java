@@ -77,7 +77,7 @@ public class MatchDialogSix extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (description.isEmpty()) {
+                    if (etDescription.getText().toString().trim().isEmpty()) {
                         Toast.makeText(getContext(), "Please enter a description!", Toast.LENGTH_SHORT).show();
                         return;
                     }

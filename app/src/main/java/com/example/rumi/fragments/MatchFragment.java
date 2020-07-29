@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,13 +18,24 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
+import com.example.rumi.RegisterActivity;
 import com.example.rumi.dialogs.MatchDialogFive;
 import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogSix;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
+import com.example.rumi.models.Post;
+import com.example.rumi.models.SurveyResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.api.LogDescriptor;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -33,6 +46,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
+
+    private ArrayList<SurveyResponse> responses = new ArrayList<>();
 
     private MatchConstants.House currHousePref = null;
     private MatchConstants.Weekend currWeekendPref = null;
@@ -49,6 +68,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private String currSelfIdentifyGender = "";
     private String currDescription = "";
 
+    private RelativeLayout relativeLayoutIntroPage;
     private Button btnMatch;
 
     public MatchFragment() {
@@ -66,11 +86,58 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         super.onViewCreated(view, savedInstanceState);
 
         btnMatch = view.findViewById(R.id.btnMatch);
+        relativeLayoutIntroPage = view.findViewById(R.id.relativeLayoutIntroPage);
 
         btnMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchMatchingDialog();
+            }
+        });
+    }
+
+    private void calculateRecommendations() {
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        String url = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
+
+        SurveyResponse survey = new SurveyResponse(currHousePref.toString(),
+                currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
+                currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
+                currGenderPref.toString(), currSmoke.toString(), currDescription,
+                currActivities, currHobbies, currEntertainment, currMusic, userId, url);
+
+        surveysRef.document(userId).set(survey).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Error saving responses! ", e);
+                Toast.makeText(getContext(), "Error saving responses!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // get other users responses
+        surveysRef.whereEqualTo(SurveyResponse.KEY_GENDER, currGender.toString())
+                .whereEqualTo(SurveyResponse.KEY_SMOKING, currSmoke.toString())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                relativeLayoutIntroPage.setVisibility(View.GONE);
+                // TODO: show other layout views
+
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
+                    if (surveyResponse.getUserId().equals(firebaseAuth.getCurrentUser().getUid()))
+                        continue;
+
+                    surveyResponse.setSurveyId(documentSnapshot.getId());
+                    responses.add(surveyResponse);
+                }
+                // TODO: update adapter
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Error retrieving survey responses!", e);
+                Toast.makeText(getContext(), "Error retrieving survey responses!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -179,7 +246,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (nextPage == MatchConstants.PAGE_FIVE) {
             openMatchDialogFive();
         } else { // end
-            // TODO: upload responses to firebase + calculate combatibility
+            calculateRecommendations();
         }
     }
 

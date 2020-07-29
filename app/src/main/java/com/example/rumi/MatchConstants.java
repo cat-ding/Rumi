@@ -20,7 +20,7 @@ public class MatchConstants {
         PARTY, HANG, QUIET, NO_PREFERENCE
     }
     public enum Guests {
-        OCCASIONAL, NO_GUESTS, NO_PREFERENCE
+        OCCASIONAL, NONE , NO_PREFERENCE
     }
 
     // MatchDialogTwo

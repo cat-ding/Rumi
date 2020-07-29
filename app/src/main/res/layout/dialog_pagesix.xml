@@ -9,8 +9,19 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:text="Finally, add a brief description of your situation or what you're looking for:"
+        android:text="Finally, add a brief description of your situation and what you're looking for!"
         android:textColor="@color/quantum_black_100"/>
+
+    <TextView
+        android:id="@+id/tvDescriptionBullets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescription"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Helpful points to include:\n\u2022 Duration\n\u2022 Semester\n\u2022 Lease info. if applicable"
+        android:textColor="@color/quantum_black_100"
+        android:textSize="12sp"/>
 
     <EditText
         android:id="@+id/etDescription"
@@ -21,7 +32,7 @@
         android:layout_marginEnd="10dp"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:layout_below="@id/tvDescription"
+        android:layout_below="@id/tvDescriptionBullets"
         android:hint="Type here"
         android:minLines="4"
         android:textSize="14sp"/>

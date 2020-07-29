@@ -30,6 +30,7 @@ import com.example.rumi.LoginActivity;
 import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.models.Post;
 import com.example.rumi.R;
+import com.example.rumi.models.SurveyResponse;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -72,6 +73,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
+    private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
     private String userId;
 
     public ProfileFragment() {
@@ -280,6 +282,7 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), "Profile image updated successfully!", Toast.LENGTH_SHORT).show();
                         Glide.with(getContext()).load(firebaseAuth.getCurrentUser().getPhotoUrl()).circleCrop().into(ivProfileImage);
                         usersRef.document(userId).update(User.KEY_PROFILE_URL, firebaseAuth.getCurrentUser().getPhotoUrl().toString());
+                        surveysRef.document(userId).update(SurveyResponse.KEY_IMAGE_URL, firebaseAuth.getCurrentUser().getPhotoUrl().toString());
                         loadPosts();
                     }
                 })

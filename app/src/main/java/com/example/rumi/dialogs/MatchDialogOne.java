@@ -136,7 +136,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
                         guestsPref = MatchConstants.Guests.OCCASIONAL;
                         break;
                     case R.id.radioNoGuests:
-                        guestsPref = MatchConstants.Guests.NO_GUESTS;
+                        guestsPref = MatchConstants.Guests.NONE;
                         break;
                     case R.id.radioGuestsNoPreference:
                         guestsPref = MatchConstants.Guests.NO_PREFERENCE;
@@ -203,7 +203,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
                 radioOccasionalGuest.setChecked(true);
                 radioNoGuests.setChecked(false);
                 radioGuestsNoPreference.setChecked(false);
-            } else if (guestsPref == MatchConstants.Guests.NO_GUESTS) {
+            } else if (guestsPref == MatchConstants.Guests.NONE) {
                 radioOccasionalGuest.setChecked(false);
                 radioNoGuests.setChecked(true);
                 radioGuestsNoPreference.setChecked(false);
