@@ -162,8 +162,8 @@ public class MatchDialogThree extends DialogFragment {
         super.onStart();
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
-            Button postiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
-            postiveButton.setOnClickListener(new View.OnClickListener() {
+            Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.sendPageThreeInputs(MatchConstants.PAGE_FOUR, activities, hobbies);

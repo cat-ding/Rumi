@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
+import com.example.rumi.dialogs.MatchDialogFive;
 import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogThree;
@@ -25,9 +27,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
-                                                       MatchDialogTwo.PageTwoListener,
-                                                       MatchDialogThree.PageThreeListener,
-        MatchDialogFour.PageFourListener {
+        MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener,
+        MatchDialogFour.PageFourListener, MatchDialogFive.PageFiveListener {
 
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
@@ -41,6 +42,10 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private ArrayList<String> currHobbies = new ArrayList<>();
     private ArrayList<String> currEntertainment = new ArrayList<>();
     private ArrayList<String> currMusic = new ArrayList<>();
+    private MatchConstants.Gender currGender = null;
+    private MatchConstants.GenderPref currGenderPref = null;
+    private MatchConstants.Smoke currSmoke = null;
+    private String currSelfIdentifyGender = "";
 
     private Button btnMatch;
 
@@ -88,10 +93,19 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         currGuestsPref = null;
                         currCleanPref = null;
                         currTempPref = null;
+                        currActivities.clear();
+                        currHobbies.clear();
+                        currEntertainment.clear();
+                        currMusic.clear();
+                        currGender = null;
+                        currGenderPref = null;
+                        currSmoke = null;
+                        currSelfIdentifyGender = "";
                     }
                 }).show();
     }
 
+    // obtaining info on house preference, weekend preference, and guests preference
     @Override
     public void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
         currHousePref = housePref;
@@ -104,6 +118,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         }
     }
 
+    // obtaining info on level of cleanliness and temperature preference
     @Override
     public void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref, MatchConstants.Temperature tempPref) {
         currCleanPref = cleanPref;
@@ -115,6 +130,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         }
     }
 
+    // obtaining info on activities and hobbies
     @Override
     public void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies) {
         currActivities = activities;
@@ -126,6 +142,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         }
     }
 
+    // obtaining info on entertainment and music
     @Override
     public void sendPageFourInputs(int nextPage, ArrayList<String> entertainment, ArrayList<String> music) {
         currEntertainment = entertainment;
@@ -133,7 +150,27 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (nextPage == MatchConstants.PAGE_THREE) {
             openMatchDialogThree();
         } else if (nextPage == MatchConstants.PAGE_FIVE) {
-            // TODO: open page 5
+            openMatchDialogFive();
+        }
+    }
+
+    // obtaining personal info on gender identify and preference for housemates gender and smoking habits
+    @Override
+    public void sendPageFiveInputs(int nextPage, MatchConstants.Gender gender,
+                                   String selfIdentifyGender, MatchConstants.GenderPref genderPref,
+                                   MatchConstants.Smoke smoke) {
+//        Log.d(TAG, "gender: " + gender.name());
+        Log.d(TAG, "self: " + selfIdentifyGender);
+//        Log.d(TAG, "pref: " + genderPref.name());
+//        Log.d(TAG, "smoke: " + smoke.toString());
+        currGender = gender;
+        currGenderPref = genderPref;
+        currSmoke = smoke;
+        currSelfIdentifyGender = selfIdentifyGender;
+        if (nextPage == MatchConstants.PAGE_FOUR) {
+            openMatchDialogFour();
+        } else if (nextPage == MatchConstants.PAGE_SIX) {
+            // TODO:
         }
     }
 
@@ -159,5 +196,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         MatchDialogFour dialog = MatchDialogFour.newInstance(currEntertainment, currMusic);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFour");
+    }
+
+    private void openMatchDialogFive() {
+        MatchDialogFive dialog = MatchDialogFive.newInstance(currGender, currSelfIdentifyGender,
+                currGenderPref, currSmoke);
+        dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
+        dialog.show(getFragmentManager(), "MatchDialogFive");
     }
 }

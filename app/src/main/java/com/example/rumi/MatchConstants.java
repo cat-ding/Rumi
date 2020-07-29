@@ -9,6 +9,7 @@ public class MatchConstants {
     public static final int PAGE_THREE = 3;
     public static final int PAGE_FOUR = 4;
     public static final int PAGE_FIVE = 5;
+    public static final int PAGE_SIX = 6;
 
     // MatchDialogOne
     public enum House {
@@ -26,7 +27,18 @@ public class MatchConstants {
         ALWAYS, FAIRLY, MESSY, NO_PREFERENCE
     }
     public enum Temperature {
-        COLD, FAIRLY_COLD, FAIRLY_WARM, WARM, NO_PREFERENCE
+        COLD, FAIRLY_COLD, FAIRLY_WARM, WARM
+    }
+
+    // MatchDialogFive
+    public enum Gender {
+        MALE, FEMALE, SELF_IDENTIFY, NO_ANSWER
+    }
+    public enum GenderPref {
+        MALE, FEMALE, NO_PREFERENCE
+    }
+    public enum Smoke {
+        NON_SMOKER_NO, NON_SMOKER_YES, SMOKER
     }
 
     private MatchConstants() { } // private constructor so class cannot be instantiated

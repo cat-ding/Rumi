@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvGenderIdentity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="I identify as:"
+        android:textColor="@color/quantum_black_100"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupGenderIdentity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvGenderIdentity">
+
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Male"/>
+
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Female"/>
+
+        <RadioButton
+            android:id="@+id/radioSelfIdentify"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Prefer to self identify: "
+            android:layout_centerVertical="true"/>
+
+        <RadioButton
+            android:id="@+id/radioNoAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Prefer not to answer"/>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etSelfIdentify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="95dp"
+        android:layout_toEndOf="@+id/radioGroupGenderIdentity"
+        android:hint="Type here"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:id="@+id/tvGenderPreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGroupGenderIdentity"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="I prefer to live with people who are:"
+        android:textColor="@color/quantum_black_100"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupGenderPreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvGenderPreference">
+
+        <RadioButton
+            android:id="@+id/radioMalePref"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Male identifying"/>
+
+        <RadioButton
+            android:id="@+id/radioFemalePref"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Female identifying"/>
+
+        <RadioButton
+            android:id="@+id/radioNoPref"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="No preference"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvSmoking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioGroupGenderPreference"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="With regards to smoking:"
+        android:textColor="@color/quantum_black_100"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupSmoking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@+id/tvSmoking">
+
+        <RadioButton
+            android:id="@+id/radioNonSmokerNo"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="I do not smoke and I prefer that my housemate does not smoke"/>
+
+        <RadioButton
+            android:id="@+id/radioNonSmokerYes"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="I do not smoke and I don't mind if my housemate smokes"/>
+
+        <RadioButton
+            android:id="@+id/radioSmoker"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="I smoke"/>
+
+    </RadioGroup>
+</RelativeLayout>

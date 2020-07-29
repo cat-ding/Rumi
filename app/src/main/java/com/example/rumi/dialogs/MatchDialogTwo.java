@@ -28,7 +28,7 @@ public class MatchDialogTwo extends DialogFragment {
 
     private RadioGroup radioGroupClean, radioGroupTemp;
     private RadioButton radioAlwaysClean, radioFairlyClean, radioMessy, radioCleanNoPref;
-    private RadioButton radioCold, radioFairlyCold, radioFairlyWarm, radioWarm, radioTempNoPref;
+    private RadioButton radioCold, radioFairlyCold, radioFairlyWarm, radioWarm;
     private MatchConstants.Clean cleanPref = null;
     private MatchConstants.Temperature tempPref = null;
 
@@ -81,7 +81,6 @@ public class MatchDialogTwo extends DialogFragment {
         radioFairlyCold = view.findViewById(R.id.radioFairlyCold);
         radioFairlyWarm = view.findViewById(R.id.radioFairlyWarm);
         radioWarm = view.findViewById(R.id.radioWarm);
-        radioTempNoPref = view.findViewById(R.id.radioTempNoPref);
 
         radioGroupClean.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -117,9 +116,6 @@ public class MatchDialogTwo extends DialogFragment {
                         break;
                     case R.id.radioWarm:
                         tempPref = MatchConstants.Temperature.WARM;
-                        break;
-                    case R.id.radioTempNoPref:
-                        tempPref = MatchConstants.Temperature.NO_PREFERENCE;
                 }
             }
         });
@@ -159,31 +155,21 @@ public class MatchDialogTwo extends DialogFragment {
                 radioFairlyCold.setChecked(false);
                 radioFairlyWarm.setChecked(false);
                 radioWarm.setChecked(false);
-                radioTempNoPref.setChecked(false);
             } else if (tempPref == MatchConstants.Temperature.FAIRLY_COLD) {
                 radioCold.setChecked(false);
                 radioFairlyCold.setChecked(true);
                 radioFairlyWarm.setChecked(false);
                 radioWarm.setChecked(false);
-                radioTempNoPref.setChecked(false);
             } else if (tempPref == MatchConstants.Temperature.FAIRLY_WARM) {
                 radioCold.setChecked(false);
                 radioFairlyCold.setChecked(false);
                 radioFairlyWarm.setChecked(true);
                 radioWarm.setChecked(false);
-                radioTempNoPref.setChecked(false);
-            } else if (tempPref == MatchConstants.Temperature.WARM) {
-                radioCold.setChecked(false);
-                radioFairlyCold.setChecked(false);
-                radioFairlyWarm.setChecked(false);
-                radioWarm.setChecked(true);
-                radioTempNoPref.setChecked(false);
             } else {
                 radioCold.setChecked(false);
                 radioFairlyCold.setChecked(false);
                 radioFairlyWarm.setChecked(false);
-                radioWarm.setChecked(false);
-                radioTempNoPref.setChecked(true);
+                radioWarm.setChecked(true);
             }
         }
     }
@@ -194,8 +180,8 @@ public class MatchDialogTwo extends DialogFragment {
         super.onStart();
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
-            Button postiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
-            postiveButton.setOnClickListener(new View.OnClickListener() {
+            Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (cleanPref == null || tempPref == null) {

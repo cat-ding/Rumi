@@ -90,12 +90,6 @@
             android:layout_height="35dp"
             android:text="Warm"/>
 
-        <RadioButton
-            android:id="@+id/radioTempNoPref"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="No preference"/>
-
     </RadioGroup>
 
 </RelativeLayout>
