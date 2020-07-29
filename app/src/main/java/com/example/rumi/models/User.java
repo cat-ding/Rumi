@@ -7,19 +7,22 @@ public class User {
     public static final String KEY_MAJOR = "major";
     public static final String KEY_YEAR = "year";
     public static final String KEY_PROFILE_URL = "profileUrl";
+    public static final String KEY_SURVEY_STATUS = "surveyStatus";
 
     private String name, email, major, year, profileUrl;
+    private boolean surveyStatus;
 
     public User () {
         // empty constructor required
     }
 
-    public User (String name, String email, String major, String year, String profileUrl) {
+    public User (String name, String email, String major, String year) {
         this.name = name;
         this.email = email;
         this.major = major;
         this.year = year;
-        this.profileUrl = profileUrl;
+        this.profileUrl = "";
+        this.surveyStatus = false;
     }
 
     public String getName() {
@@ -60,5 +63,13 @@ public class User {
 
     public void setProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public boolean isSurveyStatus() {
+        return surveyStatus;
+    }
+
+    public void setSurveyStatus(boolean surveyStatus) {
+        this.surveyStatus = surveyStatus;
     }
 }

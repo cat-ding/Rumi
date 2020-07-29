@@ -1,7 +1,10 @@
 package com.example.rumi.fragments;
 
 import androidx.appcompat.app.AlertDialog;
+
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +30,14 @@ import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
+import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,9 +52,13 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
 
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SURVEY_STATUS = "surveyStatus";
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     private ArrayList<SurveyResponse> responses = new ArrayList<>();
 
@@ -69,6 +78,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private String currDescription = "";
 
     private RelativeLayout relativeLayoutIntroPage;
+    private RelativeLayout relativeLayoutRecommendations;
     private Button btnMatch;
 
     public MatchFragment() {
@@ -87,6 +97,17 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
         btnMatch = view.findViewById(R.id.btnMatch);
         relativeLayoutIntroPage = view.findViewById(R.id.relativeLayoutIntroPage);
+        relativeLayoutRecommendations = view.findViewById(R.id.relativeLayoutRecommendations);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        boolean surveyCompleted = sharedPreferences.getBoolean(SURVEY_STATUS, false);
+        if (surveyCompleted) {
+            relativeLayoutIntroPage.setVisibility(View.GONE);
+            relativeLayoutRecommendations.setVisibility(View.VISIBLE);
+        } else {
+            relativeLayoutIntroPage.setVisibility(View.VISIBLE);
+            relativeLayoutRecommendations.setVisibility(View.GONE);
+        }
 
         btnMatch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +127,27 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 currGenderPref.toString(), currSmoke.toString(), currDescription,
                 currActivities, currHobbies, currEntertainment, currMusic, userId, url);
 
-        surveysRef.document(userId).set(survey).addOnFailureListener(new OnFailureListener() {
+        surveysRef.document(userId).set(survey).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                usersRef.document(firebaseAuth.getCurrentUser().getUid()).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                // initiate shared preference for match feature to false
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SURVEY_STATUS, documentSnapshot.getBoolean(User.KEY_SURVEY_STATUS));
+                                editor.apply();
+                            }
+                        });
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(SURVEY_STATUS, true);
+                editor.apply();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(TAG, "Error saving responses! ", e);
@@ -121,7 +162,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 relativeLayoutIntroPage.setVisibility(View.GONE);
-                // TODO: show other layout views
+                relativeLayoutRecommendations.setVisibility(View.VISIBLE);
 
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
