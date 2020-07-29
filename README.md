@@ -3,11 +3,12 @@
 ## Table of Contents
 1. [Overview](#Overview)
 1. [Product Spec](#Product-Spec)
-1. [Weekly Plan](#Weekly-Plan)
 1. [Wireframes](#Wireframes)
 2. [Schema](#Schema)
 
 ## Overview
+### [Link to Google Doc](https://docs.google.com/document/d/1liB88dXCX_VpgqF-a3TYppd1-r9tIsdJaxVvoZwsVs0/edit?usp=sharing)
+Contains additional information on behind the scenes reasoning and prioritization
 ### Description
 [Description of your app]
 
@@ -17,7 +18,7 @@
     - Real Estate
 - **Mobile:** 
     - UI that easily navigates house search, roommate search, sublet search according to your interests. Easy in app messaging system. Easy camera access to take and attach photos to posts.
-- **Story:** Tuft has only two years guaranteed housing which means a huge portion of upperclassmen look for or are forced to look for off campus housing, which also comes with its fair share of difficulties. These include:
+- **Story:** The Tufts housing crisis is pretty bad with only two years of guaranteed housing which means a huge portion of upperclassmen look for or are forced to look for off campus housing, which also comes with its fair share of difficulties. These include:
     - Students who go home for the summer and need someone to stay at their place and sublet for those months since they signed a 12 month lease
     - Students want to stick with friends, but may not have the correct number of people for their desired residence
     - People coming to the campus community from outside for a temporary research or internship position need a place to stay
@@ -137,38 +138,6 @@
   * Ability to delete a conversation
   * View user profile by tapping profile picture
   * Go into 1:1 conversation
-
-## Weekly Plan (tentative)
-### Week One
-- Set up basic data models (user and posts) and validate they work
-- Build the navigational skeleton (bottom navigation bar + fragments)
-- Build out skeleton views
-- Implement basic login/logout/signup feature
-- Start working on the home timeline screen query and display data from Parse (or Firebase if I learn out to use it)
-    - Make a details view for this
-- Start working on the compose fragment to make a new post object
-- Start fleshing out the profile fragment
-- Add a comments activity (like from Parstagram) to the details view
-
-### Week Two
-- Finish up polishing home timeline
-- Implement the liking feature if I haven't gotten to it already last week
-- Implement the save post feature and screen where you can view all your saved posts
-- Start integrating the google maps sdk to display house addresses on a map
-- Set up the messages screen with backend
-- Start working on the real estate browsing screen that pulls data from an API
-
-### Week Three
-- Finish up anything I missed from last week
-- Begin adding visual polish
-- Begin adding an animation
-- Begin adding a gesture recognizer
-
-### Week Four
-- Finish adding visual polish
-- Finish adding an animation
-- Finish adding a gesture recognizer
-- Bring in an external library to make UI look better
 
 ## Wireframes
 ![Wireframe](wireframe.png)
