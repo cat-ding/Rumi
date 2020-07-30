@@ -13,7 +13,7 @@ public class MatchConstants {
     public static final int NO_PAGE = -1;
 
     // MatchDialogOne
-    public enum House {
+    public enum Week {
         QUIET, SOCIAL, COMBO, NO_PREFERENCE
     }
     public enum Weekend {

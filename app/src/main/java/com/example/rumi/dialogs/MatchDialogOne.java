@@ -32,17 +32,17 @@ public class MatchDialogOne extends AppCompatDialogFragment {
     private RadioButton radioQuiet, radioSocial, radioWeekCombo, radioWeekNoPreference;
     private RadioButton radioParty, radioHang, radioWeekendQuiet, radioNotHome;
     private RadioButton radioOccasionalGuest, radioNoGuests, radioGuestsNoPreference;
-    private MatchConstants.House housePref = null;
+    private MatchConstants.Week housePref = null;
     private MatchConstants.Weekend weekendPref = null;
     private MatchConstants.Guests guestsPref = null;
 
 
     public interface PageOneListener {
-        void sendPageOneInputs(int nextPage, MatchConstants.House housePref,
+        void sendPageOneInputs(int nextPage, MatchConstants.Week housePref,
                                MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref);
     }
 
-    public static MatchDialogOne newInstance(MatchConstants.House currHousePref,
+    public static MatchDialogOne newInstance(MatchConstants.Week currHousePref,
                                              MatchConstants.Weekend currWeekendPref,
                                              MatchConstants.Guests currGuestsPref) {
         Bundle args = new Bundle();
@@ -95,16 +95,16 @@ public class MatchDialogOne extends AppCompatDialogFragment {
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 switch(checkedId) {
                     case R.id.radioQuiet:
-                        housePref = MatchConstants.House.QUIET;
+                        housePref = MatchConstants.Week.QUIET;
                         break;
                     case R.id.radioSocial:
-                        housePref = MatchConstants.House.SOCIAL;
+                        housePref = MatchConstants.Week.SOCIAL;
                         break;
                     case R.id.radioWeekCombo:
-                        housePref = MatchConstants.House.COMBO;
+                        housePref = MatchConstants.Week.COMBO;
                         break;
                     case R.id.radioWeekNoPreference:
-                        housePref = MatchConstants.House.NO_PREFERENCE;
+                        housePref = MatchConstants.Week.NO_PREFERENCE;
                 }
             }
         });
@@ -146,22 +146,22 @@ public class MatchDialogOne extends AppCompatDialogFragment {
     }
 
     private void setPreviousValues() {
-        housePref = (MatchConstants.House) getArguments().getSerializable(KEY_CURR_HOUSE_PREF);
+        housePref = (MatchConstants.Week) getArguments().getSerializable(KEY_CURR_HOUSE_PREF);
         weekendPref = (MatchConstants.Weekend) getArguments().getSerializable(KEY_CURR_WEEKEND_PREF);
         guestsPref = (MatchConstants.Guests) getArguments().getSerializable(KEY_CURR_GUESTS_PREF);
 
         if (housePref != null) {
-            if (housePref == MatchConstants.House.QUIET) {
+            if (housePref == MatchConstants.Week.QUIET) {
                 radioQuiet.setChecked(true);
                 radioSocial.setChecked(false);
                 radioWeekCombo.setChecked(false);
                 radioWeekNoPreference.setChecked(false);
-            } else if (housePref == MatchConstants.House.SOCIAL) {
+            } else if (housePref == MatchConstants.Week.SOCIAL) {
                 radioQuiet.setChecked(false);
                 radioSocial.setChecked(true);
                 radioWeekCombo.setChecked(false);
                 radioWeekNoPreference.setChecked(false);
-            } else if (housePref == MatchConstants.House.COMBO) {
+            } else if (housePref == MatchConstants.Week.COMBO) {
                 radioQuiet.setChecked(false);
                 radioSocial.setChecked(false);
                 radioWeekCombo.setChecked(true);

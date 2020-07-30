@@ -66,19 +66,27 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfileImage;
-        TextView tvUserName;
+        TextView tvUserName, tvMajorYear, tvDescription, tvCompatibilityScore;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvUserName = itemView.findViewById(R.id.tvUserName);
+            tvMajorYear = itemView.findViewById(R.id.tvMajorYear);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvCompatibilityScore = itemView.findViewById(R.id.tvCompatibilityScore);
         }
 
         public void bind(SurveyResponse response) {
             if (!response.getImageUrl().equals("")) {
-                Glide.with(context).load(response.getImageUrl()).into(ivProfileImage);
+                Glide.with(context).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
             }
+            tvUserName.setText(response.getName());
+            tvMajorYear.setText(response.getMajor() + ", " + response.getYear());
+            tvDescription.setText(response.getDescription());
+            String score = String.format("%.2f", response.getCompatibilityScore());
+            tvCompatibilityScore.setText(score + "% match");
         }
     }
 

@@ -10,24 +10,27 @@ public class SurveyResponse {
     public static final String KEY_SURVEY_RESPONSE = "surveyResponse";
     public static final String KEY_IMAGE_URL = "imageUrl";
 
-    private String house, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description;
+    private String week, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description;
     private String userId, imageUrl, name, major, year;
     private ArrayList<String> activities, hobbies, entertainment, music;
 
     @Exclude
     private String surveyId;
 
+    @Exclude
+    private float compatibilityScore;
+
     public SurveyResponse() {
         // empty constructor required
     }
 
-    public SurveyResponse(String house, String weekend, String guests, String cleanliness,
+    public SurveyResponse(String week, String weekend, String guests, String cleanliness,
                           String temperature, String gender, String selfIdentifyGender,
                           String genderPref, String smoking, String description,
                           ArrayList<String> activities, ArrayList<String> hobbies,
                           ArrayList<String> entertainment, ArrayList<String> music,
                           String userId, String imageUrl, String name, String major, String year) {
-        this.house = house;
+        this.week = week;
         this.weekend = weekend;
         this.guests = guests;
         this.cleanliness = cleanliness;
@@ -48,12 +51,12 @@ public class SurveyResponse {
         this.year = year;
     }
 
-    public String getHouse() {
-        return house;
+    public String getWeek() {
+        return week;
     }
 
-    public void setHouse(String house) {
-        this.house = house;
+    public void setWeek(String week) {
+        this.week = week;
     }
 
     public String getWeekend() {
@@ -206,5 +209,13 @@ public class SurveyResponse {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public float getCompatibilityScore() {
+        return compatibilityScore;
+    }
+
+    public void setCompatibilityScore(float compatibilityScore) {
+        this.compatibilityScore = compatibilityScore;
     }
 }

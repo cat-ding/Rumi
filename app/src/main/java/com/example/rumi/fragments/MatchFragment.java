@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
@@ -57,38 +59,56 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
 
+    // shared preferences
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SURVEY_STATUS = "surveyStatus";
 
+    // firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
-    private MatchConstants.House currHousePref = null;
+    // responses to survey questions
+    private MatchConstants.Week currHousePref = null;
     private MatchConstants.Weekend currWeekendPref = null;
     private MatchConstants.Guests currGuestsPref = null;
     private MatchConstants.Clean currCleanPref = null;
     private MatchConstants.Temperature currTempPref = null;
-    private ArrayList<String> currActivities = new ArrayList<>();
-    private ArrayList<String> currHobbies = new ArrayList<>();
-    private ArrayList<String> currEntertainment = new ArrayList<>();
-    private ArrayList<String> currMusic = new ArrayList<>();
+    private ArrayList<String> currActivities = new ArrayList<>(), currHobbies = new ArrayList<>();
+    private ArrayList<String> currEntertainment = new ArrayList<>(), currMusic = new ArrayList<>();
     private MatchConstants.Gender currGender = null;
     private MatchConstants.GenderPref currGenderPref = null;
     private MatchConstants.Smoke currSmoke = null;
-    private String currSelfIdentifyGender = "";
-    private String currDescription = "";
+    private String currSelfIdentifyGender = "", currDescription = "";
 
-    private SurveyResponse currSurveyResponse;
+    // the survey response for the current user
+    private SurveyResponse myResponse;
 
-    private RelativeLayout relativeLayoutIntroPage;
-    private RelativeLayout relativeLayoutRecommendations;
+    // the elements of this fragment to toggle visibility with
+    private RelativeLayout relativeLayoutIntroPage, relativeLayoutRecommendations;
     private Button btnMatch;
 
+    // recyclerview elements
     private RecyclerView rvMatches;
     private MatchAdapter adapter;
     private List<SurveyResponse> allResponses;
+
+    // weights and other things needed to calculate compatibility score
+    HashMap<String, Float> levels;
+    public static final int MAX_SCORE = 56;
+    public static final int WEEK_WEIGHT = 10;
+    public static final int WEEKEND_WEIGHT = 10;
+    public static final int GUEST_WEIGHT = 6;
+    public static final int CLEAN_WEIGHT = 9;
+    public static final int TEMP_WEIGHT = 4;
+    public static final float ACTIVITIES_WEIGHT = 3;
+    public static final float HOBBIES_WEIGHT = 3;
+    public static final float ENTERTAINMENT_WEIGHT = 3;
+    public static final float MUSIC_WEIGHT = 2;
+    public static final int MAJOR_WEIGHT = 3;
+    public static final int YEAR_WEIGHT = 2;
+    public static final Float RANGE = 3f;
 
     public MatchFragment() {
         // Required empty public constructor
@@ -108,12 +128,26 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         relativeLayoutRecommendations = view.findViewById(R.id.relativeLayoutRecommendations);
         rvMatches = view.findViewById(R.id.rvMatches);
 
+        // init hashmap that is used to calculate compatibility scores with ranges
+        levels = new HashMap<>();
+        levels.put(MatchConstants.Clean.ALWAYS_CLEAN.toString(), 1f);
+        levels.put(MatchConstants.Clean.FAIRLY_CLEAN.toString(), 2f);
+        levels.put(MatchConstants.Clean.FAIRLY_MESSY.toString(), 3f);
+        levels.put(MatchConstants.Clean.VERY_MESSY.toString(), 4f);
+
+        levels.put(MatchConstants.Temperature.COLD.toString(), 1f);
+        levels.put(MatchConstants.Temperature.FAIRLY_COLD.toString(), 2f);
+        levels.put(MatchConstants.Temperature.FAIRLY_WARM.toString(), 3f);
+        levels.put(MatchConstants.Temperature.WARM.toString(), 4f);
+
+        // recyclerview init
         allResponses = new ArrayList<>();
         adapter = new MatchAdapter(getContext(), allResponses, this);
         rvMatches.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvMatches.setLayoutManager(layoutManager);
 
+        // set layout according to what the survey status is from shared preferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         boolean surveyCompleted = sharedPreferences.getBoolean(SURVEY_STATUS, false);
         if (surveyCompleted) {
@@ -123,8 +157,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             surveysRef.document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    currSurveyResponse = documentSnapshot.toObject(SurveyResponse.class);
-                    calculateCompatibility();
+                    myResponse = documentSnapshot.toObject(SurveyResponse.class);
+                    getSurveyResponses();
                 }
             });
         } else {
@@ -142,23 +176,21 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         }
     }
 
-    private void calculateCompatibility() {
+    private void getSurveyResponses() {
         // get all responses
         surveysRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 relativeLayoutIntroPage.setVisibility(View.GONE);
                 relativeLayoutRecommendations.setVisibility(View.VISIBLE);
-                addToAdapter(queryDocumentSnapshots);
-                // TODO: call algorithm here
+                addToList(queryDocumentSnapshots);
             }
         });
     }
 
-    private void addToAdapter(QuerySnapshot queryDocumentSnapshots) {
+    private void addToList(QuerySnapshot queryDocumentSnapshots) {
 
         adapter.clear();
-
         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
             SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
             // don't want to add your own survey response
@@ -167,32 +199,80 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             }
             // if our gender pref != no pref, then we need to check if the other person's gender is
             // what we're looking for
-            if (!currSurveyResponse.getGenderPref().equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
-                if (!currSurveyResponse.getGenderPref().equals(surveyResponse.getGender()))
+            if (!myResponse.getGenderPref().equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
+                if (!myResponse.getGenderPref().equals(surveyResponse.getGender()))
                     continue;
             }
             // if the other survey's gender preference != no pref, then we need to check if our gender
             // matches what the other person is looking for
             if (!surveyResponse.getGenderPref().equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
-                if (!surveyResponse.getGenderPref().equals(currSurveyResponse.getGender()))
+                if (!surveyResponse.getGenderPref().equals(myResponse.getGender()))
                     continue;
             }
             // if smokingPref == non smoker okay with smoking then we don't need to filter by smoking
-            if (!currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_YES.toString())) {
-                if ((currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())
+            if (!myResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_YES.toString())) {
+                if ((myResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())
                         && surveyResponse.getSmoking().equals(MatchConstants.Smoke.SMOKER.toString())))
                     continue;
-                if ((currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.SMOKER.toString())
+                if ((myResponse.getSmoking().equals(MatchConstants.Smoke.SMOKER.toString())
                         && surveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())))
                     continue;
             }
 
+            surveyResponse.setCompatibilityScore(calculateCompatibilityScore(surveyResponse));
             surveyResponse.setSurveyId(documentSnapshot.getId());
             allResponses.add(surveyResponse);
         }
-
         adapter.notifyDataSetChanged();
         // TODO: add if statement for when allResponses is empty even after querying
+    }
+
+    private float calculateCompatibilityScore(SurveyResponse currRes) {
+        float score = 0;
+        if (!currRes.getWeek().equals(myResponse.getWeek()))
+            score += WEEK_WEIGHT;
+        if (!currRes.getWeekend().equals(myResponse.getWeekend()))
+            score += WEEKEND_WEIGHT;
+        if (!currRes.getGuests().equals(myResponse.getGuests()))
+            score += GUEST_WEIGHT;
+        if (!currRes.getMajor().equals(myResponse.getMajor()))
+            score += MAJOR_WEIGHT;
+        if (!currRes.getYear().equals(myResponse.getYear()))
+            score += YEAR_WEIGHT;
+
+        // calculation of similarity by dividing difference by range (3) to normalize between 0 and 1
+        score += (CLEAN_WEIGHT * Math.abs(levels.get(currRes.getCleanliness()) - levels.get(myResponse.getCleanliness()))
+                / RANGE);
+        score += (TEMP_WEIGHT * Math.abs(levels.get(currRes.getTemperature()) - levels.get(myResponse.getTemperature()))
+                / RANGE);
+
+        // calculation of array similarity
+        score +=  (ACTIVITIES_WEIGHT *
+                calculateArraySimilarity(new ArrayList<>(currRes.getActivities()), myResponse.getActivities()));
+
+        score +=  (HOBBIES_WEIGHT *
+                calculateArraySimilarity(new ArrayList<>(currRes.getHobbies()), myResponse.getHobbies()));
+
+        score +=  (ENTERTAINMENT_WEIGHT *
+                calculateArraySimilarity(new ArrayList<>(currRes.getEntertainment()), myResponse.getEntertainment()));
+
+        score +=  (MUSIC_WEIGHT *
+                calculateArraySimilarity(new ArrayList<>(currRes.getMusic()), myResponse.getMusic()));
+
+        score = ((MAX_SCORE - score) / MAX_SCORE) * 100; // get a percentage from 0-100 scale
+
+        return score;
+    }
+
+    // calculation of similarity by getting how many common elements there are and
+    // dividing by the size of the smaller list
+    private float calculateArraySimilarity(ArrayList<String> one, ArrayList<String> two) {
+        float min = (float) Math.min(one.size(), two.size());
+        if (min == 0)
+            return 1; // nothing in common
+        one.retainAll(two);
+        float diff = min - one.size();
+        return (float) diff / min;
     }
 
     private void addToDatabase() {
@@ -202,19 +282,19 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 String userId = firebaseAuth.getCurrentUser().getUid();
-                String url = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
+                String url = user.getProfileUrl();
                 String name = user.getName();
                 String major = user.getMajor();
                 String year = user.getYear();
 
-                currSurveyResponse = new SurveyResponse(currHousePref.toString(),
+                myResponse = new SurveyResponse(currHousePref.toString(),
                         currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
                         currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
                         currGenderPref.toString(), currSmoke.toString(), currDescription,
                         currActivities, currHobbies, currEntertainment, currMusic, userId, url,
                         name, major, year);
 
-                surveysRef.document(userId).set(currSurveyResponse).addOnSuccessListener(new OnSuccessListener<Void>() {
+                surveysRef.document(userId).set(myResponse).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         usersRef.document(firebaseAuth.getCurrentUser().getUid()).update(User.KEY_SURVEY_STATUS, true);
@@ -224,19 +304,14 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         editor.putBoolean(SURVEY_STATUS, true);
                         editor.apply();
 
-                        calculateCompatibility();
+                        getSurveyResponses();
                     }
                 });
             }
         });
-
-//        currSurveyResponse = new SurveyResponse(currHousePref.toString(),
-//                currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
-//                currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
-//                currGenderPref.toString(), currSmoke.toString(), currDescription,
-//                currActivities, currHobbies, currEntertainment, currMusic, userId, url);
-
     }
+
+    /* FUNCTIONS FOR DIALOG PAGE LAUNCHING AND INFO HANDLING BELOW */
 
     private void launchMatchingDialog() {
         new AlertDialog.Builder(getContext())
@@ -273,7 +348,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // obtaining info on house preference, weekend preference, and guests preference
     @Override
-    public void sendPageOneInputs(int nextPage, MatchConstants.House housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
+    public void sendPageOneInputs(int nextPage, MatchConstants.Week housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
         currHousePref = housePref;
         currWeekendPref = weekendPref;
         currGuestsPref = guestsPref;
