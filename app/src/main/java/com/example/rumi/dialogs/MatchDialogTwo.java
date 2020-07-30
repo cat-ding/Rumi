@@ -87,16 +87,16 @@ public class MatchDialogTwo extends DialogFragment {
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 switch(checkedId) {
                     case R.id.radioAlwaysClean:
-                        cleanPref = MatchConstants.Clean.ALWAYS;
+                        cleanPref = MatchConstants.Clean.ALWAYS_CLEAN;
                         break;
                     case R.id.radioFairlyClean:
-                        cleanPref = MatchConstants.Clean.FAIRLY;
+                        cleanPref = MatchConstants.Clean.FAIRLY_CLEAN;
                         break;
                     case R.id.radioMessy:
-                        cleanPref = MatchConstants.Clean.MESSY;
+                        cleanPref = MatchConstants.Clean.FAIRLY_MESSY;
                         break;
                     case R.id.radioCleanNoPref:
-                        cleanPref = MatchConstants.Clean.NO_PREFERENCE;
+                        cleanPref = MatchConstants.Clean.VERY_MESSY;
                 }
             }
         });
@@ -126,17 +126,17 @@ public class MatchDialogTwo extends DialogFragment {
         tempPref = (MatchConstants.Temperature) getArguments().getSerializable(KEY_CURR_TEMP);
 
         if (cleanPref != null) {
-            if (cleanPref == MatchConstants.Clean.ALWAYS) {
+            if (cleanPref == MatchConstants.Clean.ALWAYS_CLEAN) {
                 radioAlwaysClean.setChecked(true);
                 radioFairlyClean.setChecked(false);
                 radioMessy.setChecked(false);
                 radioCleanNoPref.setChecked(false);
-            } else if (cleanPref == MatchConstants.Clean.FAIRLY) {
+            } else if (cleanPref == MatchConstants.Clean.FAIRLY_CLEAN) {
                 radioAlwaysClean.setChecked(false);
                 radioFairlyClean.setChecked(true);
                 radioMessy.setChecked(false);
                 radioCleanNoPref.setChecked(false);
-            } else if (cleanPref == MatchConstants.Clean.MESSY) {
+            } else if (cleanPref == MatchConstants.Clean.FAIRLY_MESSY) {
                 radioAlwaysClean.setChecked(false);
                 radioFairlyClean.setChecked(false);
                 radioMessy.setChecked(true);

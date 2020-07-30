@@ -25,7 +25,7 @@ public class MatchConstants {
 
     // MatchDialogTwo
     public enum Clean {
-        ALWAYS, FAIRLY, MESSY, NO_PREFERENCE
+        ALWAYS_CLEAN, FAIRLY_CLEAN, FAIRLY_MESSY, VERY_MESSY
     }
     public enum Temperature {
         COLD, FAIRLY_COLD, FAIRLY_WARM, WARM

@@ -8,11 +8,10 @@ import java.util.ArrayList;
 public class SurveyResponse {
 
     public static final String KEY_SURVEY_RESPONSE = "surveyResponse";
-    public static final String KEY_GENDER = "gender";
-    public static final String KEY_SMOKING = "smoking";
     public static final String KEY_IMAGE_URL = "imageUrl";
 
-    private String house, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description, userId, imageUrl;
+    private String house, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description;
+    private String userId, imageUrl, name, major, year;
     private ArrayList<String> activities, hobbies, entertainment, music;
 
     @Exclude
@@ -27,7 +26,7 @@ public class SurveyResponse {
                           String genderPref, String smoking, String description,
                           ArrayList<String> activities, ArrayList<String> hobbies,
                           ArrayList<String> entertainment, ArrayList<String> music,
-                          String userId, String imageUrl) {
+                          String userId, String imageUrl, String name, String major, String year) {
         this.house = house;
         this.weekend = weekend;
         this.guests = guests;
@@ -44,6 +43,9 @@ public class SurveyResponse {
         this.music = music;
         this.userId = userId;
         this.imageUrl = imageUrl;
+        this.name = name;
+        this.major = major;
+        this.year = year;
     }
 
     public String getHouse() {
@@ -180,5 +182,29 @@ public class SurveyResponse {
 
     public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
     }
 }

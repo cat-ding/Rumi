@@ -18,10 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 import com.example.rumi.RegisterActivity;
+import com.example.rumi.adapters.MatchAdapter;
+import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.dialogs.MatchDialogFive;
 import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
@@ -44,6 +48,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
         MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener,
@@ -60,8 +65,6 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
-    private ArrayList<SurveyResponse> responses = new ArrayList<>();
-
     private MatchConstants.House currHousePref = null;
     private MatchConstants.Weekend currWeekendPref = null;
     private MatchConstants.Guests currGuestsPref = null;
@@ -77,9 +80,15 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private String currSelfIdentifyGender = "";
     private String currDescription = "";
 
+    private SurveyResponse currSurveyResponse;
+
     private RelativeLayout relativeLayoutIntroPage;
     private RelativeLayout relativeLayoutRecommendations;
     private Button btnMatch;
+
+    private RecyclerView rvMatches;
+    private MatchAdapter adapter;
+    private List<SurveyResponse> allResponses;
 
     public MatchFragment() {
         // Required empty public constructor
@@ -95,92 +104,138 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnMatch = view.findViewById(R.id.btnMatch);
         relativeLayoutIntroPage = view.findViewById(R.id.relativeLayoutIntroPage);
         relativeLayoutRecommendations = view.findViewById(R.id.relativeLayoutRecommendations);
+        rvMatches = view.findViewById(R.id.rvMatches);
+
+        allResponses = new ArrayList<>();
+        adapter = new MatchAdapter(getContext(), allResponses, this);
+        rvMatches.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvMatches.setLayoutManager(layoutManager);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         boolean surveyCompleted = sharedPreferences.getBoolean(SURVEY_STATUS, false);
         if (surveyCompleted) {
             relativeLayoutIntroPage.setVisibility(View.GONE);
             relativeLayoutRecommendations.setVisibility(View.VISIBLE);
+
+            surveysRef.document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    currSurveyResponse = documentSnapshot.toObject(SurveyResponse.class);
+                    calculateCompatibility();
+                }
+            });
         } else {
+            btnMatch = view.findViewById(R.id.btnMatch);
+
             relativeLayoutIntroPage.setVisibility(View.VISIBLE);
             relativeLayoutRecommendations.setVisibility(View.GONE);
-        }
 
-        btnMatch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchMatchingDialog();
-            }
-        });
+            btnMatch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    launchMatchingDialog();
+                }
+            });
+        }
     }
 
-    private void calculateRecommendations() {
-        String userId = firebaseAuth.getCurrentUser().getUid();
-        String url = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
-
-        SurveyResponse survey = new SurveyResponse(currHousePref.toString(),
-                currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
-                currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
-                currGenderPref.toString(), currSmoke.toString(), currDescription,
-                currActivities, currHobbies, currEntertainment, currMusic, userId, url);
-
-        surveysRef.document(userId).set(survey).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                usersRef.document(firebaseAuth.getCurrentUser().getUid()).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                // initiate shared preference for match feature to false
-                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(SURVEY_STATUS, documentSnapshot.getBoolean(User.KEY_SURVEY_STATUS));
-                                editor.apply();
-                            }
-                        });
-
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(SURVEY_STATUS, true);
-                editor.apply();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Error saving responses! ", e);
-                Toast.makeText(getContext(), "Error saving responses!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // get other users responses
-        surveysRef.whereEqualTo(SurveyResponse.KEY_GENDER, currGender.toString())
-                .whereEqualTo(SurveyResponse.KEY_SMOKING, currSmoke.toString())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    private void calculateCompatibility() {
+        // get all responses
+        surveysRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 relativeLayoutIntroPage.setVisibility(View.GONE);
                 relativeLayoutRecommendations.setVisibility(View.VISIBLE);
-
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
-                    if (surveyResponse.getUserId().equals(firebaseAuth.getCurrentUser().getUid()))
-                        continue;
-
-                    surveyResponse.setSurveyId(documentSnapshot.getId());
-                    responses.add(surveyResponse);
-                }
-                // TODO: update adapter
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Error retrieving survey responses!", e);
-                Toast.makeText(getContext(), "Error retrieving survey responses!", Toast.LENGTH_SHORT).show();
+                addToAdapter(queryDocumentSnapshots);
+                // TODO: call algorithm here
             }
         });
+    }
+
+    private void addToAdapter(QuerySnapshot queryDocumentSnapshots) {
+
+        adapter.clear();
+
+        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+            SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
+            // don't want to add your own survey response
+            if (surveyResponse.getUserId().equals(firebaseAuth.getCurrentUser().getUid())) {
+                continue;
+            }
+            // if our gender pref != no pref, then we need to check if the other person's gender is
+            // what we're looking for
+            if (!currSurveyResponse.getGenderPref().equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
+                if (!currSurveyResponse.getGenderPref().equals(surveyResponse.getGender()))
+                    continue;
+            }
+            // if the other survey's gender preference != no pref, then we need to check if our gender
+            // matches what the other person is looking for
+            if (!surveyResponse.getGenderPref().equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
+                if (!surveyResponse.getGenderPref().equals(currSurveyResponse.getGender()))
+                    continue;
+            }
+            // if smokingPref == non smoker okay with smoking then we don't need to filter by smoking
+            if (!currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_YES.toString())) {
+                if ((currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())
+                        && surveyResponse.getSmoking().equals(MatchConstants.Smoke.SMOKER.toString())))
+                    continue;
+                if ((currSurveyResponse.getSmoking().equals(MatchConstants.Smoke.SMOKER.toString())
+                        && surveyResponse.getSmoking().equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())))
+                    continue;
+            }
+
+            surveyResponse.setSurveyId(documentSnapshot.getId());
+            allResponses.add(surveyResponse);
+        }
+
+        adapter.notifyDataSetChanged();
+        // TODO: add if statement for when allResponses is empty even after querying
+    }
+
+    private void addToDatabase() {
+
+        usersRef.document(firebaseAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                String userId = firebaseAuth.getCurrentUser().getUid();
+                String url = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
+                String name = user.getName();
+                String major = user.getMajor();
+                String year = user.getYear();
+
+                currSurveyResponse = new SurveyResponse(currHousePref.toString(),
+                        currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
+                        currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
+                        currGenderPref.toString(), currSmoke.toString(), currDescription,
+                        currActivities, currHobbies, currEntertainment, currMusic, userId, url,
+                        name, major, year);
+
+                surveysRef.document(userId).set(currSurveyResponse).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        usersRef.document(firebaseAuth.getCurrentUser().getUid()).update(User.KEY_SURVEY_STATUS, true);
+
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SURVEY_STATUS, true);
+                        editor.apply();
+
+                        calculateCompatibility();
+                    }
+                });
+            }
+        });
+
+//        currSurveyResponse = new SurveyResponse(currHousePref.toString(),
+//                currWeekendPref.toString(), currGuestsPref.toString(), currCleanPref.toString(),
+//                currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
+//                currGenderPref.toString(), currSmoke.toString(), currDescription,
+//                currActivities, currHobbies, currEntertainment, currMusic, userId, url);
+
     }
 
     private void launchMatchingDialog() {
@@ -287,7 +342,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (nextPage == MatchConstants.PAGE_FIVE) {
             openMatchDialogFive();
         } else { // end
-            calculateRecommendations();
+            addToDatabase();
         }
     }
 

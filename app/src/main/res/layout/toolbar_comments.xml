@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="#FFFFFF"
+    android:background="@color/colorPrimary"
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -15,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/proxima_nova_regular"
         android:text="Comments"
-        android:textColor="#323232"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold" />
 

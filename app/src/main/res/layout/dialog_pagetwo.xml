@@ -37,13 +37,13 @@
             android:id="@+id/radioMessy"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Messy"/>
+            android:text="Fairly messy"/>
 
         <RadioButton
             android:id="@+id/radioCleanNoPref"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="No preference"/>
+            android:text="Very Messy"/>
 
     </RadioGroup>
 
@@ -70,25 +70,25 @@
             android:id="@+id/radioCold"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Cold"/>
+            android:text="Cold (below 65&#xb0;F/18&#xb0;C)"/>
 
         <RadioButton
             android:id="@+id/radioFairlyCold"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Fairly Cold"/>
+            android:text="Fairly Cold (65&#xb0;F/18&#xb0;C - 70&#xb0;F/21&#xb0;C)"/>
 
         <RadioButton
             android:id="@+id/radioFairlyWarm"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Fairly Warm"/>
+            android:text="Fairly Warm (70&#xb0;F/21&#xb0;C - 75&#xb0;F/24&#xb0;C)"/>
 
         <RadioButton
             android:id="@+id/radioWarm"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:text="Warm"/>
+            android:text="Warm (above 75&#xb0;F/24&#xb0;C)"/>
 
     </RadioGroup>
 

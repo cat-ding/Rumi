@@ -14,16 +14,10 @@
         android:id="@+id/relativeLayoutRecommendations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RECOMMENDATIONS HERE"/>
+        android:layout_below="@+id/toolbar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecommendations"
+            android:id="@+id/rvMatches"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -37,7 +31,8 @@
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="25dp"
-        android:layout_below="@+id/toolbar">
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivMatchIcon"
