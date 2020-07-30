@@ -164,7 +164,7 @@ public class ProfileFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     User user = task.getResult().toObject(User.class);
-                    if (user.getProfileUrl() != null) {
+                    if (user.getProfileUrl() != "") {
                         Glide.with(getContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                     }
                     tvName.setText(user.getName());

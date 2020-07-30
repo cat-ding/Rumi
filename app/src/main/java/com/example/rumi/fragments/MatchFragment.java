@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rumi.FilterConstants;
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 import com.example.rumi.RegisterActivity;
@@ -49,8 +50,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
         MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener,
@@ -223,8 +227,46 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             surveyResponse.setSurveyId(documentSnapshot.getId());
             allResponses.add(surveyResponse);
         }
+
+        quickSelect(0, allResponses.size()-1, 5); // rank = 5
+        allResponses.subList(5, allResponses.size()).clear();
+
+        Collections.sort(allResponses, new Comparator<SurveyResponse>() {
+            public int compare(SurveyResponse one, SurveyResponse two) {
+                return Float.compare(two.getCompatibilityScore(), one.getCompatibilityScore());
+            }
+        });
         adapter.notifyDataSetChanged();
         // TODO: add if statement for when allResponses is empty even after querying
+    }
+
+    private float quickSelect(int low, int high, int rank) {
+        int partitionIndex = partition(low, high); // partition the array
+
+        if (partitionIndex == rank)
+            return allResponses.get(partitionIndex).getCompatibilityScore();
+        if (partitionIndex < rank) // recurse on lower half
+            return  quickSelect(partitionIndex + 1, high, rank);
+
+        // recurse on upper half
+        return quickSelect(low, partitionIndex - 1, rank);
+    }
+
+    // partition function for quickSelect(), returns the index of the element after partitioning
+    private int partition(int low, int high) {
+        // standard pick last element's value to partition around
+        float pivotVal = allResponses.get(high).getCompatibilityScore();
+        int pivotIndex = low;
+        for (int i = low; i <= high; i++) {
+            if (allResponses.get(i).getCompatibilityScore() > pivotVal) {
+                Collections.swap(allResponses, i, pivotIndex);
+                pivotIndex++;
+            }
+        }
+
+        // swap pivot to the final pivot location
+        Collections.swap(allResponses, high, pivotIndex);
+        return pivotIndex;
     }
 
     private float calculateCompatibilityScore(SurveyResponse currRes) {
