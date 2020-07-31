@@ -33,6 +33,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
     public static final String TAG = "ChatsAdapter";
     private static final int REQUEST_CODE_MESSAGE = 77;
+    public static final String KEY_OTHER_NAME = "otherName";
+    public static final String KEY_OTHER_PROFILE_IMAGE = "otherProfileImage";
 
     private Context context;
     private List<Chat> chats;
@@ -81,6 +83,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 
         ImageView ivProfileImage, ivUnread;
         TextView tvUserName, tvLastMessage;
+        String otherName, otherProfileImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,7 +116,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             }
 
             tvLastMessage.setText(chat.getLastMessage());
-
         }
 
         private void getUserInfo(String userId) {
@@ -121,9 +123,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User user = documentSnapshot.toObject(User.class);
+                    otherName = user.getName();
                     tvUserName.setText(user.getName());
                     if (!user.getProfileUrl().isEmpty()) {
                         Glide.with(context).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
+                        otherProfileImage = user.getProfileUrl();
+                    } else {
+                        otherProfileImage = "";
                     }
                 }
             });
@@ -132,11 +138,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION) {
+            if (position != RecyclerView.NO_POSITION
+                    && otherName != null
+                    && otherProfileImage != null) {
                 Chat chat = chats.get(position);
                 Intent intent = new Intent(context, MessageActivity.class);
-                intent.putExtra("adapterPosition", getAdapterPosition());
                 intent.putExtra(Chat.class.getSimpleName(), Parcels.wrap(chat));
+                intent.putExtra(KEY_OTHER_NAME, otherName);
+                intent.putExtra(KEY_OTHER_PROFILE_IMAGE, otherProfileImage);
                 fragment.startActivityForResult(intent, REQUEST_CODE_MESSAGE);
                 ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }

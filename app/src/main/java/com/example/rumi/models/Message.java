@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Message {
     public static final String KEY_MESSAGES = "messages";
+    public static final String KEY_CREATED_AT = "createdAt";
 
     private Date createdAt;
     private String body, userId;

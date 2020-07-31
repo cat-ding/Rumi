@@ -3,25 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:id="@+id/relativeLayout"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginTop="10dp">
-
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
+    android:layout_marginTop="5dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/ivProfileImage"
+        android:layout_centerVertical="true"
+        android:background="@drawable/message_border"
+        android:padding="10dp"
+        android:textColor="@color/quantum_white_100"
         tools:text="This is my message" />
 
 </RelativeLayout>
