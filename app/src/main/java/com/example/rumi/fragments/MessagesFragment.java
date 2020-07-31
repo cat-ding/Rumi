@@ -120,7 +120,5 @@ public class MessagesFragment extends Fragment {
                 adapter.notifyItemChanged(position);
             }
         }
-        // TODO: update recent message and reorder chats
-        // if was updated, remove chat at position, add updated chat to beginning of list, notify adapter
     }
 }

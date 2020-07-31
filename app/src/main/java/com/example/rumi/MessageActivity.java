@@ -91,8 +91,6 @@ public class MessageActivity extends AppCompatActivity {
         chat = (Chat) Parcels.unwrap(getIntent().getParcelableExtra(Chat.class.getSimpleName()));
 
         // setting read booleans to toggle blue unread icon later
-        Log.d(TAG, "onCreate: " + chat.getMembers().get(0));
-        Log.d(TAG, "onCreate: " + chat.getMembers().get(1));
         if (chat.getMembers().get(0).equals(currId)) {
             if (!chat.isMemberOneRead()) {
                 readChanged = true; // to know if we need to pass a chat back to update chat recyclerview (onBackPressed)
@@ -100,7 +98,6 @@ public class MessageActivity extends AppCompatActivity {
                 chatsRef.document(chat.getChatId()).update(Chat.KEY_MEMBER_ONE_READ, true); // update your own
             }
             otherReadStatus = chat.isMemberTwoRead(); // needed to decide whether or not to update this later
-            Log.d(TAG, "memberTwoRead: " + otherReadStatus);
             otherId = chat.getMembers().get(1); // get other's id
             otherReadKey = Chat.KEY_MEMBER_TWO_READ; // needed to know which member's read bool to change later
         } else {
@@ -110,7 +107,6 @@ public class MessageActivity extends AppCompatActivity {
                 chatsRef.document(chat.getChatId()).update(Chat.KEY_MEMBER_TWO_READ, true);
             }
             otherReadStatus = chat.isMemberOneRead();
-            Log.d(TAG, "memberOneRead: " + otherReadStatus);
             otherId = chat.getMembers().get(0);
             otherReadKey = Chat.KEY_MEMBER_ONE_READ;
         }
@@ -165,10 +161,10 @@ public class MessageActivity extends AppCompatActivity {
         String messageBody = etMessage.getText().toString().trim();
         if (messageBody.isEmpty()) {
             Toast.makeText(this, "Message can't be empty!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if (otherReadStatus) {
-            Log.d(TAG, "sendMessage: HEREE");
             chatsRef.document(chat.getChatId()).update(otherReadKey, false); // update
         }
 
@@ -177,6 +173,7 @@ public class MessageActivity extends AppCompatActivity {
         Message message = new Message(new java.util.Date(), messageBody, currId);
         allMessages.add(0, message);
         adapter.notifyItemInserted(0);
+        rvMessages.smoothScrollToPosition(0);
 
         chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES).add(message);
     }

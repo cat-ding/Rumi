@@ -64,29 +64,26 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         TextView tvMessage;
         RelativeLayout relativeLayout;
         String currId;
+        RelativeLayout.LayoutParams params;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvMessage = itemView.findViewById(R.id.tvMessage);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
+            params = (RelativeLayout.LayoutParams)tvMessage.getLayoutParams();
 
             currId = firebaseAuth.getCurrentUser().getUid();
         }
 
         public void bind(Message message) {
-
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)tvMessage.getLayoutParams();
-
             if (message.getUserId().equals(currId)) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
             } else {
                 params.addRule(RelativeLayout.ALIGN_PARENT_START);
             }
-
             tvMessage.setLayoutParams(params);
             tvMessage.setText(message.getBody());
-
         }
     }
 }
