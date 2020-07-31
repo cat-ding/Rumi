@@ -9,10 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rumi.MainActivity;
 import com.example.rumi.R;
+import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
 
@@ -78,7 +81,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             tvCompatibilityScore = itemView.findViewById(R.id.tvCompatibilityScore);
         }
 
-        public void bind(SurveyResponse response) {
+        public void bind(final SurveyResponse response) {
             if (!response.getImageUrl().equals("")) {
                 Glide.with(context).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
             }
@@ -87,6 +90,26 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             tvDescription.setText(response.getDescription());
             String score = String.format("%.2f", response.getCompatibilityScore());
             tvCompatibilityScore.setText(score + "% match");
+
+            // onClickListeners to open ProfileFragment
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openProfileFragment(response.getUserId());
+                }
+            });
+            tvUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openProfileFragment(response.getUserId());
+                }
+            });
+        }
+
+        private void openProfileFragment(String userId) {
+            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+            Fragment fragment = new ProfileFragment(userId);
+            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         }
     }
 
