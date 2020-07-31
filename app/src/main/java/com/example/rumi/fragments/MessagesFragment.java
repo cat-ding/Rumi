@@ -1,7 +1,9 @@
 package com.example.rumi.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +100,26 @@ public class MessagesFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // coming back from MessageActivity
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_MESSAGE) {
+            Parcelable updatedChatParcel = data.getParcelableExtra("updatedChat");
+
+            if (updatedChatParcel != null) {
+                Chat updatedChat = Parcels.unwrap(updatedChatParcel);
+
+                // find adapter position (where the tweet was)
+                int position = -1;
+                for (int i = 0; i < allChats.size(); i++) {
+                    if (allChats.get(i).getChatId().equals(updatedChat.getChatId())) {
+                        position = i;
+                        break;
+                    }
+                }
+                allChats.remove(position);
+                allChats.add(position, updatedChat);
+                adapter.notifyItemChanged(position);
+            }
+        }
         // TODO: update recent message and reorder chats
         // if was updated, remove chat at position, add updated chat to beginning of list, notify adapter
     }

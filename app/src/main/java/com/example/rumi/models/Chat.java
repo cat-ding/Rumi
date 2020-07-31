@@ -12,6 +12,9 @@ public class Chat {
     public static final String KEY_CHATS = "chats";
     public static final String KEY_LAST_MESSAGE_DATE = "lastMessageDate";
     public static final String KEY_MEMBERS = "members";
+    public static final String KEY_MEMBER_ONE_READ = "memberOneRead";
+    public static final String KEY_MEMBER_TWO_READ = "memberTwoRead";
+    public static final String KEY_LAST_MESSAGE = "lastMessage";
 
     private String lastMessage;
     private ArrayList<String> members;
