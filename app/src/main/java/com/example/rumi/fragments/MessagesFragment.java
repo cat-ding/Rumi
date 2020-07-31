@@ -1,5 +1,6 @@
 package com.example.rumi.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import java.util.List;
 public class MessagesFragment extends Fragment {
 
     public static final String TAG = "MessagesFragment";
+    private static final int REQUEST_CODE_MESSAGE = 77;
 
     private RecyclerView rvChats;
     private ChatsAdapter adapter;
@@ -91,5 +93,10 @@ public class MessagesFragment extends Fragment {
         });
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // TODO: update recent message and reorder chats
+        // if was updated, remove chat at position, add updated chat to beginning of list, notify adapter
+    }
 }

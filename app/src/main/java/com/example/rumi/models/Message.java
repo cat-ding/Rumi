@@ -3,7 +3,7 @@ package com.example.rumi.models;
 import java.util.Date;
 
 public class Message {
-    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_MESSAGES = "messages";
 
     private Date createdAt;
     private String body, userId;

@@ -2,9 +2,12 @@ package com.example.rumi.models;
 
 import com.google.firebase.firestore.Exclude;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+@Parcel
 public class Chat {
     public static final String KEY_CHATS = "chats";
     public static final String KEY_LAST_MESSAGE_DATE = "lastMessageDate";

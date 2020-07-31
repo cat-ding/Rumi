@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginEnd="10dp"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="15dp">
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -38,13 +38,12 @@
 
     <ImageView
         android:id="@+id/ivUnread"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="5dp"
-        app:srcCompat="@drawable/ic_baseline_unread_1_24"
-        android:visibility="gone"/>
+        app:srcCompat="@drawable/ic_baseline_unread_1_24" />
 
 
 </RelativeLayout>

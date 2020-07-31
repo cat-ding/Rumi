@@ -1,6 +1,7 @@
 package com.example.rumi.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rumi.MainActivity;
+import com.example.rumi.MessageActivity;
 import com.example.rumi.R;
 import com.example.rumi.models.Chat;
 import com.example.rumi.models.User;
@@ -21,12 +24,15 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 
     public static final String TAG = "ChatsAdapter";
+    private static final int REQUEST_CODE_MESSAGE = 77;
 
     private Context context;
     private List<Chat> chats;
@@ -71,7 +77,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivProfileImage, ivUnread;
         TextView tvUserName, tvLastMessage;
@@ -83,6 +89,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvLastMessage = itemView.findViewById(R.id.tvLastMessage);
             ivUnread = itemView.findViewById(R.id.ivUnread);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Chat chat) {
@@ -119,6 +127,19 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                     }
                 }
             });
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                Chat chat = chats.get(position);
+                Intent intent = new Intent(context, MessageActivity.class);
+                intent.putExtra("adapterPosition", getAdapterPosition());
+                intent.putExtra(Chat.class.getSimpleName(), Parcels.wrap(chat));
+                fragment.startActivityForResult(intent, REQUEST_CODE_MESSAGE);
+                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
         }
     }
 }
