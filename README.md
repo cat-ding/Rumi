@@ -10,7 +10,7 @@
 ### [Link to Google Doc](https://docs.google.com/document/d/1liB88dXCX_VpgqF-a3TYppd1-r9tIsdJaxVvoZwsVs0/edit?usp=sharing)
 Contains additional information on behind the scenes reasoning and prioritization
 ### Description
-[Description of your app]
+An Android application using Firebase as a backend to help students navigate off-campus housing.
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
@@ -141,10 +141,6 @@ Contains additional information on behind the scenes reasoning and prioritizatio
 
 ## Wireframes
 ![Wireframe](wireframe.png)
-
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
 
 ## Schema 
 
