@@ -48,23 +48,24 @@
             android:layout_height="match_parent"
             android:layout_above="@id/etMessage"
             android:layout_below="@id/toolbar"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_margin="10dp"/>
 
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="306dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="94dp"
-            android:layout_marginBottom="9dp"
+            android:layout_toLeftOf="@+id/btnSend"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="94dp"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="55dp"
             android:ems="9"
             android:inputType="textMultiLine"
-            tools:text="Write a message..." />
+            tools:text="Write a message..."
+            android:background="@drawable/posts_border"/>
 
         <Button
             android:id="@+id/btnSend"

@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -130,8 +131,13 @@ public class MessageActivity extends AppCompatActivity {
         chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        // TODO: listen to changes + update adapter
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+//                        for (DocumentSnapshot doc : snapshots) {
+//                            Message message = doc.toObject(Message.class);
+//                            allMessages.add(0, message);
+//                        }
+//                        adapter.notifyDataSetChanged();
+//                        rvMessages.smoothScrollToPosition(0);
                     }
                 });
 

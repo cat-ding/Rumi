@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#9646FF"
+        android:background="@color/quantum_deeppurple500"
         android:padding="10dp">
 
         <TextView
@@ -51,7 +51,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/posts_border"
+        android:background="@drawable/filters_border"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Sort by"
+            android:textColor="@color/quantum_black_100"
             android:textSize="18sp" />
 
         <Spinner
@@ -78,7 +79,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/posts_border"
+        android:background="@drawable/filters_border"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
@@ -90,6 +91,7 @@
             android:layout_height="wrap_content"
             android:text="Filter posts looking for"
             android:textSize="18sp"
+            android:textColor="@color/quantum_black_100"
             />
 
         <RadioGroup
@@ -132,7 +134,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/posts_border"
+        android:background="@drawable/filters_border"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
@@ -143,7 +145,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Number of Rooms"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/quantum_black_100" />
 
         <SeekBar
             android:id="@+id/seekBarNumRooms"
@@ -171,7 +174,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/posts_border"
+        android:background="@drawable/filters_border"
         android:paddingStart="20dp"
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
@@ -182,7 +185,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Furnished"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/quantum_black_100" />
 
         <RadioGroup
             android:id="@+id/radioGroupFurnished"

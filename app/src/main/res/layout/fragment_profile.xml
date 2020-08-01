@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/quantum_deeppurple900">
 
     <include
         android:id="@+id/toolbar"
@@ -14,7 +14,8 @@
     <RelativeLayout
         android:id="@+id/relativeLayoutTop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#F5F5F8">
 
         <ImageView
             android:id="@+id/ivProfileImage"
@@ -56,8 +57,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="4dp"
             android:fontFamily="sans-serif-medium"
-            tools:text="Computer Science, Class of 2022"
-            android:background="#FFFFFF"/>
+            tools:text="Computer Science, Class of 2022" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -92,12 +92,14 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@color/quantum_deeppurple300"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

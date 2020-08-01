@@ -1,6 +1,7 @@
 package com.example.rumi.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,11 +78,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         }
 
         public void bind(Message message) {
+
+//            android:background="@drawable/message_border"
+//            android:padding="10dp"
+//            android:textColor="@color/quantum_white_100"
             if (message.getUserId().equals(currId)) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
+                params.removeRule(RelativeLayout.ALIGN_PARENT_START);
+                tvMessage.setBackgroundResource(R.drawable.message_border);
+                tvMessage.setTextColor(Color.WHITE);
             } else {
                 params.addRule(RelativeLayout.ALIGN_PARENT_START);
+                params.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                tvMessage.setBackgroundResource(R.drawable.message_received_border);
+                tvMessage.setTextColor(Color.BLACK);
             }
+            tvMessage.setPadding(30, 20, 30, 20);
             tvMessage.setLayoutParams(params);
             tvMessage.setText(message.getBody());
         }
