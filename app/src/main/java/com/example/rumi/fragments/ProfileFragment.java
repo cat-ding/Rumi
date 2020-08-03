@@ -28,6 +28,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.example.rumi.LoginActivity;
 import com.example.rumi.adapters.PostsAdapter;
+import com.example.rumi.dialogs.MatchDialogSix;
+import com.example.rumi.dialogs.MessageDialog;
+import com.example.rumi.models.Chat;
+import com.example.rumi.models.Message;
 import com.example.rumi.models.Post;
 import com.example.rumi.R;
 import com.example.rumi.models.SurveyResponse;
@@ -39,11 +43,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,14 +57,19 @@ import com.google.firebase.storage.UploadTask;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements MessageDialog.MessageListener {
 
     public static final String TAG = "ProfileFragment";
     private static final int CAPTURE_IMAGE_CODE = 35;
     public static final int LIKE_POST_REQUEST = 25;
+    public static final int MESSAGE_REQUEST_CODE = 99;
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage, btnChangeProfileImage;
@@ -74,6 +85,7 @@ public class ProfileFragment extends Fragment {
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference surveysRef = db.collection(SurveyResponse.KEY_SURVEY_RESPONSE);
+    private CollectionReference chatsRef = db.collection(Chat.KEY_CHATS);
     private String userId;
 
     public ProfileFragment() {
@@ -144,7 +156,9 @@ public class ProfileFragment extends Fragment {
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: open message dialog to send a direct message
+                MessageDialog dialog = MessageDialog.newInstance();
+                dialog.setTargetFragment(ProfileFragment.this, MESSAGE_REQUEST_CODE);
+                dialog.show(getFragmentManager(), "MessageDialog");
             }
         });
 
@@ -290,6 +304,72 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getContext(), "Profile image upload failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    public void sendMessage(final String message) {
+        String currUserId = firebaseAuth.getCurrentUser().getUid();
+        final String chatDocId, memberOne, memberTwo;
+        final ArrayList<String> members = new ArrayList<>();
+        final boolean currUserIsOne, oneRead, twoRead;
+
+        if (currUserId.compareTo(userId) > 0) {
+            chatDocId = currUserId + userId;
+            members.add(currUserId);
+            members.add(userId);
+            currUserIsOne = true;
+            oneRead = true;
+            twoRead = false;
+        } else {
+            chatDocId = userId + currUserId;
+            members.add(userId);
+            members.add(currUserId);
+            currUserIsOne = false;
+            oneRead = false;
+            twoRead = true;
+        }
+
+        chatsRef.document(chatDocId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot doc) {
+                if (doc.exists()) { // just update is read value for member one or two
+                    Map<String, Object> newValues = new HashMap<>();
+                    newValues.put(Chat.KEY_LAST_MESSAGE, message);
+                    newValues.put(Chat.KEY_LAST_MESSAGE_DATE, new java.util.Date());
+
+                    if (currUserIsOne) { // update member two's read value to false
+                        newValues.put(Chat.KEY_MEMBER_TWO_READ, false);
+                    } else { // update member one's read value to false
+                        newValues.put(Chat.KEY_MEMBER_ONE_READ, false);
+                    }
+
+                    chatsRef.document(chatDocId).update(newValues);
+                    updateMessageCollection(message, chatDocId);
+                } else { // create new chat
+                    Chat newChat = new Chat(message, members, new java.util.Date(), oneRead ,twoRead, chatDocId);
+                    chatsRef.document(chatDocId).set(newChat)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    updateMessageCollection(message, chatDocId);
+                                }
+                            });
+
+                }
+            }
+        });
+    }
+
+    private void updateMessageCollection(String message, String chatDocId) {
+        Message newMessage = new Message(new java.util.Date(), message, firebaseAuth.getCurrentUser().getUid());
+
+        chatsRef.document(chatDocId).collection(Message.KEY_MESSAGES).add(newMessage)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getContext(), "Message sent!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

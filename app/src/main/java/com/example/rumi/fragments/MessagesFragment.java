@@ -24,7 +24,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -72,6 +74,26 @@ public class MessagesFragment extends Fragment {
         rvChats.setLayoutManager(layoutManager);
 
         getChats();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        chatsRef.whereArrayContains(Chat.KEY_MEMBERS, firebaseAuth.getCurrentUser().getUid())
+                .orderBy(Chat.KEY_LAST_MESSAGE_DATE, Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        adapter.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Chat chat = documentSnapshot.toObject(Chat.class);
+                            chat.setChatId(documentSnapshot.getId());
+
+                            allChats.add(chat);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     private void getChats() {
