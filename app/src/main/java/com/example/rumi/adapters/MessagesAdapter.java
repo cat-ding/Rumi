@@ -2,6 +2,7 @@ package com.example.rumi.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHolder> {
+
+    public static final String TAG = "MessagesAdapter";
 
     private Context context;
     private List<Message> messages;
@@ -78,10 +81,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         }
 
         public void bind(Message message) {
-
-//            android:background="@drawable/message_border"
-//            android:padding="10dp"
-//            android:textColor="@color/quantum_white_100"
             if (message.getUserId().equals(currId)) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
                 params.removeRule(RelativeLayout.ALIGN_PARENT_START);

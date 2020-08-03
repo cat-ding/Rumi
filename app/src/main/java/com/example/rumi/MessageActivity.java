@@ -66,7 +66,7 @@ public class MessageActivity extends AppCompatActivity {
     private ImageView ivOtherProfileImage;
     private TextView tvOtherName;
     private EditText etMessage;
-    private Button btnSend;
+    private ImageView btnSend;
 
     private boolean otherReadStatus;
     private String otherReadKey;
@@ -90,6 +90,7 @@ public class MessageActivity extends AppCompatActivity {
         layoutManager.setStackFromEnd(true);
 
         chat = (Chat) Parcels.unwrap(getIntent().getParcelableExtra(Chat.class.getSimpleName()));
+        messagesRef = chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES);
 
         // setting read booleans to toggle blue unread icon later
         if (chat.getMembers().get(0).equals(currId)) {
@@ -127,33 +128,24 @@ public class MessageActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.flContainer, fragment).addToBackStack(null).commit();
             }
         });
-
-        chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
-//                        for (DocumentSnapshot doc : snapshots) {
-//                            Message message = doc.toObject(Message.class);
-//                            allMessages.add(0, message);
-//                        }
-//                        adapter.notifyDataSetChanged();
-//                        rvMessages.smoothScrollToPosition(0);
-                    }
-                });
-
-        getMessages();
     }
 
-    private void getMessages() {
-        messagesRef = chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES);
-        messagesRef.orderBy(Message.KEY_CREATED_AT, Query.Direction.DESCENDING).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    // auto populates all messages at beginning and will then update in real time if any messages are sent
+    @Override
+    protected void onStart() {
+        super.onStart();
+        messagesRef.orderBy(Message.KEY_CREATED_AT, Query.Direction.DESCENDING)
+                .addSnapshotListener(this, new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        adapter.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Message message = documentSnapshot.toObject(Message.class);
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Toast.makeText(MessageActivity.this, "Error loading messages!", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Error loading messages: ", error);
+                        }
 
+                        adapter.clear();
+                        for (DocumentSnapshot doc : snapshots) {
+                            Message message = doc.toObject(Message.class);
                             allMessages.add(message);
                         }
                         adapter.notifyDataSetChanged();
@@ -192,7 +184,6 @@ public class MessageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if (readChanged || messageChanged) {
             if (messageChanged) { // update last message if changed
                 // transmitting updated chat object back
@@ -209,5 +200,19 @@ public class MessageActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (messageChanged) { // update last message if changed
+            String lastMessage = allMessages.get(0).getBody();
+            Date lastMessageDate = allMessages.get(0).getCreatedAt();
+            chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE, lastMessage);
+            chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE_DATE, lastMessageDate);
+            chat.setLastMessage(lastMessage);
+            chat.setLastMessageDate(lastMessageDate);
+        }
     }
 }
