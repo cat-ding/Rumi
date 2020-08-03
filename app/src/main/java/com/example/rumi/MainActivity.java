@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002 ;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     private BottomNavigationView bottomNavigationView;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     // for location permissions
     private boolean locationPermissionGranted = false;
@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        firebaseAuth = FirebaseAuth.getInstance();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigation);

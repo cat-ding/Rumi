@@ -129,6 +129,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                         Glide.with(context).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                         otherProfileImage = user.getProfileUrl();
                     } else {
+                        Glide.with(context).load("").circleCrop().into(ivProfileImage);
                         otherProfileImage = "";
                     }
                 }

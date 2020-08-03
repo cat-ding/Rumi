@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rumi.MessageActivity;
 import com.example.rumi.R;
 import com.example.rumi.adapters.ChatsAdapter;
 import com.example.rumi.adapters.PostsAdapter;
@@ -22,11 +24,13 @@ import com.example.rumi.models.Chat;
 import com.example.rumi.models.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,6 +52,8 @@ public class MessagesFragment extends Fragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference chatsRef = db.collection(Chat.KEY_CHATS);
+
+    private ListenerRegistration listenerRegistration;
 
     public MessagesFragment() {
         // Required empty public constructor
@@ -79,11 +85,16 @@ public class MessagesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        chatsRef.whereArrayContains(Chat.KEY_MEMBERS, firebaseAuth.getCurrentUser().getUid())
+        listenerRegistration = chatsRef.whereArrayContains(Chat.KEY_MEMBERS, firebaseAuth.getCurrentUser().getUid())
                 .orderBy(Chat.KEY_LAST_MESSAGE_DATE, Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Toast.makeText(getContext(), "Error loading chats!", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Error loading chats: ", error);
+                        }
+
                         adapter.clear();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Chat chat = documentSnapshot.toObject(Chat.class);
@@ -142,5 +153,11 @@ public class MessagesFragment extends Fragment {
                 adapter.notifyItemChanged(position);
             }
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        listenerRegistration.remove();
     }
 }

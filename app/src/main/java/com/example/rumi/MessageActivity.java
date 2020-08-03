@@ -173,6 +173,9 @@ public class MessageActivity extends AppCompatActivity {
         adapter.notifyItemInserted(0);
         rvMessages.smoothScrollToPosition(0);
 
+        // update lastMessage, lastMessageDate of the chat document, and add a new message document
+        chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE, messageBody);
+        chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE_DATE, message.getCreatedAt());
         chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES).add(message);
     }
 
@@ -189,8 +192,6 @@ public class MessageActivity extends AppCompatActivity {
                 // transmitting updated chat object back
                 String lastMessage = allMessages.get(0).getBody();
                 Date lastMessageDate = allMessages.get(0).getCreatedAt();
-                chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE, lastMessage);
-                chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE_DATE, lastMessageDate);
                 chat.setLastMessage(lastMessage);
                 chat.setLastMessageDate(lastMessageDate);
             }
