@@ -30,12 +30,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     public static final String TAG = "LoginActivity";
     public static final Integer SIGN_UP_BEGIN = 23;
-    private TextInputLayout layoutEmail;
-    private TextInputLayout layoutPassword;
+    private TextInputLayout layoutEmail, layoutPassword;
+    private TextInputEditText inputEmail, inputPassword;
     private Button btnLogin;
     private TextView tvRegisterHere;
 
@@ -56,6 +56,11 @@ public class LoginActivity extends AppCompatActivity {
         layoutPassword = findViewById(R.id.layoutPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegisterHere = findViewById(R.id.tvRegister);
+        inputEmail = findViewById(R.id.inputEmail);
+        inputPassword = findViewById(R.id.inputPassword);
+
+        inputEmail.setOnFocusChangeListener(this);
+        inputPassword.setOnFocusChangeListener(this);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -76,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                 boolean error = false;
                 layoutEmail.setError(null);
                 layoutPassword.setError(null);
+                layoutEmail.clearFocus();
+                layoutPassword.clearFocus();
 
                 if (email.isEmpty()) {
                     layoutEmail.setError("Email required");
@@ -146,5 +153,19 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if (b) {
+            switch (view.getId()) {
+                case R.id.inputEmail:
+                    layoutEmail.setError(null);
+                    break;
+                case R.id.inputPassword:
+                    layoutPassword.setError(null);
+                    break;
+            }
+        }
     }
 }

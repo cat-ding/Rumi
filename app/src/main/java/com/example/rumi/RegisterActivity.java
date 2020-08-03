@@ -1,11 +1,6 @@
 package com.example.rumi;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,42 +8,40 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     public static final String TAG = "RegisterActivity";
     private static final int LOG_IN_BEGIN = 25;
     private TextInputLayout layoutEmail, layoutPassword, layoutName, layoutMajor, layoutYear;
+    private TextInputEditText inputName, inputEmail, inputPassword;
+    private AutoCompleteTextView dropdownMajors, dropdownYears;
     private Button btnRegister;
     private TextView tvLogin;
     private String major, year;
 
-    FirebaseFirestore db;
-    FirebaseAuth firebaseAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +55,17 @@ public class RegisterActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tvLogin);
         layoutMajor = findViewById(R.id.layoutMajor);
         layoutYear = findViewById(R.id.layoutYear);
+        dropdownMajors = findViewById(R.id.dropdownMajors);
+        dropdownYears = findViewById(R.id.dropdownYears);
+        inputName = findViewById(R.id.inputName);
+        inputEmail = findViewById(R.id.inputEmail);
+        inputPassword = findViewById(R.id.inputPassword);
 
-        db = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
+        inputName.setOnFocusChangeListener(this);
+        inputEmail.setOnFocusChangeListener(this);
+        inputPassword.setOnFocusChangeListener(this);
+        dropdownMajors.setOnFocusChangeListener(this);
+        dropdownYears.setOnFocusChangeListener(this);
 
         setClickableSpan();
 
@@ -72,14 +73,12 @@ public class RegisterActivity extends AppCompatActivity {
         String[] majors = getResources().getStringArray(R.array.majors);
         ArrayAdapter<String> adapterMajor =
                 new ArrayAdapter<>(RegisterActivity.this, R.layout.item_dropdown, majors);
-        AutoCompleteTextView dropdownMajors = findViewById(R.id.dropdownMajors);
         dropdownMajors.setAdapter(adapterMajor);
 
         // setting up spinner for year
         String[] years = getResources().getStringArray(R.array.year);
         ArrayAdapter<String> adapterYear =
                 new ArrayAdapter<>(RegisterActivity.this, R.layout.item_dropdown, years);
-        AutoCompleteTextView dropdownYears = findViewById(R.id.dropdownYears);
         dropdownYears.setAdapter(adapterYear);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +96,12 @@ public class RegisterActivity extends AppCompatActivity {
                 layoutPassword.setError(null);
                 layoutMajor.setError(null);
                 layoutYear.setError(null);
+
+                layoutName.clearFocus();
+                layoutEmail.clearFocus();
+                layoutPassword.clearFocus();
+                layoutMajor.clearFocus();
+                layoutYear.clearFocus();
 
                 if (name.isEmpty()) {
                     layoutName.setError("Name is required");
@@ -174,5 +179,28 @@ public class RegisterActivity extends AppCompatActivity {
         ss.setSpan(clickableSpan, LOG_IN_BEGIN, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvLogin.setText(ss);
         tvLogin.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if (b) {
+            switch(view.getId()) {
+                case R.id.inputName:
+                    layoutName.setError(null);
+                    break;
+                case R.id.inputEmail:
+                    layoutEmail.setError(null);
+                    break;
+                case R.id.inputPassword:
+                    layoutPassword.setError(null);
+                    break;
+                case R.id.dropdownMajors:
+                    layoutMajor.setError(null);
+                    break;
+                case R.id.dropdownYears:
+                    layoutYear.setError(null);
+                    break;
+            }
+        }
     }
 }
