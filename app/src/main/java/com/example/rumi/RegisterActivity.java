@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -25,11 +26,15 @@ import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,10 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     public static final String TAG = "RegisterActivity";
     private static final int LOG_IN_BEGIN = 25;
-    private EditText etEmail, etPassword, etName;
+    private TextInputLayout layoutEmail, layoutPassword, layoutName, layoutMajor, layoutYear;
     private Button btnRegister;
     private TextView tvLogin;
-    private Spinner spinnerMajor, spinnerYear;
     private String major, year;
 
     FirebaseFirestore db;
@@ -51,89 +55,87 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etName = findViewById(R.id.etName);
+        layoutEmail = findViewById(R.id.layoutEmail);
+        layoutPassword = findViewById(R.id.layoutPassword);
+        layoutName = findViewById(R.id.layoutName);
         btnRegister = findViewById(R.id.btnRegister);
         tvLogin = findViewById(R.id.tvLogin);
-        spinnerMajor = findViewById(R.id.spinnerMajor);
-        spinnerYear = findViewById(R.id.spinnerYear);
+        layoutMajor = findViewById(R.id.layoutMajor);
+        layoutYear = findViewById(R.id.layoutYear);
 
         db = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
         setClickableSpan();
 
-        final ArrayAdapter<CharSequence> adapterMajor = ArrayAdapter.createFromResource(RegisterActivity.this, R.array.majors, android.R.layout.simple_spinner_item);
-        final ArrayAdapter<CharSequence> adapterYear = ArrayAdapter.createFromResource(RegisterActivity.this, R.array.year, android.R.layout.simple_spinner_item);
-        adapterMajor.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMajor.setAdapter(adapterMajor);
-        spinnerYear.setAdapter(adapterYear);
+        // setting up spinner for majors
+        String[] majors = getResources().getStringArray(R.array.majors);
+        ArrayAdapter<String> adapterMajor =
+                new ArrayAdapter<>(RegisterActivity.this, R.layout.item_dropdown, majors);
+        AutoCompleteTextView dropdownMajors = findViewById(R.id.dropdownMajors);
+        dropdownMajors.setAdapter(adapterMajor);
 
-        spinnerMajor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    return;
-                }
-                major = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(RegisterActivity.this, major, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) { return; }
-        });
-
-        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    return;
-                }
-                year = adapterView.getItemAtPosition(i).toString();
-                if (year.equals("Other")) {
-                    year = "";
-                } else if (!year.equals("Graduate Student")) {
-                    year = "Class of " + year;
-                }
-                Toast.makeText(RegisterActivity.this, year, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) { return; }
-        });
+        // setting up spinner for year
+        String[] years = getResources().getStringArray(R.array.year);
+        ArrayAdapter<String> adapterYear =
+                new ArrayAdapter<>(RegisterActivity.this, R.layout.item_dropdown, years);
+        AutoCompleteTextView dropdownYears = findViewById(R.id.dropdownYears);
+        dropdownYears.setAdapter(adapterYear);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = etEmail.getText().toString().trim();
-                final String password = etPassword.getText().toString().trim();
-                final String name = etName.getText().toString();
+                final String email = layoutEmail.getEditText().getText().toString().trim();
+                final String password = layoutPassword.getEditText().getText().toString().trim();
+                final String name = layoutName.getEditText().getText().toString();
+                final String major = layoutMajor.getEditText().getText().toString();
+                final String year = layoutYear.getEditText().getText().toString();
+
+                boolean error = false;
+                layoutName.setError(null);
+                layoutEmail.setError(null);
+                layoutPassword.setError(null);
+                layoutMajor.setError(null);
+                layoutYear.setError(null);
 
                 if (name.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Name is required!", Toast.LENGTH_SHORT).show();
-                    etName.requestFocus();
-                    return;
-                } else if (email.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Email is required!", Toast.LENGTH_SHORT).show();
-                    etEmail.requestFocus();
-                    return;
-                } else if (password.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "Password is required!", Toast.LENGTH_SHORT).show();
-                    etPassword.requestFocus();
-                    return;
-                } // major and year are optional (might change later)
-
-                if (password.length() < 6) {
-                    Toast.makeText(RegisterActivity.this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show();
-                    etPassword.requestFocus();
+                    layoutName.setError("Name is required");
+                    error = true;
                 }
+                if (email.isEmpty()) {
+                    layoutEmail.setError("Email is required");
+                    error = true;
+                }
+                if (password.isEmpty()) {
+                    layoutPassword.setError("Password is required");
+                    error = true;
+                } else if (password.length() < 6) {
+                    layoutPassword.setError("Password must be at least 6 characters");
+                    error = true;
+                }
+                if (major.isEmpty()) {
+                    layoutMajor.setError("Major is required");
+                    error = true;
+                } else if (!Arrays.asList(getResources().getStringArray(R.array.majors)).contains(major)) {
+                    layoutMajor.setError("Choose a valid major");
+                    error = true;
+                }
+                if (year.isEmpty()) {
+                    layoutYear.setError("Year is required");
+                    error = true;
+                } else if (!Arrays.asList(getResources().getStringArray(R.array.year)).contains(year)) {
+                    layoutYear.setError("Choose a valid year");
+                    error = true;
+                }
+
+                if (error)
+                    return;
 
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
 
                             User user = new User(name, email, major, year);
                             db.collection(User.KEY_USERS).document(task.getResult().getUser().getUid()).set(user)
@@ -148,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(i);
                             finish();
                         } else {
-                            Log.e(TAG, "Error creating user! ", task.getException());
+                            Log.e(TAG, "Error creating user: ", task.getException());
                             Toast.makeText(RegisterActivity.this, "Error!", Toast.LENGTH_SHORT).show();
                         }
                     }
