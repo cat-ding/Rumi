@@ -72,7 +72,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private MatchConstants.GenderPref currGenderPref = null;
     private MatchConstants.Smoke currSmoke = null;
     private String currSelfIdentifyGender = "", currDescription = "";
-    private boolean currGeneralVisible = true;
+    private boolean currGeneralVisible = true, currPrefVisible = true, currActivityVisible = true,
+            currHobbyVisible = true, currEntertainmentVisible = true, currMusicVisible = true,
+            currPersonalVisible = true;
 
     // the survey response for the current user
     private SurveyResponse myResponse;
@@ -384,6 +386,13 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         currSmoke = null;
                         currSelfIdentifyGender = "";
                         currDescription = "";
+                        currGeneralVisible = true;
+                        currPrefVisible = true;
+                        currActivityVisible = true;
+                        currHobbyVisible = true;
+                        currEntertainmentVisible = true;
+                        currMusicVisible = true;
+                        currPersonalVisible = true;
                     }
                 }).show();
     }
@@ -406,9 +415,11 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // obtaining info on level of cleanliness and temperature preference
     @Override
-    public void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref, MatchConstants.Temperature tempPref) {
+    public void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref, MatchConstants.Temperature tempPref,
+                                  boolean preferencesVisible) {
         currCleanPref = cleanPref;
         currTempPref = tempPref;
+        currPrefVisible = preferencesVisible;
         if (nextPage == MatchConstants.PAGE_ONE) {
             openMatchDialogOne();
         } else if (nextPage == MatchConstants.PAGE_THREE) {
@@ -418,9 +429,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // obtaining info on activities and hobbies
     @Override
-    public void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies) {
+    public void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies,
+                                    boolean activityVisible, boolean hobbyVisible) {
         currActivities = activities;
         currHobbies = hobbies;
+        currActivityVisible = activityVisible;
+        currHobbyVisible = hobbyVisible;
         if (nextPage == MatchConstants.PAGE_TWO) {
             openMatchDialogTwo();
         } else if (nextPage == MatchConstants.PAGE_FOUR) {
@@ -430,9 +444,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // obtaining info on entertainment and music
     @Override
-    public void sendPageFourInputs(int nextPage, ArrayList<String> entertainment, ArrayList<String> music) {
+    public void sendPageFourInputs(int nextPage, ArrayList<String> entertainment, ArrayList<String> music,
+                                   boolean entertainmentVisible, boolean musicVisible) {
         currEntertainment = entertainment;
         currMusic = music;
+        currEntertainmentVisible = entertainmentVisible;
+        currMusicVisible = musicVisible;
         if (nextPage == MatchConstants.PAGE_THREE) {
             openMatchDialogThree();
         } else if (nextPage == MatchConstants.PAGE_FIVE) {
@@ -444,11 +461,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     @Override
     public void sendPageFiveInputs(int nextPage, MatchConstants.Gender gender,
                                    String selfIdentifyGender, MatchConstants.GenderPref genderPref,
-                                   MatchConstants.Smoke smoke) {
+                                   MatchConstants.Smoke smoke, boolean personalVisible) {
         currGender = gender;
         currGenderPref = genderPref;
         currSmoke = smoke;
         currSelfIdentifyGender = selfIdentifyGender;
+        currPersonalVisible = personalVisible;
         if (nextPage == MatchConstants.PAGE_FOUR) {
             openMatchDialogFour();
         } else if (nextPage == MatchConstants.PAGE_SIX) {
@@ -473,26 +491,26 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     }
 
     private void openMatchDialogTwo() {
-        MatchDialogTwo dialog = MatchDialogTwo.newInstance(currCleanPref, currTempPref);
+        MatchDialogTwo dialog = MatchDialogTwo.newInstance(currCleanPref, currTempPref, currPrefVisible);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogTwo");
     }
 
     private void openMatchDialogThree() {
-        MatchDialogThree dialog = MatchDialogThree.newInstance(currActivities, currHobbies);
+        MatchDialogThree dialog = MatchDialogThree.newInstance(currActivities, currHobbies, currActivityVisible, currHobbyVisible);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogThree");
     }
 
     private void openMatchDialogFour() {
-        MatchDialogFour dialog = MatchDialogFour.newInstance(currEntertainment, currMusic);
+        MatchDialogFour dialog = MatchDialogFour.newInstance(currEntertainment, currMusic, currEntertainmentVisible, currMusicVisible);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFour");
     }
 
     private void openMatchDialogFive() {
         MatchDialogFive dialog = MatchDialogFive.newInstance(currGender, currSelfIdentifyGender,
-                currGenderPref, currSmoke);
+                currGenderPref, currSmoke, currPersonalVisible);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogFive");
     }

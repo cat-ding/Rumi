@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ public class MatchDialogTwo extends DialogFragment {
     public static final String TAG = "MatchDialogThree";
     public static final String KEY_CURR_CLEAN = "currCleanPref";
     public static final String KEY_CURR_TEMP = "currTempPref";
+    public static final String KEY_CURR_PREF_VISIBLE = "currPrefVisibility";
     private PageTwoListener mListener;
 
     private RadioGroup radioGroupClean, radioGroupTemp;
@@ -32,17 +35,23 @@ public class MatchDialogTwo extends DialogFragment {
     private MatchConstants.Clean cleanPref = null;
     private MatchConstants.Temperature tempPref = null;
 
+    private CheckBox checkVisibility;
+    private boolean preferencesVisible;
+
     public interface PageTwoListener {
-        void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref, MatchConstants.Temperature tempPref);
+        void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref,
+                               MatchConstants.Temperature tempPref, boolean preferencesVisible);
     }
 
     public static MatchDialogTwo newInstance(MatchConstants.Clean currCleanPref,
-                                             MatchConstants.Temperature currTempPref) {
+                                             MatchConstants.Temperature currTempPref,
+                                             boolean currPrefVisibility) {
 
         Bundle args = new Bundle();
         MatchDialogTwo fragment = new MatchDialogTwo();
         args.putSerializable(KEY_CURR_CLEAN, currCleanPref);
         args.putSerializable(KEY_CURR_TEMP, currTempPref);
+        args.putBoolean(KEY_CURR_PREF_VISIBLE, currPrefVisibility);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +70,7 @@ public class MatchDialogTwo extends DialogFragment {
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.sendPageTwoInputs(MatchConstants.PAGE_ONE, cleanPref, tempPref);
+                        mListener.sendPageTwoInputs(MatchConstants.PAGE_ONE, cleanPref, tempPref, preferencesVisible);
                         dismiss();
                     }
                 });
@@ -81,6 +90,14 @@ public class MatchDialogTwo extends DialogFragment {
         radioFairlyCold = view.findViewById(R.id.radioFairlyCold);
         radioFairlyWarm = view.findViewById(R.id.radioFairlyWarm);
         radioWarm = view.findViewById(R.id.radioWarm);
+        checkVisibility = view.findViewById(R.id.checkVisibility);
+
+        checkVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                preferencesVisible = b;
+            }
+        });
 
         radioGroupClean.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -124,6 +141,9 @@ public class MatchDialogTwo extends DialogFragment {
     private void setPreviousValues() {
         cleanPref = (MatchConstants.Clean) getArguments().getSerializable(KEY_CURR_CLEAN);
         tempPref = (MatchConstants.Temperature) getArguments().getSerializable(KEY_CURR_TEMP);
+        preferencesVisible = getArguments().getBoolean(KEY_CURR_PREF_VISIBLE);
+
+        checkVisibility.setChecked(preferencesVisible);
 
         if (cleanPref != null) {
             if (cleanPref == MatchConstants.Clean.ALWAYS_CLEAN) {
@@ -188,7 +208,7 @@ public class MatchDialogTwo extends DialogFragment {
                         Toast.makeText(getContext(), "Please answer all the questions!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    mListener.sendPageTwoInputs(MatchConstants.PAGE_THREE, cleanPref, tempPref);
+                    mListener.sendPageTwoInputs(MatchConstants.PAGE_THREE, cleanPref, tempPref, preferencesVisible);
                     dismiss();
                 }
             });
@@ -202,7 +222,7 @@ public class MatchDialogTwo extends DialogFragment {
         try {
             mListener = (PageTwoListener) getTargetFragment();
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement MatchDialogThree");
+            throw new ClassCastException(context.toString() + " must implement MatchDialogTwo");
         }
     }
 }

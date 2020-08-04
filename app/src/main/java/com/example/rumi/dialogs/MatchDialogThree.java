@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,6 +29,8 @@ public class MatchDialogThree extends DialogFragment {
     public static final String TAG = "MatchDialogThree";
     public static final String KEY_CURR_ACTIVITIES = "currActivities";
     public static final String KEY_CURR_HOBBIES = "currHobbies";
+    private static final String KEY_CURR_ACTIVITY_VISIBLE = "currActivityVisible";
+    private static final String KEY_CURR_HOBBY_VISIBLE = "currHobbyVisible";
     private PageThreeListener mListener;
 
     private ChipGroup chipGroupActivities, chipGroupHobbies;
@@ -34,17 +38,23 @@ public class MatchDialogThree extends DialogFragment {
     private EditText etActivity, etHobby;
 
     private ArrayList<String> activities = new ArrayList<>(), hobbies = new ArrayList<>();
+    private CheckBox checkActivityVisibility, checkHobbyVisibility;
+    private boolean activityVisible = true, hobbyVisible = true;
 
     public interface PageThreeListener {
-        void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies);
+        void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies,
+                                 boolean activityVisible, boolean hobbyVisible);
     }
 
-    public static MatchDialogThree newInstance(ArrayList<String> currActivities, ArrayList<String> currHobbies) {
+    public static MatchDialogThree newInstance(ArrayList<String> currActivities, ArrayList<String> currHobbies,
+                                               boolean currActivityVisible, boolean currHobbyVisible) {
 
         Bundle args = new Bundle();
         MatchDialogThree fragment = new MatchDialogThree();
         args.putStringArrayList(KEY_CURR_ACTIVITIES, currActivities);
         args.putStringArrayList(KEY_CURR_HOBBIES, currHobbies);
+        args.putBoolean(KEY_CURR_ACTIVITY_VISIBLE, currActivityVisible);
+        args.putBoolean(KEY_CURR_HOBBY_VISIBLE, currHobbyVisible);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +73,7 @@ public class MatchDialogThree extends DialogFragment {
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.sendPageThreeInputs(MatchConstants.PAGE_TWO, activities, hobbies);
+                        mListener.sendPageThreeInputs(MatchConstants.PAGE_TWO, activities, hobbies, activityVisible, hobbyVisible);
                         dismiss();
                     }
                 });
@@ -79,6 +89,22 @@ public class MatchDialogThree extends DialogFragment {
         btnAddHobby = view.findViewById(R.id.btnAddHobby);
         etActivity = view.findViewById(R.id.etActivity);
         etHobby = view.findViewById(R.id.etHobby);
+        checkActivityVisibility = view.findViewById(R.id.checkActivityVisibility);
+        checkHobbyVisibility = view.findViewById(R.id.checkHobbyVisibility);
+
+        checkActivityVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                activityVisible = b;
+            }
+        });
+
+        checkHobbyVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                hobbyVisible = b;
+            }
+        });
 
         btnAddActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +172,11 @@ public class MatchDialogThree extends DialogFragment {
     private void setPreviousValues() {
         activities = getArguments().getStringArrayList(KEY_CURR_ACTIVITIES);
         hobbies = getArguments().getStringArrayList(KEY_CURR_HOBBIES);
+        activityVisible = getArguments().getBoolean(KEY_CURR_ACTIVITY_VISIBLE);
+        hobbyVisible = getArguments().getBoolean(KEY_CURR_HOBBY_VISIBLE);
+
+        checkActivityVisibility.setChecked(activityVisible);
+        checkHobbyVisibility.setChecked(hobbyVisible);
 
         for (String activity : activities)
         {
@@ -166,7 +197,7 @@ public class MatchDialogThree extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.sendPageThreeInputs(MatchConstants.PAGE_FOUR, activities, hobbies);
+                    mListener.sendPageThreeInputs(MatchConstants.PAGE_FOUR, activities, hobbies, activityVisible, hobbyVisible);
                     dismiss();
                 }
             });

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,6 +30,7 @@ public class MatchDialogFive extends DialogFragment {
     private static final String KEY_SELF_IDENTIFY_GENDER = "currSelfIdentifyGender";
     private static final String KEY_GENDER_PREF = "currGenderPref";
     private static final String KEY_SMOKE = "currSmoke";
+    private static final String KEY_CURR_PERSONAL_VISIBLE = "currPersonalVisible";
     private PageFiveListener mListener;
 
     private RadioGroup radioGroupGenderIdentity, radioGroupGenderPreference, radioGroupSmoking;
@@ -42,16 +45,20 @@ public class MatchDialogFive extends DialogFragment {
     private MatchConstants.GenderPref genderPref = null;
     private MatchConstants.Smoke smoke = null;
 
+    private CheckBox checkVisibility;
+    private boolean personalVisible = true;
+
     public interface PageFiveListener {
         void sendPageFiveInputs(int nextPage, MatchConstants.Gender gender,
                                 String selfIdentifyGender, MatchConstants.GenderPref genderPref,
-                                MatchConstants.Smoke smoke);
+                                MatchConstants.Smoke smoke, boolean personalVisible);
     }
 
     public static MatchDialogFive newInstance(MatchConstants.Gender currGender,
                                               String currSelfIdentifyGender,
                                               MatchConstants.GenderPref currGenderPref,
-                                              MatchConstants.Smoke currSmoke) {
+                                              MatchConstants.Smoke currSmoke,
+                                              boolean currPersonalVisible) {
 
         Bundle args = new Bundle();
         MatchDialogFive fragment = new MatchDialogFive();
@@ -59,6 +66,7 @@ public class MatchDialogFive extends DialogFragment {
         args.putString(KEY_SELF_IDENTIFY_GENDER, currSelfIdentifyGender);
         args.putSerializable(KEY_GENDER_PREF, currGenderPref);
         args.putSerializable(KEY_SMOKE, currSmoke);
+        args.putBoolean(KEY_CURR_PERSONAL_VISIBLE, currPersonalVisible);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,7 +88,7 @@ public class MatchDialogFive extends DialogFragment {
                         if (selfIdentify) {
                             selfIdentifyGender = etSelfIdentify.getText().toString();
                         }
-                        mListener.sendPageFiveInputs(MatchConstants.PAGE_FOUR, gender, selfIdentifyGender, genderPref, smoke);
+                        mListener.sendPageFiveInputs(MatchConstants.PAGE_FOUR, gender, selfIdentifyGender, genderPref, smoke, personalVisible);
                         dismiss();
                     }
                 });
@@ -103,6 +111,14 @@ public class MatchDialogFive extends DialogFragment {
         radioNonSmokerYes = view.findViewById(R.id.radioNonSmokerYes);
         radioSmoker = view.findViewById(R.id.radioSmoker);
         etSelfIdentify = view.findViewById(R.id.etSelfIdentify);
+        checkVisibility = view.findViewById(R.id.checkVisibility);
+
+        checkVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                personalVisible = b;
+            }
+        });
 
         radioGroupGenderIdentity.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -169,6 +185,9 @@ public class MatchDialogFive extends DialogFragment {
         selfIdentifyGender = getArguments().getString(KEY_SELF_IDENTIFY_GENDER);
         genderPref = (MatchConstants.GenderPref) getArguments().getSerializable(KEY_GENDER_PREF);
         smoke = (MatchConstants.Smoke) getArguments().getSerializable(KEY_SMOKE);
+        personalVisible = getArguments().getBoolean(KEY_CURR_PERSONAL_VISIBLE);
+
+        checkVisibility.setChecked(personalVisible);
 
         if (gender != null) {
             if (gender == MatchConstants.Gender.MALE) {
@@ -246,7 +265,7 @@ public class MatchDialogFive extends DialogFragment {
                     if (selfIdentify) {
                         selfIdentifyGender = etSelfIdentify.getText().toString();
                     }
-                    mListener.sendPageFiveInputs(MatchConstants.PAGE_SIX, gender, selfIdentifyGender, genderPref, smoke);
+                    mListener.sendPageFiveInputs(MatchConstants.PAGE_SIX, gender, selfIdentifyGender, genderPref, smoke, personalVisible);
                     dismiss();
                 }
             });
