@@ -65,35 +65,44 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvMessage;
+        TextView tvMessage, tvRelativeTime;
         RelativeLayout relativeLayout;
         String currId;
-        RelativeLayout.LayoutParams params;
+        RelativeLayout.LayoutParams messageParams;
+        RelativeLayout.LayoutParams timeParams;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvMessage = itemView.findViewById(R.id.tvMessage);
+            tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
-            params = (RelativeLayout.LayoutParams)tvMessage.getLayoutParams();
+            messageParams = (RelativeLayout.LayoutParams)tvMessage.getLayoutParams();
+            timeParams = (RelativeLayout.LayoutParams)tvRelativeTime.getLayoutParams();
 
             currId = firebaseAuth.getCurrentUser().getUid();
         }
 
         public void bind(Message message) {
             if (message.getUserId().equals(currId)) {
-                params.addRule(RelativeLayout.ALIGN_PARENT_END);
-                params.removeRule(RelativeLayout.ALIGN_PARENT_START);
+                timeParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                timeParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
+                messageParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                messageParams.removeRule(RelativeLayout.ALIGN_PARENT_START);
                 tvMessage.setBackgroundResource(R.drawable.message_border);
                 tvMessage.setTextColor(Color.WHITE);
             } else {
-                params.addRule(RelativeLayout.ALIGN_PARENT_START);
-                params.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                timeParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+                timeParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                messageParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+                messageParams.removeRule(RelativeLayout.ALIGN_PARENT_END);
                 tvMessage.setBackgroundResource(R.drawable.message_received_border);
                 tvMessage.setTextColor(Color.BLACK);
             }
+            tvRelativeTime.setLayoutParams(timeParams);
+            tvRelativeTime.setText(message.getRelativeTime());
             tvMessage.setPadding(30, 20, 30, 20);
-            tvMessage.setLayoutParams(params);
+            tvMessage.setLayoutParams(messageParams);
             tvMessage.setText(message.getBody());
         }
     }

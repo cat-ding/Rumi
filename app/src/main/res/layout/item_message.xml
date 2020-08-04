@@ -13,10 +13,17 @@
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:background="@drawable/message_border"
         android:padding="10dp"
         android:textColor="@color/quantum_white_100"
         tools:text="This is my message" />
+
+    <TextView
+        android:id="@+id/tvRelativeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        tools:text="1 hour ago"
+        android:textSize="11sp"/>
 
 </RelativeLayout>
