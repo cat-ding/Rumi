@@ -5,16 +5,12 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,39 +18,30 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rumi.FilterConstants;
 import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
-import com.example.rumi.RegisterActivity;
 import com.example.rumi.adapters.MatchAdapter;
-import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.dialogs.MatchDialogFive;
 import com.example.rumi.dialogs.MatchDialogFour;
 import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogSix;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
-import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
 import com.example.rumi.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class MatchFragment extends Fragment implements MatchDialogOne.PageOneListener,
         MatchDialogTwo.PageTwoListener, MatchDialogThree.PageThreeListener,
@@ -85,6 +72,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private MatchConstants.GenderPref currGenderPref = null;
     private MatchConstants.Smoke currSmoke = null;
     private String currSelfIdentifyGender = "", currDescription = "";
+    private boolean currGeneralVisible = true;
 
     // the survey response for the current user
     private SurveyResponse myResponse;
@@ -323,9 +311,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private float calculateArraySimilarity(ArrayList<String> one, ArrayList<String> two) {
         float min = (float) Math.min(one.size(), two.size());
         if (min == 0)
-            return 0; // nothing in common
+            return 0; // nothing in common - no effect
         one.retainAll(two);
-        float diff =  0 - (min - one.size()); // get negative
+        float diff =  0 - (min - one.size()); // get negative for bonus points
         return (float) diff / min; // normalize
     }
 
@@ -375,7 +363,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         " we'll do our best to suggest other users with similar qualities!")
                 .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        MatchDialogOne matchDialogOne = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
+                        MatchDialogOne matchDialogOne = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref, currGeneralVisible);
                         matchDialogOne.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
                         matchDialogOne.show(getFragmentManager(), "MatchDialogOne");
                     }})
@@ -402,10 +390,13 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // obtaining info on house preference, weekend preference, and guests preference
     @Override
-    public void sendPageOneInputs(int nextPage, MatchConstants.Week housePref, MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref) {
+    public void sendPageOneInputs(int nextPage, MatchConstants.Week housePref,
+                                  MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref,
+                                  boolean generalVisible) {
         currHousePref = housePref;
         currWeekendPref = weekendPref;
         currGuestsPref = guestsPref;
+        currGeneralVisible = generalVisible;
         if (nextPage == MatchConstants.PAGE_ZERO) {
             launchMatchingDialog();
         } else if (nextPage == MatchConstants.PAGE_TWO) {
@@ -470,13 +461,13 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         currDescription = description;
         if (nextPage == MatchConstants.PAGE_FIVE) {
             openMatchDialogFive();
-        } else { // end
+        } else {
             addToDatabase();
         }
     }
 
     private void openMatchDialogOne() {
-        MatchDialogOne dialog = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref);
+        MatchDialogOne dialog = MatchDialogOne.newInstance(currHousePref, currWeekendPref, currGuestsPref, currGeneralVisible);
         dialog.setTargetFragment(MatchFragment.this, MATCH_REQUEST_CODE);
         dialog.show(getFragmentManager(), "MatchDialogOne");
     }

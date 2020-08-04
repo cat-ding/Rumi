@@ -68,7 +68,7 @@ public class MatchDialogFour extends DialogFragment {
         findViews(view);
         setPreviousValues();
 
-        builder.setView(view).setTitle("Entertainment").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("Entertainment (Page 4/7)").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

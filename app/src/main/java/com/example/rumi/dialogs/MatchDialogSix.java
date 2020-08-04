@@ -54,7 +54,7 @@ public class MatchDialogSix extends DialogFragment {
         description = getArguments().getString(KEY_DESCRIPTION);
         etDescription.setText(description);
 
-        builder.setView(view).setTitle("Description").setPositiveButton("Submit", null)
+        builder.setView(view).setTitle("Description (Page 6/7)").setPositiveButton("Submit", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

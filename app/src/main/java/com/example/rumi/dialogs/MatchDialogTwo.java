@@ -57,7 +57,7 @@ public class MatchDialogTwo extends DialogFragment {
         findViews(view);
         setPreviousValues();
 
-        builder.setView(view).setTitle("Preferences").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("Preferences (Page 2/7)").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

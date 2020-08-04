@@ -131,4 +131,25 @@
 
     </RadioGroup>
 
+    <View
+        android:id="@+id/separator"
+        android:background="#7F000000"
+        android:layout_width = "match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_height="1dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/radioGroupGuests"/>
+
+    <CheckBox
+        android:id="@+id/checkVisibility"
+        android:layout_below="@id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="-5dp"
+        android:checked="true"
+        android:text="Share these responses with other users"/>
+
 </RelativeLayout>

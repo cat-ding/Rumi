@@ -59,7 +59,7 @@ public class MatchDialogThree extends DialogFragment {
         findViews(view);
         setPreviousValues();
 
-        builder.setView(view).setTitle("Interests").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("Interests (Page 3/7)").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

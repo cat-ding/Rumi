@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
     public static final String KEY_CURR_HOUSE_PREF = "currHousePref";
     public static final String KEY_CURR_WEEKEND_PREF = "currWeekendPref";
     public static final String KEY_CURR_GUESTS_PREF = "currGuestsPref";
+    public static final String KEY_CURR_GENERAL_VISIBLE = "currGeneralVisible";
 
     private PageOneListener mListener;
 
@@ -35,21 +38,26 @@ public class MatchDialogOne extends AppCompatDialogFragment {
     private MatchConstants.Week housePref = null;
     private MatchConstants.Weekend weekendPref = null;
     private MatchConstants.Guests guestsPref = null;
+    private CheckBox checkVisibility;
+    private boolean generalVisible = true;
 
 
     public interface PageOneListener {
         void sendPageOneInputs(int nextPage, MatchConstants.Week housePref,
-                               MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref);
+                               MatchConstants.Weekend weekendPref, MatchConstants.Guests guestsPref,
+                               boolean generalVisible);
     }
 
     public static MatchDialogOne newInstance(MatchConstants.Week currHousePref,
                                              MatchConstants.Weekend currWeekendPref,
-                                             MatchConstants.Guests currGuestsPref) {
+                                             MatchConstants.Guests currGuestsPref,
+                                             boolean currGeneralVisible) {
         Bundle args = new Bundle();
         MatchDialogOne fragment = new MatchDialogOne();
         args.putSerializable(KEY_CURR_HOUSE_PREF, currHousePref);
         args.putSerializable(KEY_CURR_WEEKEND_PREF, currWeekendPref);
         args.putSerializable(KEY_CURR_GUESTS_PREF, currGuestsPref);
+        args.putSerializable(KEY_CURR_GENERAL_VISIBLE, currGeneralVisible);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,11 +71,11 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_pageone, null, false);
         findViews(view);
         setPreviousValues();
-        builder.setView(view).setTitle("General Use").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("General Use (Page 1/7)").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mListener.sendPageOneInputs(MatchConstants.PAGE_ZERO, housePref, weekendPref, guestsPref);
+                        mListener.sendPageOneInputs(MatchConstants.PAGE_ZERO, housePref, weekendPref, guestsPref, generalVisible);
                         dismiss();
                     }
                 });
@@ -89,6 +97,14 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         radioOccasionalGuest = view.findViewById(R.id.radioOccasionalGuest);
         radioNoGuests = view.findViewById(R.id.radioNoGuests);
         radioGuestsNoPreference = view.findViewById(R.id.radioGuestsNoPreference);
+        checkVisibility = view.findViewById(R.id.checkVisibility);
+
+        checkVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                generalVisible = b;
+            }
+        });
 
         radioGroupHousePreference.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -149,6 +165,9 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         housePref = (MatchConstants.Week) getArguments().getSerializable(KEY_CURR_HOUSE_PREF);
         weekendPref = (MatchConstants.Weekend) getArguments().getSerializable(KEY_CURR_WEEKEND_PREF);
         guestsPref = (MatchConstants.Guests) getArguments().getSerializable(KEY_CURR_GUESTS_PREF);
+        generalVisible = getArguments().getBoolean(KEY_CURR_GENERAL_VISIBLE);
+
+        checkVisibility.setChecked(generalVisible);
 
         if (housePref != null) {
             if (housePref == MatchConstants.Week.QUIET) {
@@ -213,7 +232,6 @@ public class MatchDialogOne extends AppCompatDialogFragment {
                 radioGuestsNoPreference.setChecked(true);
             }
         }
-
     }
 
     // overrides the next button so that dialog doesn't dismiss if all fields are not answered
@@ -230,7 +248,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
                         Toast.makeText(getContext(), "Please answer all the questions!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    mListener.sendPageOneInputs(MatchConstants.PAGE_TWO, housePref, weekendPref, guestsPref);
+                    mListener.sendPageOneInputs(MatchConstants.PAGE_TWO, housePref, weekendPref, guestsPref, generalVisible);
                     dismiss();
                 }
             });

@@ -10,6 +10,7 @@ public class MatchConstants {
     public static final int PAGE_FOUR = 4;
     public static final int PAGE_FIVE = 5;
     public static final int PAGE_SIX = 6;
+    public static final int PAGE_SEVEN = 7;
     public static final int NO_PAGE = -1;
 
     // MatchDialogOne
