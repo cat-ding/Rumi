@@ -1,7 +1,7 @@
 package com.example.rumi.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.rumi.MainActivity;
 import com.example.rumi.MatchConstants;
+import com.example.rumi.MatchDetailActivity;
 import com.example.rumi.R;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
 
-import org.w3c.dom.Text;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivProfileImage;
         TextView tvUserName, tvMajorYear, tvDescription, tvCompatibilityScore;
@@ -121,7 +122,6 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         }
 
         private void bindPersonalInfo(SurveyResponse response) {
-            Log.d(TAG, "bindPersonalInfo: -----------------------------------");
             tvGenderIdentity.setVisibility(View.VISIBLE);
             tvGenderPreference.setVisibility(View.VISIBLE);
             tvSmokingPreference.setVisibility(View.VISIBLE);
@@ -135,7 +135,6 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             } else if (gender.equals(MatchConstants.Gender.NO_ANSWER.toString())){
                 tvGenderIdentity.setText("I identify as: No answer");
             } else if (gender.equals(MatchConstants.Gender.FEMALE.toString())) {
-                Log.d(TAG, "FEMALE");
                 tvGenderIdentity.setText("I identify as: Female");
             } else if (gender.equals(MatchConstants.Gender.MALE.toString())) {
                 tvGenderIdentity.setText("I identify as: Male");
@@ -162,6 +161,15 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
             Fragment fragment = new ProfileFragment(userId);
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+        }
+
+        @Override
+        public void onClick(View view) {
+            SurveyResponse response = responses.get(getAdapterPosition());
+            Intent intent = new Intent(context, MatchDetailActivity.class);
+            intent.putExtra(SurveyResponse.class.getSimpleName(), Parcels.wrap(response));
+            fragment.startActivity(intent);
+            ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 

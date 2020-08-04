@@ -3,8 +3,11 @@ package com.example.rumi.models;
 import com.example.rumi.MatchConstants;
 import com.google.firebase.firestore.Exclude;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
+@Parcel
 public class SurveyResponse {
 
     public static final String KEY_SURVEY_RESPONSE = "surveyResponse";
