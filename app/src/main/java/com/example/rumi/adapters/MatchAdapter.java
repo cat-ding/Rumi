@@ -1,6 +1,7 @@
 package com.example.rumi.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rumi.MainActivity;
+import com.example.rumi.MatchConstants;
 import com.example.rumi.R;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
@@ -70,6 +72,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
 
         ImageView ivProfileImage;
         TextView tvUserName, tvMajorYear, tvDescription, tvCompatibilityScore;
+        TextView tvGenderIdentity, tvGenderPreference, tvSmokingPreference;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +82,9 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             tvMajorYear = itemView.findViewById(R.id.tvMajorYear);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvCompatibilityScore = itemView.findViewById(R.id.tvCompatibilityScore);
+            tvGenderIdentity = itemView.findViewById(R.id.tvGenderIdentity);
+            tvGenderPreference = itemView.findViewById(R.id.tvGenderPreference);
+            tvSmokingPreference = itemView.findViewById(R.id.tvSmokingPreference);
         }
 
         public void bind(final SurveyResponse response) {
@@ -90,6 +96,14 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             tvDescription.setText(response.getDescription());
             String score = String.format("%.2f", response.getCompatibilityScore());
             tvCompatibilityScore.setText(score + "% match");
+
+            if (response.isPersonalVisible()) {
+                bindPersonalInfo(response);
+            } else {
+                tvGenderIdentity.setVisibility(View.GONE);
+                tvGenderPreference.setVisibility(View.GONE);
+                tvSmokingPreference.setVisibility(View.GONE);
+            }
 
             // onClickListeners to open ProfileFragment
             ivProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +118,44 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
                     openProfileFragment(response.getUserId());
                 }
             });
+        }
+
+        private void bindPersonalInfo(SurveyResponse response) {
+            Log.d(TAG, "bindPersonalInfo: -----------------------------------");
+            tvGenderIdentity.setVisibility(View.VISIBLE);
+            tvGenderPreference.setVisibility(View.VISIBLE);
+            tvSmokingPreference.setVisibility(View.VISIBLE);
+
+            String gender = response.getGender();
+            String genderPref = response.getGenderPref();
+            String smoking = response.getSmoking();
+
+            if (gender.equals(MatchConstants.Gender.SELF_IDENTIFY.toString())) {
+                tvGenderIdentity.setText("I identify as: " + response.getSelfIdentifyGender());
+            } else if (gender.equals(MatchConstants.Gender.NO_ANSWER.toString())){
+                tvGenderIdentity.setText("I identify as: No answer");
+            } else if (gender.equals(MatchConstants.Gender.FEMALE.toString())) {
+                Log.d(TAG, "FEMALE");
+                tvGenderIdentity.setText("I identify as: Female");
+            } else if (gender.equals(MatchConstants.Gender.MALE.toString())) {
+                tvGenderIdentity.setText("I identify as: Male");
+            }
+
+            if (genderPref.equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
+                tvGenderPreference.setText("Gender preference: No preference");
+            } else if (genderPref.equals(MatchConstants.GenderPref.FEMALE.toString())) {
+                tvGenderPreference.setText("Gender preference: Female");
+            } else if (genderPref.equals(MatchConstants.GenderPref.MALE.toString())) {
+                tvGenderPreference.setText("Gender preference: Male");
+            }
+
+            if (smoking.equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())) {
+                tvSmokingPreference.setText("Smoking: Non-smoking, not okay with smokers");
+            } else if (smoking.equals(MatchConstants.Smoke.NON_SMOKER_YES.toString())) {
+                tvSmokingPreference.setText("Smoking: Non-smoking, okay with smokers");
+            } else if (smoking.equals(MatchConstants.Smoke.SMOKER.toString())) {
+                tvSmokingPreference.setText("Smoking: Smoker");
+            }
         }
 
         private void openProfileFragment(String userId) {

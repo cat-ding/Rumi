@@ -13,6 +13,7 @@ public class SurveyResponse {
     private String week, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description;
     private String userId, imageUrl, name, major, year;
     private ArrayList<String> activities, hobbies, entertainment, music;
+    private boolean generalVisible, preferencesVisible, activityVisible, hobbyVisible, entertainmentVisible, musicVisible, personalVisible;
 
     @Exclude
     private String surveyId;
@@ -29,7 +30,10 @@ public class SurveyResponse {
                           String genderPref, String smoking, String description,
                           ArrayList<String> activities, ArrayList<String> hobbies,
                           ArrayList<String> entertainment, ArrayList<String> music,
-                          String userId, String imageUrl, String name, String major, String year) {
+                          String userId, String imageUrl, String name, String major, String year,
+                          boolean generalVisible, boolean preferencesVisible, boolean activityVisible,
+                          boolean hobbyVisible, boolean entertainmentVisible, boolean musicVisible,
+                          boolean personalVisible) {
         this.week = week;
         this.weekend = weekend;
         this.guests = guests;
@@ -49,6 +53,13 @@ public class SurveyResponse {
         this.name = name;
         this.major = major;
         this.year = year;
+        this.generalVisible = generalVisible;
+        this.preferencesVisible = preferencesVisible;
+        this.activityVisible = activityVisible;
+        this.hobbyVisible = hobbyVisible;
+        this.entertainmentVisible = entertainmentVisible;
+        this.musicVisible = musicVisible;
+        this.personalVisible = personalVisible;
     }
 
     public String getWeek() {
@@ -217,5 +228,61 @@ public class SurveyResponse {
 
     public void setCompatibilityScore(float compatibilityScore) {
         this.compatibilityScore = compatibilityScore;
+    }
+
+    public boolean isGeneralVisible() {
+        return generalVisible;
+    }
+
+    public void setGeneralVisible(boolean generalVisible) {
+        this.generalVisible = generalVisible;
+    }
+
+    public boolean isPreferencesVisible() {
+        return preferencesVisible;
+    }
+
+    public void setPreferencesVisible(boolean preferencesVisible) {
+        this.preferencesVisible = preferencesVisible;
+    }
+
+    public boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public void setActivityVisible(boolean activityVisible) {
+        this.activityVisible = activityVisible;
+    }
+
+    public boolean isHobbyVisible() {
+        return hobbyVisible;
+    }
+
+    public void setHobbyVisible(boolean hobbyVisible) {
+        this.hobbyVisible = hobbyVisible;
+    }
+
+    public boolean isEntertainmentVisible() {
+        return entertainmentVisible;
+    }
+
+    public void setEntertainmentVisible(boolean entertainmentVisible) {
+        this.entertainmentVisible = entertainmentVisible;
+    }
+
+    public boolean isMusicVisible() {
+        return musicVisible;
+    }
+
+    public void setMusicVisible(boolean musicVisible) {
+        this.musicVisible = musicVisible;
+    }
+
+    public boolean isPersonalVisible() {
+        return personalVisible;
+    }
+
+    public void setPersonalVisible(boolean personalVisible) {
+        this.personalVisible = personalVisible;
     }
 }

@@ -57,4 +57,32 @@
         android:layout_below="@id/ivProfileImage"
         tools:text="This is my description!!" />
 
+    <TextView
+        android:id="@+id/tvGenderIdentity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/tvDescription"
+        android:textStyle="bold"
+        tools:text="I identify as: Female" />
+
+    <TextView
+        android:id="@+id/tvGenderPreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGenderIdentity"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        tools:text="Gender preference: Female" />
+
+    <TextView
+        android:id="@+id/tvSmokingPreference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        android:layout_below="@id/tvGenderPreference"
+        tools:text="Smoking: No smoking in house"/>
+
 </RelativeLayout>

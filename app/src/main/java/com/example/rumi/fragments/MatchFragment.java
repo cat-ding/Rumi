@@ -222,6 +222,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (allResponses.size() == 0) { // get all if there are none
             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                 SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
+                if (surveyResponse.getUserId().equals(firebaseAuth.getCurrentUser().getUid())) {
+                    continue;
+                }
                 surveyResponse.setCompatibilityScore(calculateCompatibilityScore(surveyResponse));
                 surveyResponse.setSurveyId(documentSnapshot.getId());
                 allResponses.add(surveyResponse);
@@ -336,7 +339,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         currTempPref.toString(), currGender.toString(), currSelfIdentifyGender,
                         currGenderPref.toString(), currSmoke.toString(), currDescription,
                         currActivities, currHobbies, currEntertainment, currMusic, userId, url,
-                        name, major, year);
+                        name, major, year, currGeneralVisible, currPrefVisible, currActivityVisible,
+                        currHobbyVisible, currEntertainmentVisible, currMusicVisible, currPersonalVisible);
 
                 surveysRef.document(userId).set(myResponse).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
