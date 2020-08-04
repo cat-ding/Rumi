@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = layoutEmail.getEditText().getText().toString().trim();
+                final String email = layoutEmail.getEditText().getText().toString().toLowerCase().trim();
                 final String password = layoutPassword.getEditText().getText().toString().trim();
                 final String name = layoutName.getEditText().getText().toString();
                 final String major = layoutMajor.getEditText().getText().toString();

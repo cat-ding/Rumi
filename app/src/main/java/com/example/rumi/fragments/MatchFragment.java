@@ -100,16 +100,16 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     // weights and other things needed to calculate compatibility score
     HashMap<String, Float> levels;
-    public static final int MAX_SCORE = 56;
+    public static final int MAX_SCORE = 45; // does not include activities, hobbies, entertainment, or music (bonus)
     public static final int WEEK_WEIGHT = 10;
     public static final int WEEKEND_WEIGHT = 10;
     public static final int GUEST_WEIGHT = 6;
     public static final int CLEAN_WEIGHT = 9;
     public static final int TEMP_WEIGHT = 4;
-    public static final float ACTIVITIES_WEIGHT = 3;
-    public static final float HOBBIES_WEIGHT = 3;
-    public static final float ENTERTAINMENT_WEIGHT = 3;
-    public static final float MUSIC_WEIGHT = 2;
+    public static final float ACTIVITIES_WEIGHT = 1.5f;
+    public static final float HOBBIES_WEIGHT = 1.5f;
+    public static final float ENTERTAINMENT_WEIGHT = 1.5f;
+    public static final float MUSIC_WEIGHT = 1.5f;
     public static final int MAJOR_WEIGHT = 3;
     public static final int YEAR_WEIGHT = 2;
     public static final Float RANGE = 3f;
@@ -228,8 +228,21 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             allResponses.add(surveyResponse);
         }
 
-        quickSelect(0, allResponses.size()-1, 5); // rank = 5
-        allResponses.subList(5, allResponses.size()).clear();
+        // TODO: maybe set a flag if size = 0, to let user know matches are not good
+        if (allResponses.size() == 0) { // get all if there are none
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                SurveyResponse surveyResponse = documentSnapshot.toObject(SurveyResponse.class);
+                surveyResponse.setCompatibilityScore(calculateCompatibilityScore(surveyResponse));
+                surveyResponse.setSurveyId(documentSnapshot.getId());
+                allResponses.add(surveyResponse);
+            }
+        }
+
+        // only need to get top 5 if there are more than 5 responses in the list, otherwise just sort
+        if (allResponses.size() > 5) {
+            quickSelect(0, allResponses.size()-1, 5); // rank = 5
+            allResponses.subList(5, allResponses.size()).clear();
+        }
 
         Collections.sort(allResponses, new Comparator<SurveyResponse>() {
             public int compare(SurveyResponse one, SurveyResponse two) {
@@ -237,7 +250,6 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
             }
         });
         adapter.notifyDataSetChanged();
-        // TODO: add if statement for when allResponses is empty even after querying
     }
 
     private float quickSelect(int low, int high, int rank) {
@@ -311,10 +323,10 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private float calculateArraySimilarity(ArrayList<String> one, ArrayList<String> two) {
         float min = (float) Math.min(one.size(), two.size());
         if (min == 0)
-            return 1; // nothing in common
+            return 0; // nothing in common
         one.retainAll(two);
-        float diff = min - one.size();
-        return (float) diff / min;
+        float diff =  0 - (min - one.size()); // get negative
+        return (float) diff / min; // normalize
     }
 
     private void addToDatabase() {

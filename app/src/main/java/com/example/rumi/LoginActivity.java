@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String email = layoutEmail.getEditText().getText().toString().trim();
+                final String email = layoutEmail.getEditText().getText().toString().toLowerCase().trim();
                 final String password = layoutPassword.getEditText().getText().toString();
 
                 boolean error = false;
