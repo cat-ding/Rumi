@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.CommentsActivity;
 import com.example.rumi.MainActivity;
 import com.example.rumi.models.Post;
@@ -48,6 +49,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private static final int REQUEST_CODE = 25;
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
+    public static final int RADIUS = 30;
     private Context context;
     private List<Post> posts;
     private Fragment fragment;
@@ -206,7 +208,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvRelativeTime.setText(post.getRelativeTime());
 
             if (!post.getPhotoUrl().equals("")) {
-                Glide.with(context).load(post.getPhotoUrl()).into(ivImage);
+                Glide.with(context).load(post.getPhotoUrl())
+                        .transform(new RoundedCorners(RADIUS)).into(ivImage);
                 ivImage.setVisibility(View.VISIBLE);
             } else {
                 ivImage.setVisibility(View.GONE);
@@ -219,7 +222,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
 
             tvValues.setText(post.getNumRooms() + " room(s) | $" + post.getRent() + " /mo | "
-                    + post.getDuration() + " months starting " + post.getStartMonth());
+                    + post.getStartDate() + " to " + post.getEndDate());
 
             bindUserFields(post);
         }

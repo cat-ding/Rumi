@@ -17,9 +17,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
@@ -41,6 +44,7 @@ public class PostDetailActivity extends AppCompatActivity {
     public static final String TAG = "PostDetailActivity";
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
+    public static final int RADIUS = 30;
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
                     tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes;
@@ -53,6 +57,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     private RelativeLayout layoutAddress;
+    private ScrollView scrollView;
 
     private FrameLayout flContainer;
     private AnimatedVectorDrawable avdHeart;
@@ -83,6 +88,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvNumLikes = findViewById(R.id.tvNumLikes);
         flContainer = findViewById(R.id.flContainer);
         layoutAddress = findViewById(R.id.layoutAddress);
+        scrollView = findViewById(R.id.scrollView);
 
         ivHeartAnim = findViewById(R.id.ivHeartAnim);
 
@@ -114,7 +120,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void setHeartAnimation() {
         final Drawable drawable = ivHeartAnim.getDrawable();
-        flContainer.setOnTouchListener(new View.OnTouchListener() {
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(PostDetailActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
@@ -192,8 +198,11 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         if (!post.getPhotoUrl().isEmpty()) {
-            Glide.with(PostDetailActivity.this).load(post.getPhotoUrl()).into(ivImage);
+            Glide.with(PostDetailActivity.this).load(post.getPhotoUrl())
+                    .transform(new RoundedCorners(RADIUS)).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
+        } else {
+            ivImage.setVisibility(View.GONE);
         }
 
         if (post.isFurnished()) {
