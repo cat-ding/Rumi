@@ -57,7 +57,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
     private RelativeLayout layoutAddress;
-    private ScrollView scrollView;
+    private RelativeLayout relativeLayout;
 
     private FrameLayout flContainer;
     private AnimatedVectorDrawable avdHeart;
@@ -88,7 +88,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvNumLikes = findViewById(R.id.tvNumLikes);
         flContainer = findViewById(R.id.flContainer);
         layoutAddress = findViewById(R.id.layoutAddress);
-        scrollView = findViewById(R.id.scrollView);
+        relativeLayout = findViewById(R.id.relativeLayout);
 
         ivHeartAnim = findViewById(R.id.ivHeartAnim);
 
@@ -120,7 +120,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private void setHeartAnimation() {
         final Drawable drawable = ivHeartAnim.getDrawable();
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
+        relativeLayout.setOnTouchListener(new View.OnTouchListener() {
             private GestureDetector gestureDetector = new GestureDetector(PostDetailActivity.this, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
