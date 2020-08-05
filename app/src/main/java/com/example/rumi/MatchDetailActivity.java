@@ -33,8 +33,8 @@ public class MatchDetailActivity extends AppCompatActivity {
     public static final String GENDER_MALE = "Male";
     public static final String GENDER_PREF_FEMALE = "Female";
     public static final String GENDER_PREF_MALE = "Male";
-    public static final String SMOKING_NON_SMOKER_NOT_OKAY = "Non-smoker, smoking not OK";
-    public static final String SMOKING_NON_SMOKER_OKAY = "Non-smoker, smoking OK";
+    public static final String SMOKING_NON_SMOKER_NOT_OKAY = "Non-smoker, not okay with smokers";
+    public static final String SMOKING_NON_SMOKER_OKAY = "Non-smoker, okay with smokers";
     public static final String SMOKING_SMOKER = "Smoker";
 
     // general info fields

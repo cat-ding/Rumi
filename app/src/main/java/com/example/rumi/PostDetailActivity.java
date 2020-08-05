@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,7 +43,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
-                    tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress, tvNumLikes;
+                    tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike, ivHeartAnim;
     private ArrayList<String> likeList;
     private int numLikes, postPopularity;
@@ -50,6 +51,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+
+    private RelativeLayout layoutAddress;
 
     private FrameLayout flContainer;
     private AnimatedVectorDrawable avdHeart;
@@ -71,8 +74,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvMajorYear = findViewById(R.id.tvMajorYear);
         tvNumRooms = findViewById(R.id.tvNumRooms);
         tvRent = findViewById(R.id.tvRent);
-        tvStartDate = findViewById(R.id.tvStartDate);
-        tvEndDate = findViewById(R.id.tvEndDate);
+        tvDuration = findViewById(R.id.tvDuration);
         tvFurnished = findViewById(R.id.tvFurnished);
         ivImage = findViewById(R.id.ivImage);
         tvAddress = findViewById(R.id.tvAddress);
@@ -80,6 +82,7 @@ public class PostDetailActivity extends AppCompatActivity {
         ivLike = findViewById(R.id.ivLike);
         tvNumLikes = findViewById(R.id.tvNumLikes);
         flContainer = findViewById(R.id.flContainer);
+        layoutAddress = findViewById(R.id.layoutAddress);
 
         ivHeartAnim = findViewById(R.id.ivHeartAnim);
 
@@ -177,21 +180,26 @@ public class PostDetailActivity extends AppCompatActivity {
         tvDescription.setText(post.getDescription());
         tvRelativeTime.setText(post.getRelativeTime());
 
-        tvNumRooms.setText("Number of Rooms: " + post.getNumRooms());
-        tvRent.setText("Monthly Rent per Room: $" + post.getRent());
-        tvStartDate.setText("Start Date: " + post.getStartDate());
-        tvEndDate.setText("End Date: " + post.getEndDate());
-        tvAddress.setText("Address: " + post.getAddress());
+        tvNumRooms.setText("" + post.getNumRooms());
+        tvRent.setText("$" + post.getRent());
+        tvDuration.setText(post.getStartDate() + " to " + post.getEndDate());
 
-        if (!post.getPhotoUrl().equals("")) {
+        if (!post.isLookingForHouse()) {
+            layoutAddress.setVisibility(View.VISIBLE);
+            tvAddress.setText(post.getAddress());
+        } else {
+            layoutAddress.setVisibility(View.GONE);
+        }
+
+        if (!post.getPhotoUrl().isEmpty()) {
             Glide.with(PostDetailActivity.this).load(post.getPhotoUrl()).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
         }
 
         if (post.isFurnished()) {
-            tvFurnished.setText("Furnished: YES");
+            tvFurnished.setText("Yes");
         } else {
-            tvFurnished.setText("Furnished: NO");
+            tvFurnished.setText("No");
         }
 
         if (post.isLookingForHouse()) {

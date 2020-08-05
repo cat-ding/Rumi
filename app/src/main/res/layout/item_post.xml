@@ -27,8 +27,7 @@
         android:layout_toRightOf="@id/ivProfileImage"
         android:textSize="16sp"
         android:textStyle="bold"
-        tools:text="Catherine Ding"
-        android:textColor="@color/quantum_grey900"/>
+        tools:text="Catherine Ding" />
 
     <TextView
         android:id="@+id/tvRelativeTime"
@@ -38,8 +37,7 @@
         android:layout_marginTop="4dp"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@id/ivProfileImage"
-        tools:text="1 hour ago"
-        android:textColor="@color/quantum_grey900"/>
+        tools:text="1 hour ago" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -51,8 +49,7 @@
         android:layout_marginEnd="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="Looking for a sublet for one person"
-        android:textColor="@color/quantum_grey900"/>
+        tools:text="Looking for a sublet for one person" />
 
     <TextView
         android:id="@+id/tvDescription"
@@ -64,8 +61,7 @@
         android:layout_marginEnd="10dp"
         android:textSize="16sp"
         tools:text="Here is the description of my situation...
-        blahblahblahblahblahblahblahblahblah"
-        android:textColor="@color/quantum_grey900"/>
+        blahblahblahblahblahblahblahblahblah" />
 
     <TextView
         android:id="@+id/tvStatus"
@@ -74,8 +70,7 @@
         android:layout_below="@id/tvDescription"
         android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
-        tools:text="Looking for: "
-        android:textColor="@color/quantum_grey900"/>
+        tools:text="Looking for: " />
 
     <TextView
         android:id="@+id/tvValues"
@@ -86,8 +81,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginStart="10dp"
         tools:text="3 rooms, 12 months, starting August"
-        android:textStyle="bold"
-        android:textColor="@color/quantum_grey900"/>
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/ivImage"
@@ -118,8 +112,7 @@
             android:layout_marginStart="5dp"
             android:layout_toRightOf="@id/ivLike"
             android:textStyle="bold"
-            tools:text="2 likes"
-            android:textColor="@color/quantum_grey900"/>
+            tools:text="2 likes" />
 
         <ImageView
             android:id="@+id/ivComment"

@@ -41,7 +41,8 @@
                     android:layout_toRightOf="@id/ivProfileImage"
                     android:text="Catherine Ding"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/quantum_grey900"/>
 
                 <TextView
                     android:id="@+id/tvMajorYear"

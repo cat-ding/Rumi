@@ -35,6 +35,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -56,13 +57,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ComposeActivity extends AppCompatActivity {
+public class ComposeActivity extends AppCompatActivity implements View.OnFocusChangeListener {
 
     private static final String TAG = "ComposeActivity";
     private static final float DAYS_IN_MONTH = 30;
     private static final int CAPTURE_IMAGE_CODE = 10;
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
-    private EditText etTitle, etDescription, etRent, etNumRooms;
+    private TextInputLayout layoutTitle, layoutDescription;
+    private EditText etRent, etNumRooms;
     private RadioGroup radioGroupOne, radioGroupFurnished;
     private RadioButton radioButtonHouse, radioButtonFurnished;
     private ImageView ivImagePreview;
@@ -88,8 +90,8 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
-        etTitle = findViewById(R.id.etTitle);
-        etDescription = findViewById(R.id.etDescription);
+        layoutTitle = findViewById(R.id.layoutTitle);
+        layoutDescription = findViewById(R.id.layoutDescription);
         radioGroupOne = findViewById(R.id.radioGroupOne);
         radioGroupFurnished = findViewById(R.id.radioGroupFurnished);
         etRent = findViewById(R.id.etRent);
@@ -179,28 +181,40 @@ public class ComposeActivity extends AppCompatActivity {
 
     // onClick method for post button - uploads new post to database
     public void makePost(View view) {
-        title = etTitle.getText().toString();
-        description = etDescription.getText().toString();
+        title = layoutTitle.getEditText().getText().toString();
+        description = layoutDescription.getEditText().getText().toString();
+
+        boolean error = false;
+        layoutTitle.setError(null);
+        layoutDescription.setError(null);
+        layoutTitle.clearFocus();
+        layoutDescription.clearFocus();
 
         if (title.isEmpty()) {
-            Toast.makeText(ComposeActivity.this, "Title is required!", Toast.LENGTH_SHORT).show();
-            etTitle.requestFocus();
-            return;
-        } else if (description.isEmpty()) {
-            Toast.makeText(ComposeActivity.this, "Description is required!", Toast.LENGTH_SHORT).show();
-            etDescription.requestFocus();
-            return;
-        } else if (etRent.getText().toString().isEmpty()) {
+            layoutTitle.setError("Title is required");
+            error = true;
+        }
+        if (description.isEmpty()) {
+            layoutDescription.setError("Description is required");
+            error = true;
+        }
+
+        if (etRent.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
             etRent.requestFocus();
             return;
-        } else if (tvStartDate.getText().toString().isEmpty()) {
+        }
+        if (tvStartDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Start date is required!", Toast.LENGTH_SHORT).show();
             return;
-        } else if (tvEndDate.getText().toString().isEmpty()) {
+        }
+        if (tvEndDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "End date is required!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (error)
+            return;
 
         rent = Integer.parseInt(etRent.getText().toString());
 
@@ -325,6 +339,20 @@ public class ComposeActivity extends AppCompatActivity {
                         photoUrl = uri.toString();
                     }
                 });
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        if (b) {
+            switch (view.getId()) {
+                case R.id.inputTitle:
+                    layoutTitle.setError(null);
+                    break;
+                case R.id.inputDescription:
+                    layoutDescription.setError(null);
+                    break;
+            }
+        }
     }
 
     @Override
