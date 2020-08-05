@@ -4,11 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,13 +43,16 @@ public class PostDetailActivity extends AppCompatActivity {
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
                     tvNumRooms, tvRent, tvStartDate, tvEndDate, tvFurnished, tvAddress, tvNumLikes;
-    private ImageView ivProfileImage, ivImage, ivComment, ivLike;
+    private ImageView ivProfileImage, ivImage, ivComment, ivLike, ivHeartAnim;
     private ArrayList<String> likeList;
     private int numLikes, postPopularity;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+
+    private FrameLayout flContainer;
+    private AnimatedVectorDrawable avdHeart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,31 +79,16 @@ public class PostDetailActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
         tvNumLikes = findViewById(R.id.tvNumLikes);
+        flContainer = findViewById(R.id.flContainer);
+
+        ivHeartAnim = findViewById(R.id.ivHeartAnim);
+
+        setHeartAnimation();
 
         ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_24);
-                    db.collection(Post.KEY_POSTS).document(post.getPostId())
-                            .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
-                    likeList.add(firebaseAuth.getCurrentUser().getUid());
-                    numLikes++;
-                    postPopularity++;
-                } else {
-                    ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
-                    ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
-                    db.collection(Post.KEY_POSTS).document(post.getPostId())
-                            .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
-                    likeList.remove(firebaseAuth.getCurrentUser().getUid());
-                    numLikes--;
-                    postPopularity--;
-                }
-                post.setLikes(likeList);
-                post.setPopularity(postPopularity);
-                updateNumLikes(numLikes);
-                updatePopularity(post.getPostId(), postPopularity);
+                likePost();
             }
         });
 
@@ -113,6 +107,54 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         setFields();
+    }
+
+    private void setHeartAnimation() {
+        final Drawable drawable = ivHeartAnim.getDrawable();
+        flContainer.setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(PostDetailActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    ivHeartAnim.setAlpha(0.7f);
+                    avdHeart = (AnimatedVectorDrawable) drawable;
+                    avdHeart.start();
+                    if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
+                        likePost();
+                    }
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+    }
+
+    private void likePost() {
+        if ((int)ivLike.getTag() == R.drawable.ic_baseline_favorite_border_24) {
+            ivLike.setImageResource(R.drawable.ic_baseline_favorite_24);
+            ivLike.setTag(R.drawable.ic_baseline_favorite_24);
+            db.collection(Post.KEY_POSTS).document(post.getPostId())
+                    .update(Post.KEY_LIKES, FieldValue.arrayUnion(firebaseAuth.getCurrentUser().getUid()));
+            likeList.add(firebaseAuth.getCurrentUser().getUid());
+            numLikes++;
+            postPopularity++;
+        } else {
+            ivLike.setImageResource(R.drawable.ic_baseline_favorite_border_24);
+            ivLike.setTag(R.drawable.ic_baseline_favorite_border_24);
+            db.collection(Post.KEY_POSTS).document(post.getPostId())
+                    .update(Post.KEY_LIKES, FieldValue.arrayRemove(firebaseAuth.getCurrentUser().getUid()));
+            likeList.remove(firebaseAuth.getCurrentUser().getUid());
+            numLikes--;
+            postPopularity--;
+        }
+        post.setLikes(likeList);
+        post.setPopularity(postPopularity);
+        updateNumLikes(numLikes);
+        updatePopularity(post.getPostId(), postPopularity);
     }
 
     private void openProfileFragment(String userId) {

@@ -1,6 +1,8 @@
 package com.example.rumi;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
 
@@ -39,6 +42,19 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         response = Parcels.unwrap(getIntent().getParcelableExtra(SurveyResponse.class.getSimpleName()));
 
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openProfileFragment(response.getUserId());
+            }
+        });
+        tvUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openProfileFragment(response.getUserId());
+            }
+        });
+
         setInfoFields();
     }
 
@@ -63,6 +79,12 @@ public class MatchDetailActivity extends AppCompatActivity {
             layoutPreferences.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    private void openProfileFragment(String userId) {
+        FragmentManager fragmentManager = (MatchDetailActivity.this).getSupportFragmentManager();
+        Fragment fragment = new ProfileFragment(userId);
+        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
     }
 
     @Override
