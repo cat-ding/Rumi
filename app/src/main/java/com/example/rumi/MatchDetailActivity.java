@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,8 +16,12 @@ import com.bumptech.glide.Glide;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 public class MatchDetailActivity extends AppCompatActivity {
 
@@ -57,11 +63,14 @@ public class MatchDetailActivity extends AppCompatActivity {
 
     private ImageView ivProfileImage;
     private TextView tvUserName, tvMajorYear, tvDescription;
-    private RelativeLayout layoutBasicInfo, layoutGeneralInfo, layoutPreferences;
+    private RelativeLayout layoutBasicInfo, layoutGeneralInfo, layoutPreferences,
+            layoutActivities, layoutHobbies, layoutEntertainment, layoutMusic;
 
     private TextView tvGender, tvGenderPref, tvSmoking;
     private TextView tvWeekday, tvWeekend, tvGuests;
     private TextView tvClean, tvTemp;
+
+    private ChipGroup chipGroupActivities, chipGroupHobbies, chipGroupEntertainment, chipGroupMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +83,10 @@ public class MatchDetailActivity extends AppCompatActivity {
         layoutBasicInfo = findViewById(R.id.layoutBasicInfo);
         layoutGeneralInfo = findViewById(R.id.layoutGeneralInfo);
         layoutPreferences = findViewById(R.id.layoutPreferences);
+        layoutActivities = findViewById(R.id.layoutActivities);
+        layoutHobbies = findViewById(R.id.layoutHobbies);
+        layoutEntertainment = findViewById(R.id.layoutEntertainment);
+        layoutMusic = findViewById(R.id.layoutMusic);
         tvDescription = findViewById(R.id.tvDescription);
         tvGender = findViewById(R.id.tvGender);
         tvGenderPref = findViewById(R.id.tvGenderPref);
@@ -83,6 +96,10 @@ public class MatchDetailActivity extends AppCompatActivity {
         tvGuests = findViewById(R.id.tvGuests);
         tvClean = findViewById(R.id.tvClean);
         tvTemp = findViewById(R.id.tvTemp);
+        chipGroupActivities = findViewById(R.id.chipGroupActivities);
+        chipGroupHobbies = findViewById(R.id.chipGroupHobbies);
+        chipGroupEntertainment = findViewById(R.id.chipGroupEntertainment);
+        chipGroupMusic = findViewById(R.id.chipGroupMusic);
 
         response = Parcels.unwrap(getIntent().getParcelableExtra(SurveyResponse.class.getSimpleName()));
 
@@ -130,6 +147,34 @@ public class MatchDetailActivity extends AppCompatActivity {
             bindPreferences();
         } else {
             layoutPreferences.setVisibility(View.GONE);
+        }
+
+        if (response.isActivityVisible()) {
+            layoutActivities.setVisibility(View.VISIBLE);
+            addChips(response.getActivities(), chipGroupActivities);
+        } else {
+            layoutActivities.setVisibility(View.GONE);
+        }
+
+        if (response.isHobbyVisible()) {
+            layoutHobbies.setVisibility(View.VISIBLE);
+            addChips(response.getHobbies(), chipGroupHobbies);
+        } else {
+            layoutHobbies.setVisibility(View.GONE);
+        }
+
+        if (response.isEntertainmentVisible()) {
+            layoutEntertainment.setVisibility(View.VISIBLE);
+            addChips(response.getEntertainment(), chipGroupEntertainment);
+        } else {
+            layoutEntertainment.setVisibility(View.GONE);
+        }
+
+        if (response.isMusicVisible()) {
+            layoutMusic.setVisibility(View.VISIBLE);
+            addChips(response.getMusic(), chipGroupMusic);
+        } else {
+            layoutMusic.setVisibility(View.GONE);
         }
     }
 
@@ -228,6 +273,18 @@ public class MatchDetailActivity extends AppCompatActivity {
         FragmentManager fragmentManager = (MatchDetailActivity.this).getSupportFragmentManager();
         Fragment fragment = new ProfileFragment(userId);
         fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+    }
+
+    private void addChips(ArrayList<String> list, ChipGroup chipGroup) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        for (String item : list) {
+            Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
+            chip.setText(item);
+            chip.setCheckable(false);
+            chip.setCloseIcon(null);
+            chipGroup.addView(chip);
+        }
     }
 
     @Override

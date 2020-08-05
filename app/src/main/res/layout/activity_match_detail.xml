@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/flContainer"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.rumi.MatchDetailActivity">
@@ -40,76 +39,76 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="14dp"
                     android:layout_toRightOf="@id/ivProfileImage"
+                    android:text="Catherine Ding"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="Catherine Ding" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMajorYear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_below="@id/tvUserName"
-                    android:layout_toRightOf="@id/ivProfileImage"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@id/ivProfileImage"
                     android:text="Computer Science, Class of 2022" />
 
                 <TextView
                     android:id="@id/tvDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="8dp"
                     android:layout_below="@id/ivProfileImage"
-                    tools:text="This is my description!"
-                    android:textSize="16sp"/>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:textSize="16sp"
+                    tools:text="This is my description!" />
 
                 <RelativeLayout
                     android:id="@+id/layoutBasicInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/tvDescription"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/tvDescription">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tvBasicInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Basic Info"
-                        android:textStyle="bold"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/ivGender"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:padding="4dp"
-                        android:layout_marginTop="4dp"
                         android:layout_below="@id/tvBasicInfo"
                         android:layout_marginStart="12dp"
+                        android:layout_marginTop="4dp"
                         android:background="@drawable/circle_border"
+                        android:padding="4dp"
                         app:srcCompat="@drawable/ic_baseline_person_black_24" />
 
                     <TextView
                         android:id="@+id/tvGender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/tvBasicInfo"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="2dp"
                         android:layout_toRightOf="@+id/ivGender"
                         android:text="Female"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvGenderLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvGender"
-                        android:layout_toRightOf="@+id/ivGender"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivGender"
                         android:text="Gender" />
 
                     <ImageView
@@ -127,21 +126,21 @@
                         android:id="@+id/tvGenderPref"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/ivGender"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivGenderPref"
                         android:text="Female"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvGenderPrefLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvGenderPref"
-                        android:layout_toRightOf="@+id/ivGenderPref"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivGenderPref"
                         android:text="Gender Preference" />
 
                     <ImageView
@@ -159,33 +158,33 @@
                         android:id="@+id/tvSmoking"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/ivGenderPref"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivSmoking"
                         android:text="Non-smoker, smoking not OK"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvSmokingLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvSmoking"
-                        android:layout_toRightOf="@+id/ivSmoking"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivSmoking"
                         android:text="Smoking Habits" />
 
                     <View
                         android:id="@+id/separator"
-                        android:background="#7F000000"
-                        android:layout_width = "match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_below="@id/tvSmokingLabel"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/tvSmokingLabel"/>
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
 
                 </RelativeLayout>
 
@@ -193,17 +192,17 @@
                     android:id="@+id/layoutGeneralInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/layoutBasicInfo"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/layoutBasicInfo">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tvGeneralInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="General"
-                        android:textStyle="bold"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/ivWeekday"
@@ -220,21 +219,21 @@
                         android:id="@+id/tvWeekday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/tvGeneralInfo"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivWeekday"
                         android:text="Quiet, study space"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvWeekdayLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvWeekday"
-                        android:layout_toRightOf="@+id/ivWeekday"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivWeekday"
                         android:text="Weekday House Preference" />
 
                     <ImageView
@@ -252,21 +251,21 @@
                         android:id="@+id/tvWeekend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/ivWeekday"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivWeekend"
                         android:text="Party place"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvWeekendLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvWeekend"
-                        android:layout_toRightOf="@+id/ivWeekend"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivWeekend"
                         android:text="Weekend House Preference" />
 
                     <ImageView
@@ -284,33 +283,33 @@
                         android:id="@+id/tvGuests"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/ivWeekend"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivGuests"
                         android:text="Occasional"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvGuestsLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvGuests"
-                        android:layout_toRightOf="@+id/ivGuests"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivGuests"
                         android:text="Guests" />
 
                     <View
                         android:id="@+id/separatorGeneral"
-                        android:background="#7F000000"
-                        android:layout_width = "match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_below="@id/tvGuestsLabel"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/tvGuestsLabel"/>
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
 
                 </RelativeLayout>
 
@@ -318,48 +317,48 @@
                     android:id="@+id/layoutPreferences"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/layoutGeneralInfo"
                     android:layout_marginStart="8dp"
-                    android:layout_below="@id/layoutGeneralInfo">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tvPreferences"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Preferences"
-                        android:textStyle="bold"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <ImageView
-                    android:id="@+id/ivClean"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_below="@id/tvPreferences"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/circle_border"
-                    android:padding="4dp"
-                    app:srcCompat="@drawable/ic_baseline_bubble_chart_24" />
+                        android:id="@+id/ivClean"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/tvPreferences"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/circle_border"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/ic_baseline_bubble_chart_24" />
 
                     <TextView
                         android:id="@+id/tvClean"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/tvPreferences"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivClean"
                         android:text="Fairly clean"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvCleanLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvClean"
-                        android:layout_toRightOf="@+id/ivClean"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivClean"
                         android:text="Cleanliness" />
 
                     <ImageView
@@ -377,33 +376,171 @@
                         android:id="@+id/tvTemp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_below="@id/ivClean"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:layout_toRightOf="@+id/ivTemp"
                         android:text="Fairly cold"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvTempLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tvTemp"
-                        android:layout_toRightOf="@+id/ivTemp"
                         android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/ivTemp"
                         android:text="Temperature" />
 
                     <View
                         android:id="@+id/separatorPreferences"
-                        android:background="#7F000000"
-                        android:layout_width = "match_parent"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_below="@id/tvTempLabel"
                         android:layout_centerHorizontal="true"
-                        android:layout_below="@id/tvTempLabel"/>
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutActivities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutPreferences"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tvActivities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="On-Campus Activities"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupActivities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvActivities"
+                        android:layout_marginStart="10dp"
+                        app:chipSpacingVertical="-10dp"/>
+
+                    <View
+                        android:id="@+id/separatorActivities"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/chipGroupActivities"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutHobbies"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutActivities"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tvHobbies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hobbies"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupHobbies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvHobbies"
+                        android:layout_marginStart="10dp"
+                        app:chipSpacingVertical="-10dp"/>
+
+                    <View
+                        android:id="@+id/separatorHobbies"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/chipGroupHobbies"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutEntertainment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutHobbies"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/tvEntertainment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Entertainment"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupEntertainment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvEntertainment"
+                        android:layout_marginStart="10dp"
+                        app:chipSpacingVertical="-10dp"/>
+
+                    <View
+                        android:id="@+id/separatorEntertainment"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/chipGroupEntertainment"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="#7F000000" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutMusic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutEntertainment"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/tvMusic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Music"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupMusic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvMusic"
+                        android:layout_marginStart="10dp"
+                        app:chipSpacingVertical="-10dp"/>
 
                 </RelativeLayout>
 
