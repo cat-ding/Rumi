@@ -29,6 +29,20 @@ import java.util.List;
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> {
 
     public static final String TAG = "MatchAdapter";
+
+    public static final String GENDER_SELF_IDENTIFY = "I identify as: ";
+    public static final String GENDER_NO_ANSWER = "I identify as: No answer";
+    public static final String GENDER_FEMALE = "I identify as: Female";
+    public static final String GENDER_MALE = "I identify as: Male";
+
+    public static final String GENDER_PREF_NONE = "Gender preference: No preference";
+    public static final String GENDER_PREF_FEMALE = "Gender preference: Female";
+    public static final String GENDER_PREF_MALE = "Gender preference: Male";
+
+    public static final String SMOKING_NON_SMOKER_NOT_OKAY = "Smoking: Non-smoking, not okay with smokers";
+    public static final String SMOKING_NON_SMOKER_OKAY = "Smoking: Non-smoking, okay with smokers";
+    public static final String SMOKING_SMOKER = "Smoking: Smoker";
+
     private Context context;
     private List<SurveyResponse> responses;
     private Fragment fragment;
@@ -133,29 +147,29 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             String smoking = response.getSmoking();
 
             if (gender.equals(MatchConstants.Gender.SELF_IDENTIFY.toString())) {
-                tvGenderIdentity.setText("I identify as: " + response.getSelfIdentifyGender());
+                tvGenderIdentity.setText(GENDER_SELF_IDENTIFY + response.getSelfIdentifyGender());
             } else if (gender.equals(MatchConstants.Gender.NO_ANSWER.toString())){
-                tvGenderIdentity.setText("I identify as: No answer");
+                tvGenderIdentity.setText(GENDER_NO_ANSWER);
             } else if (gender.equals(MatchConstants.Gender.FEMALE.toString())) {
-                tvGenderIdentity.setText("I identify as: Female");
+                tvGenderIdentity.setText(GENDER_FEMALE);
             } else if (gender.equals(MatchConstants.Gender.MALE.toString())) {
-                tvGenderIdentity.setText("I identify as: Male");
+                tvGenderIdentity.setText(GENDER_MALE);
             }
 
             if (genderPref.equals(MatchConstants.GenderPref.NO_PREFERENCE.toString())) {
-                tvGenderPreference.setText("Gender preference: No preference");
+                tvGenderPreference.setText(GENDER_PREF_NONE);
             } else if (genderPref.equals(MatchConstants.GenderPref.FEMALE.toString())) {
-                tvGenderPreference.setText("Gender preference: Female");
+                tvGenderPreference.setText(GENDER_PREF_FEMALE);
             } else if (genderPref.equals(MatchConstants.GenderPref.MALE.toString())) {
-                tvGenderPreference.setText("Gender preference: Male");
+                tvGenderPreference.setText(GENDER_PREF_MALE);
             }
 
             if (smoking.equals(MatchConstants.Smoke.NON_SMOKER_NO.toString())) {
-                tvSmokingPreference.setText("Smoking: Non-smoking, not okay with smokers");
+                tvSmokingPreference.setText(SMOKING_NON_SMOKER_NOT_OKAY);
             } else if (smoking.equals(MatchConstants.Smoke.NON_SMOKER_YES.toString())) {
-                tvSmokingPreference.setText("Smoking: Non-smoking, okay with smokers");
+                tvSmokingPreference.setText(SMOKING_NON_SMOKER_OKAY);
             } else if (smoking.equals(MatchConstants.Smoke.SMOKER.toString())) {
-                tvSmokingPreference.setText("Smoking: Smoker");
+                tvSmokingPreference.setText(SMOKING_SMOKER);
             }
         }
 
