@@ -86,6 +86,8 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
             tvGenderIdentity = itemView.findViewById(R.id.tvGenderIdentity);
             tvGenderPreference = itemView.findViewById(R.id.tvGenderPreference);
             tvSmokingPreference = itemView.findViewById(R.id.tvSmokingPreference);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bind(final SurveyResponse response) {
