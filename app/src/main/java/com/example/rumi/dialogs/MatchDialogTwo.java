@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ public class MatchDialogTwo extends DialogFragment {
 
     private CheckBox checkVisibility;
     private boolean preferencesVisible;
+
+    private ImageView ivInfo;
 
     public interface PageTwoListener {
         void sendPageTwoInputs(int nextPage, MatchConstants.Clean cleanPref,
@@ -91,6 +94,21 @@ public class MatchDialogTwo extends DialogFragment {
         radioFairlyWarm = view.findViewById(R.id.radioFairlyWarm);
         radioWarm = view.findViewById(R.id.radioWarm);
         checkVisibility = view.findViewById(R.id.checkVisibility);
+        ivInfo = view.findViewById(R.id.ivInfo);
+
+        ivInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getContext())
+                        .setIcon(R.drawable.ic_baseline_info_24)
+                        .setTitle("Privacy Information")
+                        .setMessage("Checking this box will display these responses to other users " +
+                                "that have filled out the survey to look for a suitable roommate. " +
+                                "\n\nThis can help others better understand your preferences and help " +
+                                "you find the most compatible match.")
+                        .setPositiveButton("Done", null).show();
+            }
+        });
 
         checkVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -9,5 +9,5 @@
         android:top="4dp"
         android:bottom="4dp"/>
     <solid
-        android:color="@color/colorLight"/>
+        android:color="@color/colorMedium"/>
 </shape>

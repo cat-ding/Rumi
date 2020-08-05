@@ -26,7 +26,8 @@
         android:layout_toRightOf="@id/ivProfileImage"
         android:textSize="16sp"
         android:textStyle="bold"
-        tools:text="Catherine Ding" />
+        tools:text="Catherine Ding"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvCompatibilityScore"
@@ -37,7 +38,8 @@
         android:layout_marginEnd="8dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        tools:text="50% match" />
+        tools:text="50% match"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvMajorYear"
@@ -46,7 +48,8 @@
         android:layout_marginStart="8dp"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivProfileImage"
-        tools:text="Computer Science, Class of 2022" />
+        tools:text="Computer Science, Class of 2022"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvDescription"
@@ -55,7 +58,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:layout_below="@id/ivProfileImage"
-        tools:text="This is my description!!" />
+        tools:text="This is my description!!"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvGenderIdentity"
@@ -65,7 +69,8 @@
         android:layout_marginTop="4dp"
         android:layout_below="@id/tvDescription"
         android:textStyle="bold"
-        tools:text="I identify as: Female" />
+        tools:text="I identify as: Female"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvGenderPreference"
@@ -74,7 +79,8 @@
         android:layout_below="@id/tvGenderIdentity"
         android:layout_marginStart="10dp"
         android:textStyle="bold"
-        tools:text="Gender preference: Female" />
+        tools:text="Gender preference: Female"
+        android:textColor="@color/quantum_grey900"/>
 
     <TextView
         android:id="@+id/tvSmokingPreference"
@@ -83,6 +89,7 @@
         android:layout_marginStart="10dp"
         android:textStyle="bold"
         android:layout_below="@id/tvGenderPreference"
-        tools:text="Smoking: No smoking in house"/>
+        tools:text="Smoking: No smoking in house"
+        android:textColor="@color/quantum_grey900"/>
 
 </RelativeLayout>

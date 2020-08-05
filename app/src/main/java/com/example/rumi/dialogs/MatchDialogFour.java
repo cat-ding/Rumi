@@ -41,7 +41,7 @@ public class MatchDialogFour extends DialogFragment {
     private EditText etEntertainment;
 
     private EditText etMusic;
-    private ImageView ivAddMusic;
+    private ImageView ivAddMusic, ivInfoEntertainment, ivInfoMusic;
 
     private ArrayList<String> entertainment = new ArrayList<>();
     private ArrayList<String> music = new ArrayList<>();
@@ -101,6 +101,22 @@ public class MatchDialogFour extends DialogFragment {
         ivAddMusic = view.findViewById(R.id.ivAddMusic);
         checkEntertainmentVisibility = view.findViewById(R.id.checkEntertainmentVisibility);
         checkMusicVisibility = view.findViewById(R.id.checkMusicVisibility);
+        ivInfoEntertainment = view.findViewById(R.id.ivInfoEntertainment);
+        ivInfoMusic = view.findViewById(R.id.ivInfoMusic);
+
+        ivInfoEntertainment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openInfoDialog();
+            }
+        });
+
+        ivInfoMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openInfoDialog();
+            }
+        });
 
         checkEntertainmentVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -149,6 +165,17 @@ public class MatchDialogFour extends DialogFragment {
                 etMusic.getText().clear();
             }
         });
+    }
+
+    private void openInfoDialog() {
+        new AlertDialog.Builder(getContext())
+                .setIcon(R.drawable.ic_baseline_info_24)
+                .setTitle("Privacy Information")
+                .setMessage("Checking this box will display these responses to other users " +
+                        "that have filled out the survey to look for a suitable roommate. " +
+                        "\n\nThis can help others better understand your preferences and help " +
+                        "you find the most compatible match.")
+                .setPositiveButton("Done", null).show();
     }
 
     private void addEntertainmentChip(final String toAdd) {

@@ -43,22 +43,37 @@
         android:layout_below="@+id/chipGroupActivities"
         android:text="Add" />
 
-    <CheckBox
-        android:id="@+id/checkActivityVisibility"
-        android:layout_below="@id/etActivity"
+    <RelativeLayout
+        android:id="@+id/layoutCheck"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:checked="true"
-        android:text="Share this response with other users"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etActivity"
+        android:layout_marginStart="10dp">
+
+        <CheckBox
+            android:id="@+id/checkActivityVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:checked="true"
+            android:text="Share this response with other users"/>
+
+        <ImageView
+            android:id="@+id/ivInfoActivity"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/checkActivityVisibility"
+            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvHobbies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="What are some of your hobbies? (i.e. fashion, travel, etc.)"
-        android:layout_below="@+id/checkActivityVisibility"
+        android:layout_below="@+id/layoutCheck"
         android:textColor="@color/quantum_black_100"
         android:layout_marginStart="10dp"/>
 
@@ -92,15 +107,30 @@
         android:layout_below="@+id/chipGroupHobbies"
         android:text="Add"/>
 
-    <CheckBox
-        android:id="@+id/checkHobbyVisibility"
-        android:layout_below="@id/etHobby"
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:checked="true"
-        android:text="Share this response with other users"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etHobby"
+        android:layout_marginStart="10dp">
+
+        <CheckBox
+            android:id="@+id/checkHobbyVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:checked="true"
+            android:text="Share this response with other users"/>
+
+        <ImageView
+            android:id="@+id/ivInfoHobby"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/checkHobbyVisibility"
+            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

@@ -99,7 +99,7 @@
             android:id="@+id/rvPosts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/quantum_deeppurple300"/>
+            android:background="@color/quantum_white_100"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

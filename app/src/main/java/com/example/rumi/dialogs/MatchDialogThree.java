@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,8 @@ public class MatchDialogThree extends DialogFragment {
     private ArrayList<String> activities = new ArrayList<>(), hobbies = new ArrayList<>();
     private CheckBox checkActivityVisibility, checkHobbyVisibility;
     private boolean activityVisible = true, hobbyVisible = true;
+
+    private ImageView ivInfoActivity, ivInfoHobby;
 
     public interface PageThreeListener {
         void sendPageThreeInputs(int nextPage, ArrayList<String> activities, ArrayList<String> hobbies,
@@ -91,6 +94,22 @@ public class MatchDialogThree extends DialogFragment {
         etHobby = view.findViewById(R.id.etHobby);
         checkActivityVisibility = view.findViewById(R.id.checkActivityVisibility);
         checkHobbyVisibility = view.findViewById(R.id.checkHobbyVisibility);
+        ivInfoActivity = view.findViewById(R.id.ivInfoActivity);
+        ivInfoHobby = view.findViewById(R.id.ivInfoHobby);
+
+        ivInfoActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openInfoDialog();
+            }
+        });
+
+        ivInfoHobby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openInfoDialog();
+            }
+        });
 
         checkActivityVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -137,6 +156,17 @@ public class MatchDialogThree extends DialogFragment {
                 etHobby.getText().clear();
             }
         });
+    }
+
+    private void openInfoDialog() {
+        new AlertDialog.Builder(getContext())
+                .setIcon(R.drawable.ic_baseline_info_24)
+                .setTitle("Privacy Information")
+                .setMessage("Checking this box will display these responses to other users " +
+                        "that have filled out the survey to look for a suitable roommate. " +
+                        "\n\nThis can help others better understand your preferences and help " +
+                        "you find the most compatible match.")
+                .setPositiveButton("Done", null).show();
     }
 
     private void addHobbyChip(final String toAdd) {

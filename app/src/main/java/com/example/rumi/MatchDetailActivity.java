@@ -149,28 +149,28 @@ public class MatchDetailActivity extends AppCompatActivity {
             layoutPreferences.setVisibility(View.GONE);
         }
 
-        if (response.isActivityVisible()) {
+        if (response.isActivityVisible() && !response.getActivities().isEmpty()) {
             layoutActivities.setVisibility(View.VISIBLE);
             addChips(response.getActivities(), chipGroupActivities);
         } else {
             layoutActivities.setVisibility(View.GONE);
         }
 
-        if (response.isHobbyVisible()) {
+        if (response.isHobbyVisible() && !response.getHobbies().isEmpty()) {
             layoutHobbies.setVisibility(View.VISIBLE);
             addChips(response.getHobbies(), chipGroupHobbies);
         } else {
             layoutHobbies.setVisibility(View.GONE);
         }
 
-        if (response.isEntertainmentVisible()) {
+        if (response.isEntertainmentVisible() && !response.getEntertainment().isEmpty()) {
             layoutEntertainment.setVisibility(View.VISIBLE);
             addChips(response.getEntertainment(), chipGroupEntertainment);
         } else {
             layoutEntertainment.setVisibility(View.GONE);
         }
 
-        if (response.isMusicVisible()) {
+        if (response.isMusicVisible() && !response.getMusic().isEmpty()) {
             layoutMusic.setVisibility(View.VISIBLE);
             addChips(response.getMusic(), chipGroupMusic);
         } else {
@@ -185,7 +185,7 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         if (gender.equals(MatchConstants.Gender.SELF_IDENTIFY.toString())) {
             tvGender.setText(response.getSelfIdentifyGender());
-        } else if (gender.equals(MatchConstants.Gender.NO_ANSWER.toString())){
+        } else if (gender.equals(MatchConstants.Gender.NO_ANSWER.toString())) {
             tvGender.setText(GENDER_NO_ANSWER);
         } else if (gender.equals(MatchConstants.Gender.FEMALE.toString())) {
             tvGender.setText(GENDER_FEMALE);
@@ -281,6 +281,7 @@ public class MatchDetailActivity extends AppCompatActivity {
         for (String item : list) {
             Chip chip = (Chip) inflater.inflate(R.layout.item_chip, null, false);
             chip.setText(item);
+            chip.setClickable(false);
             chip.setCheckable(false);
             chip.setCloseIcon(null);
             chipGroup.addView(chip);

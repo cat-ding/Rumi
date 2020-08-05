@@ -43,22 +43,37 @@
         android:layout_below="@+id/chipGroupEntertainment"
         android:text="Add"/>
 
-    <CheckBox
-        android:id="@+id/checkEntertainmentVisibility"
-        android:layout_below="@id/etEntertainment"
+    <RelativeLayout
+        android:id="@+id/layoutEntertainment"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:checked="true"
-        android:text="Share this response with other users"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etEntertainment"
+        android:layout_marginStart="10dp">
+
+        <CheckBox
+            android:id="@+id/checkEntertainmentVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:checked="true"
+            android:text="Share this response with other users"/>
+
+        <ImageView
+            android:id="@+id/ivInfoEntertainment"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/checkEntertainmentVisibility"
+            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvMusic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_below="@id/checkEntertainmentVisibility"
+        android:layout_below="@id/layoutEntertainment"
         android:text="Select your musical preferences:"
         android:textColor="@color/quantum_black_100"/>
 
@@ -93,13 +108,28 @@
 
     </com.google.android.material.chip.ChipGroup>
 
-    <CheckBox
-        android:id="@+id/checkMusicVisibility"
-        android:layout_below="@id/chipGroupMusic"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:checked="true"
-        android:text="Share this response with other users"/>
+        android:layout_below="@id/chipGroupMusic">
+
+        <CheckBox
+            android:id="@+id/checkMusicVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:checked="true"
+            android:text="Share this response with other users"/>
+
+        <ImageView
+            android:id="@+id/ivInfoMusic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/checkMusicVisibility"
+            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

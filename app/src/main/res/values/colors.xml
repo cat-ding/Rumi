@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">@color/quantum_deeppurple900</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorLight">#F5F5F8</color>
+    <color name="colorMedium">#D8D1E6</color>
 </resources>
