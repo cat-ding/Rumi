@@ -9,6 +9,9 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -20,12 +23,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.rumi.ComposeActivity;
+import com.example.rumi.LikesActivity;
 import com.example.rumi.LoginActivity;
 import com.example.rumi.adapters.PostsAdapter;
 import com.example.rumi.dialogs.MatchDialogSix;
@@ -70,6 +76,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
     private static final int CAPTURE_IMAGE_CODE = 35;
     public static final int LIKE_POST_REQUEST = 25;
     public static final int MESSAGE_REQUEST_CODE = 99;
+    public static final int LIKES_REQUEST = 111;
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage, btnChangeProfileImage;
@@ -79,6 +86,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
     private PostsAdapter adapter;
     private List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -99,6 +107,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -106,6 +115,9 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        toolbar = (androidx.appcompat.widget.Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         btnLogout = view.findViewById(R.id.btnLogout);
         btnChangeProfileImage = view.findViewById(R.id.btnChangeProfileImage);
@@ -170,6 +182,21 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
 
         getUserInfo();
         loadPosts();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_likes, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent = new Intent(getContext(), LikesActivity.class);
+        startActivityForResult(intent, LIKES_REQUEST);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void getUserInfo() {

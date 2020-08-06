@@ -12,6 +12,14 @@
         android:id="@+id/toolbar_compose"
         layout="@layout/toolbar_compose" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar_compose"
+        android:visibility="gone"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

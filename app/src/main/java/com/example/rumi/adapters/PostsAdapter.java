@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.CommentsActivity;
+import com.example.rumi.LikesActivity;
 import com.example.rumi.MainActivity;
 import com.example.rumi.models.Post;
 import com.example.rumi.PostDetailActivity;
@@ -142,7 +143,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             Post post = posts.get(position);
                             Intent intent = new Intent(context, PostDetailActivity.class);
                             intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                            fragment.startActivityForResult(intent, REQUEST_CODE);
+                            if (fragment != null)
+                                fragment.startActivityForResult(intent, REQUEST_CODE);
+                            else
+                                ((LikesActivity) context).startActivityForResult(intent, REQUEST_CODE);
                             ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         }
                         return super.onSingleTapConfirmed(e);

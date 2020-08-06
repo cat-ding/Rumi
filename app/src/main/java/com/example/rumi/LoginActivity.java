@@ -103,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
                             layoutEmail.setError("Email may be incorrect");
                             layoutPassword.setError("Password may be incorrect");
                         } else {
-                            Toast.makeText(LoginActivity.this, "Login success!", Toast.LENGTH_SHORT).show();
                             goMainActivity();
                         }
                     }

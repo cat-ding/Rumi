@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -72,6 +73,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
     private AutocompleteSupportFragment autocompleteFragment;
     private RelativeLayout relativeLayoutAutocomplete;
     private SeekBar seekBarNumRooms;
+    private ProgressBar progressBar;
 
     private String title, description, startMonth, startDate, endDate;
     private String photoUrl = "", name = "", address = "";
@@ -101,6 +103,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         relativeLayoutAutocomplete = findViewById(R.id.relativeLayoutAutocomplete);
         tvTextNumRooms = findViewById(R.id.tvTextNumRooms);
         seekBarNumRooms = findViewById(R.id.seekBarNumRooms);
+        progressBar = findViewById(R.id.progressBar);
 
         seekBarNumRooms.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -181,6 +184,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
 
     // onClick method for post button - uploads new post to database
     public void makePost(View view) {
+        progressBar.setVisibility(View.VISIBLE);
         title = layoutTitle.getEditText().getText().toString();
         description = layoutDescription.getEditText().getText().toString();
 
@@ -230,7 +234,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         postRef.add(post).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(ComposeActivity.this, "Post created!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
                 post.setPostId(documentReference.getId());
                 Intent intent = new Intent();
                 intent.putExtra("newPost", Parcels.wrap(post));
