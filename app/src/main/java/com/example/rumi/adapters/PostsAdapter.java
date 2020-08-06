@@ -143,11 +143,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             Post post = posts.get(position);
                             Intent intent = new Intent(context, PostDetailActivity.class);
                             intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
-                            if (fragment != null)
+                            if (fragment != null) {
                                 fragment.startActivityForResult(intent, REQUEST_CODE);
-                            else
+                                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
+                            else {
                                 ((LikesActivity) context).startActivityForResult(intent, REQUEST_CODE);
-                            ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                ((LikesActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                            }
                         }
                         return super.onSingleTapConfirmed(e);
                     }
@@ -274,9 +277,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         private void openProfileFragment(String userId) {
-            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
-            Fragment fragment = new ProfileFragment(userId);
-            fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
+            FragmentManager fragmentManager;
+            if (fragment != null) {
+                fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+            } else {
+                fragmentManager = ((LikesActivity)context).getSupportFragmentManager();
+            }
+            Fragment newFragment = new ProfileFragment(userId);
+            fragmentManager.beginTransaction().replace(R.id.flContainer, newFragment).addToBackStack(null).commit();
         }
 
         private void bindUserFields(Post post) {
