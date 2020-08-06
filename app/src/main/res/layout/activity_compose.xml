@@ -333,8 +333,8 @@
 
                 <ImageView
                     android:id="@+id/ivImagePreview"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:layout_below="@id/tvTakePicture"
                     android:layout_marginTop="10dp"
                     android:layout_centerHorizontal="true"

@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,8 +38,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -47,6 +51,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     public static final String TAG = "MapFragment";
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     public static final float ZOOM_LEVEL = 15;
+    public static final int POSTS_BOTTOM_SHEET_REQUEST_CODE = 11111;
 
     private final static String KEY_LOCATION = "location";
 
@@ -54,6 +59,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap googleMap;
     private AutocompleteSupportFragment autocompleteFragment;
     private RelativeLayout relativeLayoutAutocomplete;
+
+    private Map<Marker, Post> markerPost = new HashMap<>();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
@@ -159,22 +166,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     Post post = documentSnapshot.toObject(Post.class);
                     if (post.getLatitude() != 0 && post.getLongitude() != 0) {
                         LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
-                        googleMap.addMarker(new MarkerOptions()
+
+                        MarkerOptions marker = new MarkerOptions()
                                 .position(location)
-                                .title(post.getName()));
+                                .title(post.getName());
+                        Marker theMarker = googleMap.addMarker(marker);
+
+                        Log.d(TAG, "onSuccess: " + post.getName());
+                        markerPost.put(theMarker, post);
                     }
                 }
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        Log.d(TAG, "onMarkerClick: " + markerPost.get(marker).getName());
+                        PostBottomSheetDialog postDialog =
+                                PostBottomSheetDialog.newInstance(markerPost.get(marker)); // make this specific
+                        postDialog.setTargetFragment(MapFragment.this, POSTS_BOTTOM_SHEET_REQUEST_CODE);
+                        postDialog.show(getFragmentManager(), "PostBottomSheetDialog");
+
+                        return true;
+                    }
+                });
 
             }
         });
-        // TODO: use later for camera zooms
-        // googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
     }
 
     @Override

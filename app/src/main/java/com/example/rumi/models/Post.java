@@ -6,6 +6,7 @@ import com.google.firebase.firestore.Exclude;
 
 import org.parceler.Parcel;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,7 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Parcel
-public class Post {
+public class Post implements Serializable {
 
     public static final String KEY_POSTS = "posts";
     public static final String KEY_NAME = "name";

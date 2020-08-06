@@ -27,6 +27,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.models.Post;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -64,6 +66,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
     private static final float DAYS_IN_MONTH = 30;
     private static final int CAPTURE_IMAGE_CODE = 10;
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
+    public static final int RADIUS = 30;
     private TextInputLayout layoutTitle, layoutDescription;
     private EditText etRent, etNumRooms;
     private RadioGroup radioGroupOne, radioGroupFurnished;
@@ -301,8 +304,6 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         if (requestCode == CAPTURE_IMAGE_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                ivImagePreview.setImageBitmap(bitmap);
-                ivImagePreview.setVisibility(View.VISIBLE);
                 handleUpload(bitmap);
             } else {
                 Toast.makeText(ComposeActivity.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -341,6 +342,8 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
                     @Override
                     public void onSuccess(Uri uri) {
                         photoUrl = uri.toString();
+                        Glide.with(ComposeActivity.this).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
+                        ivImagePreview.setVisibility(View.VISIBLE);
                     }
                 });
     }
