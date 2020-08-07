@@ -139,6 +139,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             return;
         }
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
         googleMap = map;
 
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());

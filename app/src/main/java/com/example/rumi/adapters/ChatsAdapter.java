@@ -82,7 +82,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivProfileImage, ivUnread;
-        TextView tvUserName, tvLastMessage;
+        TextView tvUserName, tvLastMessage, tvRelativeTime;
         String otherName, otherProfileImage;
 
         public ViewHolder(@NonNull View itemView) {
@@ -91,6 +91,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvLastMessage = itemView.findViewById(R.id.tvLastMessage);
+            tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
             ivUnread = itemView.findViewById(R.id.ivUnread);
 
             itemView.setOnClickListener(this);
@@ -116,6 +117,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
             }
 
             tvLastMessage.setText(chat.getLastMessage());
+            tvRelativeTime.setText(" \u2022 " + chat.getRelativeTime());
         }
 
         private void getUserInfo(String userId) {

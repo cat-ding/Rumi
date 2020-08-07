@@ -159,6 +159,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toRightOf="@+id/ivAddress"
                             android:text="1 Hacker Way, Menlo Park, CA"
                             android:textSize="18sp"
@@ -199,6 +200,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toRightOf="@+id/ivNumRooms"
                             android:text="5"
                             android:textSize="18sp"
@@ -211,7 +213,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_below="@+id/tvNumRooms"
                             android:layout_toRightOf="@+id/ivNumRooms"
-                            android:text="Number of rooms" />
+                            android:text="Room(s)" />
 
                     </RelativeLayout>
 
@@ -239,6 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toRightOf="@+id/ivRent"
                             android:text="$900"
                             android:textSize="18sp"
@@ -279,6 +282,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="2dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_toRightOf="@+id/ivDuration"
                             android:text="9/1/20 to 1/1/21"
                             android:textSize="18sp"

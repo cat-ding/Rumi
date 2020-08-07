@@ -285,7 +285,8 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
                     tvUserName.setText(task.getResult().getString(User.KEY_NAME));
                     tvMajorYear.setText(task.getResult().getString(User.KEY_MAJOR) + ", "
                             + task.getResult().getString(User.KEY_YEAR));
-                    if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+                    if (task.getResult().getString(User.KEY_PROFILE_URL) != null
+                            && !task.getResult().getString(User.KEY_PROFILE_URL).isEmpty()) {
                         Glide.with(getContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                     }
                 } else {
