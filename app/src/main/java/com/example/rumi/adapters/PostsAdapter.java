@@ -48,6 +48,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     public static final String TAG = "PostsAdapter";
     private static final int REQUEST_CODE = 25;
+    public static final int COMMENTS_REQUEST_CODE = 88;
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     public static final int RADIUS = 30;
@@ -205,7 +206,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     Intent intent = new Intent(context, CommentsActivity.class);
                     intent.putExtra(Post.KEY_POPULARITY, post.getPopularity());
                     intent.putExtra(Post.KEY_POST_ID, post.getPostId());
-                    fragment.startActivity(intent);
+                    fragment.startActivityForResult(intent, COMMENTS_REQUEST_CODE);
                 }
             });
 

@@ -1,6 +1,7 @@
 package com.example.rumi;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 public class PostDetailActivity extends AppCompatActivity {
 
     public static final String TAG = "PostDetailActivity";
+    public static final int COMMENTS_REQUEST_CODE = 88;
     private static final String LOOKING_FOR_HOUSE_STRING = "Looking for: ";
     private static final String LOOKING_FOR_PERSON_STRING = "Offering: ";
     public static final int RADIUS = 30;
@@ -258,7 +260,17 @@ public class PostDetailActivity extends AppCompatActivity {
     public void goToComments(View view) {
         Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
         intent.putExtra(Post.KEY_POST_ID, post.getPostId());
-        startActivity(intent);
+        startActivityForResult(intent, COMMENTS_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == COMMENTS_REQUEST_CODE) {
+            int updatedPopularity = data.getIntExtra("updatedPopularity", 0);
+            post.setPopularity(updatedPopularity);
+            postPopularity = updatedPopularity;
+        }
     }
 
     @Override

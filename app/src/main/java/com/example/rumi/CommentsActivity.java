@@ -66,7 +66,8 @@ public class CommentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
-        postId = getIntent().getStringExtra(Post.KEY_POST_ID);;
+        postId = getIntent().getStringExtra(Post.KEY_POST_ID);
+        ;
         postPopularity = getIntent().getIntExtra(Post.KEY_POPULARITY, 0);
 
         rvComments = findViewById(R.id.rvComments);
@@ -112,7 +113,7 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void postComment(String body) {
-        postPopularity++;
+        postPopularity += 5;
         final Comment comment = new Comment(postId, firebaseAuth.getCurrentUser().getUid(), body);
         commentsRef.add(comment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
@@ -129,5 +130,14 @@ public class CommentsActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure: unable to update popularity", e.getCause());
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("postId", postId);
+        intent.putExtra("updatedPopularity", postPopularity);
+        setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

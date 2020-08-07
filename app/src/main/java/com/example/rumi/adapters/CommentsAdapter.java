@@ -147,7 +147,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 commentsRef.document(commentToDelete.getCommentId()).delete();
-                                CommentsActivity.postPopularity--;
+                                CommentsActivity.postPopularity-=5;
                                 postsRef.document(commentToDelete.getPostId()).update(Post.KEY_POPULARITY,
                                         CommentsActivity.postPopularity).addOnFailureListener(new OnFailureListener() {
                                     @Override
