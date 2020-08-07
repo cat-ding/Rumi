@@ -25,16 +25,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.fragments.ProfileFragment;
+import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.parceler.Parcels;
 
@@ -49,7 +52,7 @@ public class PostDetailActivity extends AppCompatActivity {
     public static final int RADIUS = 30;
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
-                    tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes;
+                    tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes, tvNumComments;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike, ivHeartAnim;
     private ArrayList<String> likeList;
     private int numLikes, postPopularity;
@@ -57,6 +60,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+    private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
 
     private RelativeLayout layoutAddress;
     private RelativeLayout relativeLayout;
@@ -87,6 +91,7 @@ public class PostDetailActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
         tvNumLikes = findViewById(R.id.tvNumLikes);
+        tvNumComments = findViewById(R.id.tvNumComments);
         layoutAddress = findViewById(R.id.layoutAddress);
         relativeLayout = findViewById(R.id.relativeLayout);
 
@@ -182,6 +187,15 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void setFields() {
+
+        commentsRef.whereEqualTo(Comment.KEY_POST_ID, post.getPostId()).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        updateNumComments(queryDocumentSnapshots.size());
+                    }
+                });
+
         tvTitle.setText(post.getTitle());
         tvDescription.setText(post.getDescription());
         tvRelativeTime.setText(post.getRelativeTime());
@@ -256,6 +270,14 @@ public class PostDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void updateNumComments(int numComments) {
+        if (numComments == 1) {
+            tvNumComments.setText(numComments + " comment");
+        } else {
+            tvNumComments.setText(numComments + " comments");
+        }
+    }
+
     // onClick method for the comment icon (ivComment)
     public void goToComments(View view) {
         Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
@@ -268,8 +290,10 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == COMMENTS_REQUEST_CODE) {
             int updatedPopularity = data.getIntExtra("updatedPopularity", 0);
+            int updatedNumComments = data.getIntExtra("updatedNumComments", 0);
             post.setPopularity(updatedPopularity);
             postPopularity = updatedPopularity;
+            updateNumComments(updatedNumComments);
         }
     }
 

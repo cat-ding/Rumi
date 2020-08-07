@@ -12,6 +12,7 @@ import java.util.Locale;
 public class Comment {
 
     public static final String KEY_COMMENTS = "comments";
+    public static final String KEY_POST_ID = "postId";
     public static final String dateFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
     public String postId, userId, body;

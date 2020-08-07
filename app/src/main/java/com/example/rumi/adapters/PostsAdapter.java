@@ -24,6 +24,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.rumi.CommentsActivity;
 import com.example.rumi.LikesActivity;
 import com.example.rumi.MainActivity;
+import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
 import com.example.rumi.PostDetailActivity;
 import com.example.rumi.R;
@@ -32,12 +33,14 @@ import com.example.rumi.fragments.PostsFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.parceler.Parcels;
 
@@ -59,6 +62,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+    private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
 
     public PostsAdapter(Context context, List<Post> posts, Fragment fragment) {
         this.context = context;
@@ -98,7 +102,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues, tvNumLikes;
+        private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues,
+                tvNumLikes, tvNumComments;
         private ImageView ivProfileImage, ivImage, ivLike, ivComment, ivHeartAnim;
         private ArrayList<String> likeList;
         private int numLikes;
@@ -118,6 +123,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivLike = itemView.findViewById(R.id.ivLike);
             ivComment = itemView.findViewById(R.id.ivComment);
             tvNumLikes = itemView.findViewById(R.id.tvNumLikes);
+            tvNumComments = itemView.findViewById(R.id.tvNumComments);
             ivHeartAnim = itemView.findViewById(R.id.ivHeartAnim);
 
             final Drawable drawable = ivHeartAnim.getDrawable();
@@ -166,6 +172,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
         public void bind(final Post post) {
+
+            commentsRef.whereEqualTo(Comment.KEY_POST_ID, post.getPostId()).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            int numComments = queryDocumentSnapshots.size();
+                            if (numComments == 1) {
+                                tvNumComments.setText(numComments + " comment");
+                            } else {
+                                tvNumComments.setText(numComments + " comments");
+                            }
+                        }
+                    });
 
             likeList = post.getLikes();
             numLikes = post.getLikes().size();

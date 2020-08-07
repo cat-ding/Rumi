@@ -348,6 +348,16 @@
                         android:layout_marginStart="12dp"
                         app:srcCompat="@drawable/ic_baseline_comment_24"
                         android:onClick="goToComments"/>
+
+                    <TextView
+                        android:id="@+id/tvNumComments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_toRightOf="@id/ivComment"
+                        android:textStyle="bold"
+                        tools:text="2 comments" />
                 </RelativeLayout>
 
                 <ImageView

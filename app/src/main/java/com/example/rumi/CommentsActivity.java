@@ -48,6 +48,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     public static final String TAG = "CommentsActivity";
     public static int postPopularity;
+
     private String postId;
     private RecyclerView rvComments;
     private CommentsAdapter adapter;
@@ -97,7 +98,7 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void queryComments() {
-        commentsRef.whereEqualTo(Post.KEY_POST_ID, postId).orderBy(Post.KEY_CREATED_AT, Query.Direction.ASCENDING).get()
+        commentsRef.whereEqualTo(Comment.KEY_POST_ID, postId).orderBy(Post.KEY_CREATED_AT, Query.Direction.ASCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -137,6 +138,7 @@ public class CommentsActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra("postId", postId);
         intent.putExtra("updatedPopularity", postPopularity);
+        intent.putExtra("updatedNumComments", allComments.size());
         setResult(RESULT_OK, intent);
         super.onBackPressed();
     }
