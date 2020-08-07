@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap googleMap;
     private AutocompleteSupportFragment autocompleteFragment;
     private RelativeLayout relativeLayoutAutocomplete;
+    private FrameLayout flContainer;
 
     private Map<Marker, Post> markerPost = new HashMap<>();
 
@@ -81,6 +83,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.map);
         relativeLayoutAutocomplete = view.findViewById(R.id.relativeLayoutAutocomplete);
+
+        flContainer = view.findViewById(R.id.flContainer);
 
         initGoogleMap(savedInstanceState);
         setUpAddressAutoComplete();

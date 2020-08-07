@@ -59,7 +59,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private RelativeLayout layoutAddress;
     private RelativeLayout relativeLayout;
 
-    private FrameLayout flContainer;
     private AnimatedVectorDrawable avdHeart;
 
     @Override
@@ -86,7 +85,6 @@ public class PostDetailActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment);
         ivLike = findViewById(R.id.ivLike);
         tvNumLikes = findViewById(R.id.tvNumLikes);
-        flContainer = findViewById(R.id.flContainer);
         layoutAddress = findViewById(R.id.layoutAddress);
         relativeLayout = findViewById(R.id.relativeLayout);
 
@@ -190,7 +188,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvRent.setText("$" + post.getRent());
         tvDuration.setText(post.getStartDate() + " to " + post.getEndDate());
 
-        if (!post.isLookingForHouse()) {
+        if (!post.isLookingForHouse() && post.getLatitude() != 0 && post.getLongitude() != 0) { // check this when I have wifi
             layoutAddress.setVisibility(View.VISIBLE);
             tvAddress.setText(post.getAddress());
         } else {

@@ -1,50 +1,396 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<FrameLayout
+    android:id="@+id/flContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
-        android:id="@+id/layoutBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/quantum_deeppurple500"
-        android:padding="10dp">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/layoutBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            tools:text="1 Hacker Way" />
+            android:background="@color/quantum_deeppurple500"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tvDone"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                tools:text="1 Hacker Way" />
+
+            <TextView
+                android:id="@+id/tvDone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="5dp"
+                android:text="Done"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
-            android:text="Done"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_below="@+id/layoutBar"
+            android:paddingBottom="10dp">
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar_post_detail">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivProfileImage"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        app:srcCompat="@drawable/ic_baseline_person_24" />
+
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@id/toolbar_post_detail"
+                        android:layout_toRightOf="@id/ivProfileImage"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Catherine Ding" />
+
+                    <TextView
+                        android:id="@+id/tvMajorYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvUserName"
+                        android:layout_toRightOf="@id/ivProfileImage"
+                        android:layout_marginStart="8dp"
+                        tools:text="Computer Science, Class of 2022" />
+
+                    <TextView
+                        android:id="@+id/tvRelativeTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_below="@+id/tvMajorYear"
+                        android:layout_toRightOf="@id/ivProfileImage"
+                        tools:text="1 hour ago" />
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivProfileImage"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        tools:text="Looking for a sublet for one person" />
+
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvTitle"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="16sp"
+                        tools:text="Here is the description of my situation...
+        blahblahblahblahblahblahblahblahblah" />
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvDescription"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
+                        tools:text="Offering: "
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:id="@+id/layoutAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tvStatus"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivAddress"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/circle_border"
+                            android:padding="4dp"
+                            app:srcCompat="@drawable/ic_baseline_location_on_24" />
+
+                        <TextView
+                            android:id="@+id/tvAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@+id/ivAddress"
+                            android:text="1 Hacker Way, Menlo Park, CA"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvAddressLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_below="@+id/tvAddress"
+                            android:layout_toRightOf="@+id/ivAddress"
+                            android:text="Address" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layoutNumRooms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layoutAddress"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivNumRooms"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/circle_border"
+                            android:padding="4dp"
+                            app:srcCompat="@drawable/ic_baseline_hotel_24" />
+
+                        <TextView
+                            android:id="@+id/tvNumRooms"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@+id/ivNumRooms"
+                            android:text="5"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvNumRoomsLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_below="@+id/tvNumRooms"
+                            android:layout_toRightOf="@+id/ivNumRooms"
+                            android:text="Number of rooms" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layoutRent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layoutNumRooms"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivRent"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/circle_border"
+                            android:padding="4dp"
+                            app:srcCompat="@drawable/ic_baseline_attach_money_24" />
+
+                        <TextView
+                            android:id="@+id/tvRent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@+id/ivRent"
+                            android:text="$900"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvRentLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_below="@+id/tvRent"
+                            android:layout_toRightOf="@+id/ivRent"
+                            android:text="Rent per room" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layoutDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layoutRent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivDuration"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/circle_border"
+                            android:padding="4dp"
+                            app:srcCompat="@drawable/ic_baseline_date_range_24" />
+
+                        <TextView
+                            android:id="@+id/tvDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@+id/ivDuration"
+                            android:text="9/1/20 to 1/1/21"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvDurationLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_below="@+id/tvDuration"
+                            android:layout_toRightOf="@+id/ivDuration"
+                            android:text="Duration" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layoutFurnished"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/layoutDuration"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/ivFurnished"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/circle_border"
+                            android:padding="4dp"
+                            app:srcCompat="@drawable/ic_baseline_single_bed_24" />
+
+                        <TextView
+                            android:id="@+id/tvFurnished"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_toRightOf="@+id/ivFurnished"
+                            android:text="Yes"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvFurnishedLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_below="@+id/tvFurnished"
+                            android:layout_toRightOf="@+id/ivFurnished"
+                            android:text="Furnished" />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/layoutFurnished"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="gone"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivImage"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/ivLike"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+                        <TextView
+                            android:id="@+id/tvNumLikes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="5dp"
+                            android:layout_toRightOf="@id/ivLike"
+                            android:textStyle="bold"
+                            tools:text="2 likes" />
+
+                        <ImageView
+                            android:id="@+id/ivComment"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_toRightOf="@+id/tvNumLikes"
+                            android:onClick="goToComments"
+                            app:srcCompat="@drawable/ic_baseline_comment_24" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/ivHeartAnim"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerInParent="true"
+                        android:alpha="0"
+                        app:srcCompat="@drawable/avd_heart_anim" />
+
+                </RelativeLayout>
+
+            </ScrollView>
+
+        </ScrollView>
 
     </RelativeLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutBar">
-
-
-
-    </ScrollView>
-
-</RelativeLayout>
+</FrameLayout>
