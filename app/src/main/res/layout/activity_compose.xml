@@ -328,7 +328,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_toRightOf="@id/tvTakePicture"
-                    android:onClick="launchCamera"
+                    android:onClick="openBottomSheet"
                     app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
 
                 <ImageView

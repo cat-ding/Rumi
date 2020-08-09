@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.rumi.fragments.PhotoBottomSheetDialog;
+import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Post;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -60,13 +62,16 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-public class ComposeActivity extends AppCompatActivity implements View.OnFocusChangeListener {
+public class ComposeActivity extends AppCompatActivity implements View.OnFocusChangeListener,
+        PhotoBottomSheetDialog.PhotoBottomSheetListener {
 
     private static final String TAG = "ComposeActivity";
+    public static final int PHOTO_BOTTOM_SHEET_REQUEST_CODE = 777;
     private static final float DAYS_IN_MONTH = 30;
     private static final int CAPTURE_IMAGE_CODE = 10;
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
     public static final int RADIUS = 30;
+
     private TextInputLayout layoutTitle, layoutDescription;
     private EditText etRent, etNumRooms;
     private RadioGroup radioGroupOne, radioGroupFurnished;
@@ -159,7 +164,6 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
             }
         });
     }
-
 
     // onClick method for place radio buttons
     public void checkPlaceRadioButton(View view) {
@@ -291,61 +295,17 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         endDialog.show();
     }
 
-    public void launchCamera(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(ComposeActivity.this.getPackageManager()) != null) {
-            startActivityForResult(intent, CAPTURE_IMAGE_CODE);
-        }
+    public void openBottomSheet(View view) {
+        PhotoBottomSheetDialog photoDialog =
+                PhotoBottomSheetDialog.newInstance("postImages", UUID.randomUUID().toString());
+        photoDialog.show(getSupportFragmentManager(), "PhotoBottomSheetDialog");
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                handleUpload(bitmap);
-            } else {
-                Toast.makeText(ComposeActivity.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void handleUpload(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-        String imageId = UUID.randomUUID().toString();
-        final StorageReference reference = FirebaseStorage.getInstance().getReference()
-                .child("postImages")
-                .child(imageId + ".jpeg");
-
-        //this is an UploadTask
-        reference.putBytes(baos.toByteArray())
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        getDownloadUrl(reference);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error uploading post image!", e);
-                    }
-                });
-    }
-
-    private void getDownloadUrl(StorageReference reference) {
-        reference.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        photoUrl = uri.toString();
-                        Glide.with(ComposeActivity.this).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
-                        ivImagePreview.setVisibility(View.VISIBLE);
-                    }
-                });
+    public void sendPhotoUri(Uri photoUri) {
+        photoUrl = photoUri.toString();
+        Glide.with(ComposeActivity.this).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
+        ivImagePreview.setVisibility(View.VISIBLE);
     }
 
     @Override

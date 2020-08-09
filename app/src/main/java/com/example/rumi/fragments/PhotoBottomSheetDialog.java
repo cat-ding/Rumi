@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
+import com.example.rumi.ComposeActivity;
 import com.example.rumi.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -207,10 +208,18 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            mListener = (PhotoBottomSheetListener) getTargetFragment();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement PhotoBottomSheetListener");
+        if (context instanceof ComposeActivity) {
+            try {
+                mListener = (PhotoBottomSheetListener) getActivity();
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement PhotoBottomSheetListener");
+            }
+        } else {
+            try {
+                mListener = (PhotoBottomSheetListener) getTargetFragment();
+            } catch (ClassCastException e) {
+                throw new ClassCastException(context.toString() + " must implement PhotoBottomSheetListener");
+            }
         }
     }
 }
