@@ -331,7 +331,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error uploading profile image!", e);
+                        Log.e(TAG, "Error uploading post image!", e);
                     }
                 });
     }

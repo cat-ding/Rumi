@@ -70,13 +70,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProfileFragment extends Fragment implements MessageDialog.MessageListener {
+public class ProfileFragment extends Fragment implements MessageDialog.MessageListener,
+        PhotoBottomSheetDialog.PhotoBottomSheetListener {
 
     public static final String TAG = "ProfileFragment";
     private static final int CAPTURE_IMAGE_CODE = 35;
     public static final int LIKE_POST_REQUEST = 25;
     public static final int MESSAGE_REQUEST_CODE = 99;
     public static final int LIKES_REQUEST = 111;
+    public static final int PHOTO_BOTTOM_SHEET_REQUEST_CODE = 777;
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage, btnChangeProfileImage;
@@ -162,7 +164,10 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
         btnChangeProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchCamera();
+                PhotoBottomSheetDialog photoDialog =
+                        PhotoBottomSheetDialog.newInstance("profileImages", userId);
+                photoDialog.setTargetFragment(ProfileFragment.this, PHOTO_BOTTOM_SHEET_REQUEST_CODE);
+                photoDialog.show(getFragmentManager(), "PhotoBottomSheetDialog");
             }
         });
 
@@ -237,24 +242,9 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
                 });
     }
 
-    private void launchCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivityForResult(intent, CAPTURE_IMAGE_CODE);
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAPTURE_IMAGE_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                handleUpload(bitmap);
-            } else {
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        }
 
         if (resultCode == Activity.RESULT_OK && requestCode == LIKE_POST_REQUEST) {
             Parcelable updatedPostParcel = data.getParcelableExtra("updatedPost");
@@ -277,39 +267,9 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
         }
     }
 
-    private void handleUpload(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-        final StorageReference reference = FirebaseStorage.getInstance().getReference()
-                .child("profileImages")
-                .child(userId + ".jpeg");
-
-        //this is an UploadTask
-        reference.putBytes(baos.toByteArray())
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        getDownloadUrl(reference);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error uploading profile image!", e);
-                    }
-                });
-
-    }
-
-    private void getDownloadUrl(StorageReference reference) {
-        reference.getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        updateUser(uri);
-                    }
-                });
+    @Override
+    public void sendPhotoUri(Uri photoUri) {
+        updateUser(photoUri);
     }
 
     private void updateUser(final Uri uri) {
