@@ -12,6 +12,13 @@ public class SurveyResponse {
 
     public static final String KEY_SURVEY_RESPONSE = "surveyResponse";
     public static final String KEY_IMAGE_URL = "imageUrl";
+    public static final String KEY_PERSONAL_VISIBLE = "personalVisible";
+    public static final String KEY_GENERAL_VISIBLE = "generalVisible";
+    public static final String KEY_PREFERENCES_VISIBLE = "preferencesVisible";
+    public static final String KEY_ACTIVITY_VISIBLE = "activityVisible";
+    public static final String KEY_HOBBY_VISIBLE = "hobbyVisible";
+    public static final String KEY_ENTERTAINMENT_VISIBLE = "entertainmentVisible";
+    public static final String KEY_MUSIC_VISIBLE = "musicVisible";
 
     private String week, weekend, guests, cleanliness, temperature, gender, selfIdentifyGender, genderPref, smoking, description;
     private String userId, imageUrl, name, major, year;

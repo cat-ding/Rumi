@@ -7,6 +7,12 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:textColor">@color/quantum_grey900</item>
+
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+    </style>
+
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_baseline_more_vert_24</item>
     </style>
 
 </resources>

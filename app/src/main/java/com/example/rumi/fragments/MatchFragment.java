@@ -2,11 +2,18 @@ package com.example.rumi.fragments;
 
 import androidx.appcompat.app.AlertDialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,11 +21,15 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rumi.ChangeVisibilityActivity;
+import com.example.rumi.LikesActivity;
 import com.example.rumi.MatchConstants;
+import com.example.rumi.PostDetailActivity;
 import com.example.rumi.R;
 import com.example.rumi.adapters.MatchAdapter;
 import com.example.rumi.dialogs.MatchDialogFive;
@@ -27,6 +38,7 @@ import com.example.rumi.dialogs.MatchDialogOne;
 import com.example.rumi.dialogs.MatchDialogSix;
 import com.example.rumi.dialogs.MatchDialogThree;
 import com.example.rumi.dialogs.MatchDialogTwo;
+import com.example.rumi.models.Post;
 import com.example.rumi.models.SurveyResponse;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +48,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,8 +63,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
 
     public static final String TAG = "MatchFragment";
     private static final int MATCH_REQUEST_CODE = 11;
-
-    // shared preferences
+    private static final int CHANGE_VISIBILITY_REQUEST_CODE = 65;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SURVEY_STATUS = "surveyStatus";
 
@@ -104,6 +117,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public static final int YEAR_WEIGHT = 2;
     public static final Float RANGE = 3f;
 
+    private androidx.appcompat.widget.Toolbar toolbar;
+
     public MatchFragment() {
         // Required empty public constructor
     }
@@ -111,12 +126,16 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_match, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        toolbar = (androidx.appcompat.widget.Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         relativeLayoutIntroPage = view.findViewById(R.id.relativeLayoutIntroPage);
         relativeLayoutRecommendations = view.findViewById(R.id.relativeLayoutRecommendations);
@@ -152,6 +171,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     myResponse = documentSnapshot.toObject(SurveyResponse.class);
+                    myResponse.setSurveyId(documentSnapshot.getId());
                     getSurveyResponses();
                 }
             });
@@ -168,6 +188,33 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 }
             });
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_match, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_visibility:
+                Intent intent = new Intent(getContext(), ChangeVisibilityActivity.class);
+                intent.putExtra(SurveyResponse.class.getSimpleName(), Parcels.wrap(myResponse));
+                startActivityForResult(intent, CHANGE_VISIBILITY_REQUEST_CODE);
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == CHANGE_VISIBILITY_REQUEST_CODE) {
+            myResponse = Parcels.unwrap(data.getParcelableExtra("updatedResponse"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void getSurveyResponses() {

@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LikesActivity"></activity>
+        <activity android:name=".ChangeVisibilityActivity"></activity>
+        <activity android:name=".LikesActivity" />
         <activity android:name=".MatchDetailActivity" />
         <activity android:name=".MessageActivity" />
 
