@@ -79,6 +79,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
     public static final int MESSAGE_REQUEST_CODE = 99;
     public static final int LIKES_REQUEST = 111;
     public static final int PHOTO_BOTTOM_SHEET_REQUEST_CODE = 777;
+    public static final int COMMENTS_REQUEST_CODE = 88;
 
     private TextView tvName, tvMajorYear;
     private ImageView ivProfileImage, btnChangeProfileImage;
@@ -211,7 +212,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     User user = task.getResult().toObject(User.class);
-                    if (user.getProfileUrl() != "") {
+                    if (!user.getProfileUrl().isEmpty() && user.getProfileUrl() != null) {
                         Glide.with(getContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                     }
                     tvName.setText(user.getName());
@@ -264,6 +265,21 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
                 allPosts.add(position, updatedPost);
                 adapter.notifyItemChanged(position);
             }
+        }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == COMMENTS_REQUEST_CODE) {
+            String postId = data.getStringExtra("postId");
+            int updatedPopularity = data.getIntExtra("updatedPopularity", 0);
+
+            int position = -1;
+            for (int i = 0; i < allPosts.size(); i++) {
+                if (allPosts.get(i).getPostId().equals(postId)) {
+                    position = i;
+                    break;
+                }
+            }
+            allPosts.get(position).setPopularity(updatedPopularity);
+            adapter.notifyItemChanged(position);
         }
     }
 

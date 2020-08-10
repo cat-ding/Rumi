@@ -119,7 +119,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                 public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+
+                        String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
+                        if (!profileUrl.isEmpty() && profileUrl != null) {
                             Glide.with(context.getApplicationContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
 

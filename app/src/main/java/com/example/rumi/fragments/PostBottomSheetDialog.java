@@ -245,7 +245,7 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
 
         tvAddress.setText(post.getAddress());
 
-        if (!post.getPhotoUrl().isEmpty()) {
+        if (!post.getPhotoUrl().isEmpty() && post.getPhotoUrl() != null) {
             Glide.with(getContext()).load(post.getPhotoUrl())
                     .transform(new RoundedCorners(RADIUS)).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
@@ -285,8 +285,9 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
                     tvUserName.setText(task.getResult().getString(User.KEY_NAME));
                     tvMajorYear.setText(task.getResult().getString(User.KEY_MAJOR) + ", "
                             + task.getResult().getString(User.KEY_YEAR));
-                    if (task.getResult().getString(User.KEY_PROFILE_URL) != null
-                            && !task.getResult().getString(User.KEY_PROFILE_URL).isEmpty()) {
+
+                    String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
+                    if (!profileUrl.isEmpty() && profileUrl != null) {
                         Glide.with(getContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                     }
                 } else {

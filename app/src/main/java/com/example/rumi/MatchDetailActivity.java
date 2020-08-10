@@ -121,7 +121,7 @@ public class MatchDetailActivity extends AppCompatActivity {
 
     private void setInfoFields() {
 
-        if (!response.getImageUrl().equals("")) {
+        if (!response.getImageUrl().isEmpty() && response.getImageUrl() != null) {
             Glide.with(MatchDetailActivity.this).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
         }
         tvUserName.setText(response.getName());

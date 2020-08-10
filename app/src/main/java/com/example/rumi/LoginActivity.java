@@ -39,10 +39,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
     private Button btnLogin;
     private TextView tvRegisterHere;
 
-    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
-    private CollectionReference usersRef = firestore.collection(User.KEY_USERS);
+    private CollectionReference usersRef = db.collection(User.KEY_USERS);
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SURVEY_STATUS = "surveyStatus";

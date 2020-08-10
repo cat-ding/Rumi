@@ -31,6 +31,7 @@ public class LikesActivity extends AppCompatActivity {
 
     public static final String TAG = "LikesActivity";
     public static final int LIKE_POST_REQUEST = 25;
+    public static final int COMMENTS_REQUEST_CODE = 88;
 
     protected RecyclerView rvPosts;
     private PostsAdapter adapter;
@@ -112,6 +113,21 @@ public class LikesActivity extends AppCompatActivity {
                 allPosts.add(position, updatedPost);
                 adapter.notifyItemChanged(position);
             }
+        }
+
+        if (resultCode == Activity.RESULT_OK && requestCode == COMMENTS_REQUEST_CODE) {
+            String postId = data.getStringExtra("postId");
+            int updatedPopularity = data.getIntExtra("updatedPopularity", 0);
+
+            int position = -1;
+            for (int i = 0; i < allPosts.size(); i++) {
+                if (allPosts.get(i).getPostId().equals(postId)) {
+                    position = i;
+                    break;
+                }
+            }
+            allPosts.get(position).setPopularity(updatedPopularity);
+            adapter.notifyItemChanged(position);
         }
     }
 

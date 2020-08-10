@@ -127,7 +127,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
                     User user = documentSnapshot.toObject(User.class);
                     otherName = user.getName();
                     tvUserName.setText(user.getName());
-                    if (!user.getProfileUrl().isEmpty()) {
+                    if (!user.getProfileUrl().isEmpty() && user.getProfileUrl() != null) {
                         Glide.with(context).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                         otherProfileImage = user.getProfileUrl();
                     } else {

@@ -211,7 +211,7 @@ public class PostDetailActivity extends AppCompatActivity {
             layoutAddress.setVisibility(View.GONE);
         }
 
-        if (!post.getPhotoUrl().isEmpty()) {
+        if (!post.getPhotoUrl().isEmpty() && post.getPhotoUrl() != null) {
             Glide.with(PostDetailActivity.this).load(post.getPhotoUrl())
                     .transform(new RoundedCorners(RADIUS)).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
@@ -251,8 +251,9 @@ public class PostDetailActivity extends AppCompatActivity {
                     tvUserName.setText(task.getResult().getString(User.KEY_NAME));
                     tvMajorYear.setText(task.getResult().getString(User.KEY_MAJOR) + ", "
                             + task.getResult().getString(User.KEY_YEAR));
-                    if (task.getResult().getString(User.KEY_PROFILE_URL) != null
-                            && !task.getResult().getString(User.KEY_PROFILE_URL).isEmpty()) {
+
+                    String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
+                    if (!profileUrl.isEmpty() && profileUrl != null) {
                         Glide.with(PostDetailActivity.this).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                     }
                 } else {
@@ -282,6 +283,7 @@ public class PostDetailActivity extends AppCompatActivity {
     public void goToComments(View view) {
         Intent intent = new Intent(PostDetailActivity.this, CommentsActivity.class);
         intent.putExtra(Post.KEY_POST_ID, post.getPostId());
+        intent.putExtra(Post.KEY_POPULARITY, post.getPopularity());
         startActivityForResult(intent, COMMENTS_REQUEST_CODE);
     }
 

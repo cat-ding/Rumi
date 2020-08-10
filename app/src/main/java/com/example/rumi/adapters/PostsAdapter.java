@@ -147,16 +147,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
-                            Post post = posts.get(position);
+                            Post detailPost = posts.get(position);
                             Intent intent = new Intent(context, PostDetailActivity.class);
-                            intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(post));
+                            intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(detailPost));
                             if (fragment != null) {
                                 fragment.startActivityForResult(intent, REQUEST_CODE);
                                 ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                             else {
                                 ((LikesActivity) context).startActivityForResult(intent, REQUEST_CODE);
-                                ((LikesActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                ((LikesActivity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
                         return super.onSingleTapConfirmed(e);
@@ -225,7 +225,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     Intent intent = new Intent(context, CommentsActivity.class);
                     intent.putExtra(Post.KEY_POPULARITY, post.getPopularity());
                     intent.putExtra(Post.KEY_POST_ID, post.getPostId());
-                    fragment.startActivityForResult(intent, COMMENTS_REQUEST_CODE);
+
+                    if (fragment != null) {
+                        fragment.startActivityForResult(intent, COMMENTS_REQUEST_CODE);
+                    }
+                    else {
+                        ((LikesActivity) context).startActivityForResult(intent, COMMENTS_REQUEST_CODE);
+                    }
                 }
             });
 
@@ -234,7 +240,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription.setText(post.getDescription());
             tvRelativeTime.setText(post.getRelativeTime());
 
-            if (!post.getPhotoUrl().equals("")) {
+            if (!post.getPhotoUrl().isEmpty() && post.getPhotoUrl() != null) {
                 Glide.with(context).load(post.getPhotoUrl())
                         .transform(new RoundedCorners(RADIUS)).into(ivImage);
                 ivImage.setVisibility(View.VISIBLE);
@@ -313,7 +319,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         tvUserName.setText(task.getResult().getString(Post.KEY_NAME));
-                        if (task.getResult().getString(User.KEY_PROFILE_URL) != null) {
+
+                        String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
+                        if (!profileUrl.isEmpty() && profileUrl != null) {
                             Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {

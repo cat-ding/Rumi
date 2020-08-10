@@ -105,7 +105,7 @@ public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.ViewHolder> 
         }
 
         public void bind(final SurveyResponse response) {
-            if (!response.getImageUrl().equals("")) {
+            if (!response.getImageUrl().isEmpty() && response.getImageUrl() != null) {
                 Glide.with(context).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
             }
             tvUserName.setText(response.getName());
