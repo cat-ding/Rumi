@@ -170,14 +170,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Post post = documentSnapshot.toObject(Post.class);
                     if (post.getLatitude() != 0 && post.getLongitude() != 0) {
-                        LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
+                        post.setPostId(documentSnapshot.getId());
 
+                        LatLng location = new LatLng(post.getLatitude(), post.getLongitude());
                         MarkerOptions marker = new MarkerOptions()
                                 .position(location)
                                 .title(post.getName());
                         Marker theMarker = googleMap.addMarker(marker);
-
-                        Log.d(TAG, "onSuccess: " + post.getName());
                         markerPost.put(theMarker, post);
                     }
                 }
@@ -185,7 +184,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        Log.d(TAG, "onMarkerClick: " + markerPost.get(marker).getName());
                         PostBottomSheetDialog postDialog =
                                 PostBottomSheetDialog.newInstance(markerPost.get(marker)); // make this specific
                         postDialog.setTargetFragment(MapFragment.this, POSTS_BOTTOM_SHEET_REQUEST_CODE);

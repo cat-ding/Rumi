@@ -75,7 +75,6 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
         PhotoBottomSheetDialog.PhotoBottomSheetListener {
 
     public static final String TAG = "ProfileFragment";
-    private static final int CAPTURE_IMAGE_CODE = 35;
     public static final int LIKE_POST_REQUEST = 25;
     public static final int MESSAGE_REQUEST_CODE = 99;
     public static final int LIKES_REQUEST = 111;

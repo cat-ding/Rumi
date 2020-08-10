@@ -47,6 +47,7 @@ public class ChangeVisibilityActivity extends AppCompatActivity implements Compo
         switchMusic = findViewById(R.id.switchMusic);
 
         response = Parcels.unwrap(getIntent().getParcelableExtra(SurveyResponse.class.getSimpleName()));
+        Log.d(TAG, "onCreate: " + response.getSurveyId());
 
         setPreviousSettings();
         switchPersonal.setOnCheckedChangeListener(this);

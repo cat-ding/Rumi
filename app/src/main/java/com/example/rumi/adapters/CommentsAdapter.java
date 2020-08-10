@@ -79,8 +79,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
-        TextView tvBody;
-        TextView tvUserName;
+        TextView tvBody, tvUserName, tvRelativeTime;
         ImageView ivProfileImage;
 
         public ViewHolder(@NonNull View itemView) {
@@ -89,13 +88,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             tvBody = itemView.findViewById(R.id.tvBody);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
 
             itemView.setOnLongClickListener(this);
         }
 
         public void bind(final Comment comment) {
-            // TODO: set onclick listener for profile picture
             tvBody.setText(comment.getBody());
+            tvRelativeTime.setText(comment.getRelativeTime());
 
             ivProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override

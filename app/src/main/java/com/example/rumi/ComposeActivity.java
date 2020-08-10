@@ -66,9 +66,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         PhotoBottomSheetDialog.PhotoBottomSheetListener {
 
     private static final String TAG = "ComposeActivity";
-    public static final int PHOTO_BOTTOM_SHEET_REQUEST_CODE = 777;
     private static final float DAYS_IN_MONTH = 30;
-    private static final int CAPTURE_IMAGE_CODE = 10;
     private static final String STRING_LOOKING_FOR_PLACE = "Looking for a place";
     public static final int RADIUS = 30;
 

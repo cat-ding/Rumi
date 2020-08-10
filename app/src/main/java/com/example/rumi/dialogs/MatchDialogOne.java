@@ -74,7 +74,7 @@ public class MatchDialogOne extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_pageone, null, false);
         findViews(view);
         setPreviousValues();
-        builder.setView(view).setTitle("General Use (Page 1/7)").setPositiveButton("Next", null)
+        builder.setView(view).setTitle("General Use (Page 1/6)").setPositiveButton("Next", null)
                 .setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
