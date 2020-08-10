@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextView tvCancel, tvChooseGallery, tvTakePhoto;
     private String photoUrl, photoId, folderName;
+    private ProgressBar progressBar;
 
     public interface PhotoBottomSheetListener {
         void sendPhotoUri(Uri photoUri);
@@ -74,6 +76,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
         tvCancel = view.findViewById(R.id.tvCancel);
         tvChooseGallery = view.findViewById(R.id.tvChooseGallery);
         tvTakePhoto = view.findViewById(R.id.tvTakePhoto);
+        progressBar = view.findViewById(R.id.progressBar);
 
         photoId = getArguments().getString(KEY_PHOTO_ID);
         folderName = getArguments().getString(KEY_FOLDER_NAME);
@@ -88,6 +91,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
         tvTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 launchCamera();
             }
         });
@@ -103,10 +107,12 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
                         requestPermissions(permissions, PERMISSION_CODE);
                     } else {
                         // permission already granted
+                        progressBar.setVisibility(View.VISIBLE);
                         pickImageFromGallery();
                     }
                 } else {
                     // system os is less than marshmallow
+                    progressBar.setVisibility(View.VISIBLE);
                     pickImageFromGallery();
                 }
             }
@@ -124,6 +130,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
         switch (requestCode) {
             case PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    progressBar.setVisibility(View.VISIBLE);
                     pickImageFromGallery();
                 } else {
                     Toast.makeText(getContext(), "Gallery access was denied!", Toast.LENGTH_SHORT).show();
@@ -149,6 +156,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
                 handleUpload(bitmap);
             } else {
                 Toast.makeText(getContext(), "Photo wasn't taken!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
                 dismiss();
             }
         }
@@ -163,6 +171,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
                 }
             } else {
                 Toast.makeText(getContext(), "No photo selected!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
                 dismiss();
             }
         }
@@ -199,6 +208,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
                     @Override
                     public void onSuccess(Uri uri) {
                         mListener.sendPhotoUri(uri);
+                        progressBar.setVisibility(View.GONE);
                         dismiss();
                     }
                 });

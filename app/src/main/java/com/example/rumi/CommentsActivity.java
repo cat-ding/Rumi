@@ -64,7 +64,7 @@ public class CommentsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String body = etComment.getText().toString().trim();
                 if (body.isEmpty()) {
-                    Toast.makeText(CommentsActivity.this, "Sorry, your comment cannot be empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CommentsActivity.this, "Your comment cannot be empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 etComment.getText().clear();
@@ -103,7 +103,6 @@ public class CommentsActivity extends AppCompatActivity {
         commentsRef.add(comment).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(CommentsActivity.this, "Comment created!", Toast.LENGTH_SHORT).show();
                 comment.setCommentId(documentReference.getId());
                 allComments.add(comment);
                 adapter.notifyItemInserted(allComments.size() - 1);

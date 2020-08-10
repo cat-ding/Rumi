@@ -213,19 +213,24 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         if (etRent.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
             etRent.requestFocus();
+            progressBar.setVisibility(View.GONE);
             return;
         }
         if (tvStartDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Start date is required!", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         }
         if (tvEndDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "End date is required!", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         }
 
-        if (error)
+        if (error) {
+            progressBar.setVisibility(View.GONE);
             return;
+        }
 
         rent = Integer.parseInt(etRent.getText().toString());
 
@@ -257,6 +262,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month++;
                 tvStartDate.setText(month + "/" + day + "/" + year);
                 tvStartDate.setVisibility(View.VISIBLE);
                 startMonth = new DateFormatSymbols().getMonths()[month];
@@ -279,6 +285,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         DatePickerDialog endDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month++;
                 tvEndDate.setText(month + "/" + day + "/" + year);
                 tvEndDate.setVisibility(View.VISIBLE);
                 endDate = month + "/" + day + "/" + year;
@@ -306,6 +313,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
         photoUrl = photoUri.toString();
         Glide.with(ComposeActivity.this).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
         ivImagePreview.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

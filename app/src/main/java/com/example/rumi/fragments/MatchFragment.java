@@ -66,6 +66,7 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     private static final int CHANGE_VISIBILITY_REQUEST_CODE = 65;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String SURVEY_STATUS = "surveyStatus";
+    public static final int NUM_TO_DISPLAY = 5;
 
     // firebase
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -279,9 +280,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         }
 
         // only need to get top 5 if there are more than 5 responses in the list, otherwise just sort
-        if (allResponses.size() > 5) {
-            quickSelect(0, allResponses.size()-1, 5); // rank = 5
-            allResponses.subList(5, allResponses.size()).clear();
+        if (allResponses.size() > NUM_TO_DISPLAY) {
+            quickSelect(0, allResponses.size()-1, NUM_TO_DISPLAY); // rank = 5
+            allResponses.subList(NUM_TO_DISPLAY, allResponses.size()).clear();
         }
 
         Collections.sort(allResponses, new Comparator<SurveyResponse>() {

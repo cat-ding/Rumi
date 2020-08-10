@@ -314,6 +314,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
                             posts.remove(position);
                             notifyItemRemoved(position);
+                            notifyDataSetChanged();
                         }})
                     .setNegativeButton("No", null).show();
         }
