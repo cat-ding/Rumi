@@ -1,20 +1,24 @@
 package com.example.rumi.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +44,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.parceler.Parcels;
@@ -80,7 +85,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Post post = posts.get(position);
-        holder.bind(post);
+        holder.bind(post, position);
     }
 
     @Override
@@ -104,7 +109,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvValues,
                 tvNumLikes, tvNumComments;
-        private ImageView ivProfileImage, ivImage, ivLike, ivComment, ivHeartAnim;
+        private ImageView ivProfileImage, ivImage, ivLike, ivComment, ivHeartAnim, ivMenu;
         private ArrayList<String> likeList;
         private int numLikes;
         private AnimatedVectorDrawable avdHeart;
@@ -125,6 +130,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvNumLikes = itemView.findViewById(R.id.tvNumLikes);
             tvNumComments = itemView.findViewById(R.id.tvNumComments);
             ivHeartAnim = itemView.findViewById(R.id.ivHeartAnim);
+            ivMenu = itemView.findViewById(R.id.ivMenu);
 
             final Drawable drawable = ivHeartAnim.getDrawable();
 
@@ -171,7 +177,36 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             });
         }
 
-        public void bind(final Post post) {
+        public void bind(final Post post, final int position) {
+
+            if (post.getUserId().equals(firebaseAuth.getCurrentUser().getUid())) {
+                ivMenu.setVisibility(View.VISIBLE);
+            } else {
+                ivMenu.setVisibility(View.GONE);
+            }
+
+            ivMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenu popup = new PopupMenu(context, view);
+                    if (fragment != null)
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch (menuItem.getItemId()) {
+                                    case R.id.action_delete: {
+                                        deletePost(post.getPostId(), position);
+                                        return true;
+                                    }
+                                    default:
+                                        return false;
+                                }
+                            }
+                        });
+                    popup.inflate(R.menu.menu_post);
+                    popup.show();
+                }
+            });
 
             commentsRef.whereEqualTo(Comment.KEY_POST_ID, post.getPostId()).get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -258,6 +293,29 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     + post.getStartDate() + " to " + post.getEndDate());
 
             bindUserFields(post);
+        }
+
+        private void deletePost(final String postId, final int position) {
+            new AlertDialog.Builder(context)
+                    .setMessage("Are you sure you want to delete this post?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            postsRef.document(postId).delete();
+                            commentsRef.whereEqualTo(Comment.KEY_POST_ID, postId).get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                                commentsRef.document(documentSnapshot.getId()).delete();
+                                            }
+                                        }
+                                    });
+
+                            posts.remove(position);
+                            notifyItemRemoved(position);
+                        }})
+                    .setNegativeButton("No", null).show();
         }
 
         private void likePost(Post post) {

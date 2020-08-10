@@ -40,6 +40,15 @@
         android:layout_toRightOf="@id/ivProfileImage"
         tools:text="1 hour ago" />
 
+    <ImageView
+        android:id="@+id/ivMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/ic_baseline_more_vert_black_24" />
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
