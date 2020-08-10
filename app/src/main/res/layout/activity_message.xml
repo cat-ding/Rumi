@@ -46,44 +46,51 @@
             android:id="@+id/rvMessages"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/etMessage"
+            android:layout_above="@id/layoutEdit"
             android:layout_below="@id/toolbar"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:paddingBottom="10dp"/>
 
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/layoutEdit"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="false"
+            android:layout_marginBottom="11dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="11dp"
-            android:layout_toLeftOf="@+id/btnSend"
-            android:background="@drawable/posts_border"
-            android:ems="9"
-            android:inputType="textMultiLine"
-            android:paddingStart="10dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="94dp"
-            android:paddingBottom="10dp"
-            android:textSize="14dp"
-            android:hint="Write a message..." />
-
-        <ImageView
-            android:id="@+id/btnSend"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="11dp"
-            android:onClick="sendMessage"
-            android:text="Send"
-            app:srcCompat="@drawable/ic_baseline_send_24" />
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/btnSend"
+                android:background="@drawable/edit_text_border"
+                android:ems="9"
+                android:inputType="textMultiLine"
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textSize="14dp"
+                android:hint="Write a message..." />
+
+            <ImageView
+                android:id="@+id/btnSend"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="11dp"
+                android:onClick="sendMessage"
+                android:text="Send"
+                app:srcCompat="@drawable/ic_baseline_send_24" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

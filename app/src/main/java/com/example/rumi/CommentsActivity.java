@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class CommentsActivity extends AppCompatActivity {
     private CommentsAdapter adapter;
     private List<Comment> allComments;
 
-    private Button btnPost;
+    private ImageView btnPost;
     private EditText etComment;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();

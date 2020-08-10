@@ -9,20 +9,25 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
         <include
             android:id="@+id/toolbar_match_detail"
             layout="@layout/toolbar_match_detail" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar_match_detail">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingBottom="10dp"
+                android:background="@color/quantum_white_100"
+                android:elevation="4dp">
 
                 <ImageView
                     android:id="@+id/ivProfileImage"
@@ -60,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ivProfileImage"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="4dp"
                     android:textSize="16sp"
                     tools:text="This is my description!" />
@@ -524,8 +530,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/layoutEntertainment"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/tvMusic"
@@ -547,7 +552,7 @@
 
             </RelativeLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </RelativeLayout>
 
