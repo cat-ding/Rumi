@@ -40,7 +40,9 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -53,8 +55,6 @@ public class MessageActivity extends AppCompatActivity {
     private List<Message> allMessages;
 
     private Chat chat;
-    private boolean readChanged = false;
-    private boolean messageChanged = false;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -70,6 +70,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private boolean otherReadStatus;
     private String otherReadKey;
+    private boolean isCurrUserMemberOne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,19 +96,19 @@ public class MessageActivity extends AppCompatActivity {
         // setting read booleans to toggle blue unread icon later
         if (chat.getMembers().get(0).equals(currId)) {
             if (!chat.isMemberOneRead()) {
-                readChanged = true; // to know if we need to pass a chat back to update chat recyclerview (onBackPressed)
                 chat.setMemberOneRead(true); // set your own read status to true
                 chatsRef.document(chat.getChatId()).update(Chat.KEY_MEMBER_ONE_READ, true); // update your own
             }
+            isCurrUserMemberOne = true;
             otherReadStatus = chat.isMemberTwoRead(); // needed to decide whether or not to update this later
             otherId = chat.getMembers().get(1); // get other's id
             otherReadKey = Chat.KEY_MEMBER_TWO_READ; // needed to know which member's read bool to change later
         } else {
             if (!chat.isMemberTwoRead()) {
-                readChanged = true;
                 chat.setMemberTwoRead(true);
                 chatsRef.document(chat.getChatId()).update(Chat.KEY_MEMBER_TWO_READ, true);
             }
+            isCurrUserMemberOne = false;
             otherReadStatus = chat.isMemberOneRead();
             otherId = chat.getMembers().get(0);
             otherReadKey = Chat.KEY_MEMBER_ONE_READ;
@@ -167,15 +168,16 @@ public class MessageActivity extends AppCompatActivity {
         }
 
         etMessage.getText().clear();
-        messageChanged = true;
         Message message = new Message(new java.util.Date(), messageBody, currId);
         allMessages.add(0, message);
         adapter.notifyItemInserted(0);
         rvMessages.smoothScrollToPosition(0);
 
         // update lastMessage, lastMessageDate of the chat document, and add a new message document
-        chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE, messageBody);
-        chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE_DATE, message.getCreatedAt());
+        Map<String, Object> updatedValues = new HashMap<>();
+        updatedValues.put(Chat.KEY_LAST_MESSAGE, messageBody);
+        updatedValues.put(Chat.KEY_LAST_MESSAGE_DATE, message.getCreatedAt());
+        chatsRef.document(chat.getChatId()).update(updatedValues);
         chatsRef.document(chat.getChatId()).collection(Message.KEY_MESSAGES).add(message);
     }
 
@@ -187,33 +189,25 @@ public class MessageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (readChanged || messageChanged) {
-            if (messageChanged) { // update last message if changed
-                // transmitting updated chat object back
-                String lastMessage = allMessages.get(0).getBody();
-                Date lastMessageDate = allMessages.get(0).getCreatedAt();
-                chat.setLastMessage(lastMessage);
-                chat.setLastMessageDate(lastMessageDate);
-            }
-            // if only read status changed or message new message was sent, sent updated chat
-            Intent intent = new Intent();
-            intent.putExtra("updatedChat", Parcels.wrap(chat));
-            setResult(RESULT_OK, intent);
-        }
+        updatedChat();
         super.onBackPressed();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        updatedChat();
+    }
 
-        if (messageChanged) { // update last message if changed
-            String lastMessage = allMessages.get(0).getBody();
-            Date lastMessageDate = allMessages.get(0).getCreatedAt();
-            chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE, lastMessage);
-            chatsRef.document(chat.getChatId()).update(Chat.KEY_LAST_MESSAGE_DATE, lastMessageDate);
-            chat.setLastMessage(lastMessage);
-            chat.setLastMessageDate(lastMessageDate);
+    private void updatedChat() {
+        Map<String, Object> newChat = new HashMap<>();
+        newChat.put(Chat.KEY_LAST_MESSAGE, allMessages.get(0).getBody());
+        newChat.put(Chat.KEY_LAST_MESSAGE_DATE, allMessages.get(0).getCreatedAt());
+        if (isCurrUserMemberOne) {
+            newChat.put(Chat.KEY_MEMBER_ONE_READ, true);
+        } else {
+            newChat.put(Chat.KEY_MEMBER_TWO_READ, true);
         }
+        chatsRef.document(chat.getChatId()).update(newChat);
     }
 }
