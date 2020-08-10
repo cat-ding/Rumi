@@ -89,7 +89,7 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/circle_border"
                         android:padding="4dp"
-                        app:srcCompat="@drawable/ic_baseline_person_black_24" />
+                        app:srcCompat="@drawable/ic_baseline_person_white_24" />
 
                     <TextView
                         android:id="@+id/tvGender"

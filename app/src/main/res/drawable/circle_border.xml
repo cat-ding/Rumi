@@ -5,9 +5,9 @@
         android:thicknessRatio="2.0"
         android:useLevel="false" >
 
-        <solid android:color="@color/quantum_grey300" />
+        <solid android:color="@color/colorPrimary" />
 
         <stroke
             android:width="10dp"
-            android:color="@color/quantum_grey300" />
+            android:color="@color/colorPrimary" />
 </shape>

@@ -12,7 +12,8 @@
         android:id="@+id/rlFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/filters_border">
+        android:background="@drawable/filters_border"
+        android:elevation="4dp">
 
         <ImageView
             android:id="@+id/ivFilter"
@@ -29,7 +30,6 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="2dp"
-            android:textColor="@color/colorPrimary"
             android:text="Filters" />
 
     </RelativeLayout>
