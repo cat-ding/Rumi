@@ -213,7 +213,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
                 if (task.isSuccessful()) {
                     User user = task.getResult().toObject(User.class);
                     if (!user.getProfileUrl().isEmpty() && user.getProfileUrl() != null) {
-                        Glide.with(getContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
+                        Glide.with(getActivity().getApplicationContext()).load(user.getProfileUrl()).circleCrop().into(ivProfileImage);
                     }
                     tvName.setText(user.getName());
                     tvMajorYear.setText(user.getMajor() + ", " + user.getYear());

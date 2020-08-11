@@ -45,7 +45,7 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
 
     PhotoBottomSheetListener mListener;
 
-    private TextView tvCancel, tvChooseGallery, tvTakePhoto;
+    private TextView tvChooseGallery, tvTakePhoto, tvName;
     private String photoUrl, photoId, folderName;
     private ProgressBar progressBar;
 
@@ -73,20 +73,19 @@ public class PhotoBottomSheetDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvCancel = view.findViewById(R.id.tvCancel);
         tvChooseGallery = view.findViewById(R.id.tvChooseGallery);
         tvTakePhoto = view.findViewById(R.id.tvTakePhoto);
         progressBar = view.findViewById(R.id.progressBar);
+        tvName = view.findViewById(R.id.tvName);
 
         photoId = getArguments().getString(KEY_PHOTO_ID);
         folderName = getArguments().getString(KEY_FOLDER_NAME);
 
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        if (folderName.equals("postImages")) {
+            tvName.setText("Add an Image");
+        } else {
+            tvName.setText("Change Profile Image");
+        }
 
         tvTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

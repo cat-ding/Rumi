@@ -18,7 +18,8 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="60sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/quantum_deeppurple300"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutEmail"

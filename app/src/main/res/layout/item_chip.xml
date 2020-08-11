@@ -8,6 +8,8 @@
     android:layout_height="wrap_content"
     app:closeIcon="@drawable/ic_baseline_close_24"
     tools:text="Example"
-    android:checkable="false">
+    android:checkable="false"
+    app:chipBackgroundColor="@color/colorPrimary"
+    android:textColor="@color/quantum_white_100">
 
 </com.google.android.material.chip.Chip>

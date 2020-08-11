@@ -263,8 +263,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_toRightOf="@id/tvStartDate"
-                    app:srcCompat="@drawable/ic_baseline_date_range_24"
-                    android:onClick="chooseStartDate"/>
+                    android:onClick="chooseStartDate"
+                    app:srcCompat="@drawable/ic_baseline_date_range_black_24" />
 
             </RelativeLayout>
 
@@ -300,8 +300,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_toRightOf="@id/tvEndDate"
-                    app:srcCompat="@drawable/ic_baseline_date_range_24"
-                    android:onClick="chooseEndDate"/>
+                    android:onClick="chooseEndDate"
+                    app:srcCompat="@drawable/ic_baseline_date_range_black_24" />
 
             </RelativeLayout>
 

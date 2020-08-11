@@ -309,7 +309,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
     @Override
     public void sendPhotoUri(Uri photoUri) {
         photoUrl = photoUri.toString();
-        Glide.with(ComposeActivity.this).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
+        Glide.with(getApplicationContext()).load(photoUrl).transform(new RoundedCorners(RADIUS)).into(ivImagePreview);
         ivImagePreview.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }

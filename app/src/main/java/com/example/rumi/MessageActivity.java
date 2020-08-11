@@ -118,7 +118,7 @@ public class MessageActivity extends AppCompatActivity {
         String url = getIntent().getStringExtra(KEY_OTHER_PROFILE_IMAGE);
         tvOtherName.setText(getIntent().getStringExtra(KEY_OTHER_NAME));
         if (!url.isEmpty())
-            Glide.with(this).load(url).circleCrop().into(ivOtherProfileImage);
+            Glide.with(getApplicationContext()).load(url).circleCrop().into(ivOtherProfileImage);
 
         // onClick to go to other user's profile
         ivOtherProfileImage.setOnClickListener(new View.OnClickListener() {

@@ -51,7 +51,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     public static final String TAG = "MapFragment";
     public static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
-    public static final float ZOOM_LEVEL = 15;
+    public static final float ZOOM_LEVEL_HIGH = 20;
+    public static final float ZOOM_LEVEL_MEDIUM = 17;
+    public static final float ZOOM_LEVEL_LOW = 15;
     public static final int POSTS_BOTTOM_SHEET_REQUEST_CODE = 11111;
 
     private final static String KEY_LOCATION = "location";
@@ -67,8 +69,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
 
+    private Post post;
+
     public MapFragment() {
         // Required empty public constructor
+    }
+
+    public MapFragment(Post post) {
+        this.post = post;
     }
 
     @Override
@@ -108,7 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             public void onPlaceSelected(@NonNull Place place) {
                 LatLng latLng = place.getLatLng();
                 CameraUpdate center = CameraUpdateFactory.newLatLng(latLng);
-                CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL_LOW);
                 googleMap.moveCamera(center);
                 googleMap.animateCamera(zoom);
             }
@@ -148,7 +156,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             public void onSuccess(Location location) {
                 if (location != null) {
                     CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL);
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(ZOOM_LEVEL_LOW);
                     googleMap.moveCamera(center);
                     googleMap.animateCamera(zoom);
                 }
@@ -184,6 +192,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM_LEVEL_MEDIUM));
                         PostBottomSheetDialog postDialog =
                                 PostBottomSheetDialog.newInstance(markerPost.get(marker)); // make this specific
                         postDialog.setTargetFragment(MapFragment.this, POSTS_BOTTOM_SHEET_REQUEST_CODE);
@@ -193,8 +202,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     }
                 });
 
+                if (post != null)
+                    displayPost();
             }
         });
+    }
+
+    private void displayPost() {
+        LatLng postLatLng = new LatLng(post.getLatitude(), post.getLongitude());
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(postLatLng, ZOOM_LEVEL_HIGH));
+        PostBottomSheetDialog postDialog =
+                PostBottomSheetDialog.newInstance(post); // make this specific
+        postDialog.setTargetFragment(MapFragment.this, POSTS_BOTTOM_SHEET_REQUEST_CODE);
+        postDialog.show(getFragmentManager(), "PostBottomSheetDialog");
     }
 
     @Override

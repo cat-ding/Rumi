@@ -276,7 +276,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvRelativeTime.setText(post.getRelativeTime());
 
             if (!post.getPhotoUrl().isEmpty() && post.getPhotoUrl() != null) {
-                Glide.with(context).load(post.getPhotoUrl())
+                Glide.with(context.getApplicationContext()).load(post.getPhotoUrl())
                         .transform(new RoundedCorners(RADIUS)).into(ivImage);
                 ivImage.setVisibility(View.VISIBLE);
             } else {
@@ -381,7 +381,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
                         String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
                         if (!profileUrl.isEmpty() && profileUrl != null) {
-                            Glide.with(context).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                            Glide.with(context.getApplicationContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                         }
                     } else {
                         Log.e(TAG, "Error retrieving user data! ", task.getException());

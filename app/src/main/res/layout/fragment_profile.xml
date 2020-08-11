@@ -76,6 +76,7 @@
                     android:id="@+id/btnLogout"
                     android:layout_width="110dp"
                     android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
                     android:layout_centerHorizontal="true"
                     android:text="Logout"
                     android:textSize="12sp"
@@ -85,10 +86,10 @@
                     android:id="@+id/btnMessage"
                     android:layout_width="110dp"
                     android:layout_height="50dp"
+                    android:layout_marginTop="4dp"
                     android:layout_centerHorizontal="true"
                     android:text="Message"
                     android:textSize="12sp" />
-
 
             </RelativeLayout>
 

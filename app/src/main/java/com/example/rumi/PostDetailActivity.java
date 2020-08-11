@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.rumi.fragments.MapFragment;
 import com.example.rumi.fragments.ProfileFragment;
 import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
@@ -117,6 +118,15 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openProfileFragment(post.getUserId());
+            }
+        });
+
+        layoutAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = (PostDetailActivity.this).getSupportFragmentManager();
+                Fragment fragment = new MapFragment(post);
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -254,7 +264,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     String profileUrl = task.getResult().getString(User.KEY_PROFILE_URL);
                     if (!profileUrl.isEmpty() && profileUrl != null) {
-                        Glide.with(PostDetailActivity.this).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
+                        Glide.with(getApplicationContext()).load(task.getResult().getString(User.KEY_PROFILE_URL)).circleCrop().into(ivProfileImage);
                     }
                 } else {
                     Log.e(TAG, "Error retrieving user data! ", task.getException());
