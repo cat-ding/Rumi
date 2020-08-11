@@ -1,6 +1,7 @@
 package com.example.rumi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -42,6 +43,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SURVEY_STATUS = "surveyStatus";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,13 +151,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnFocusC
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.i(TAG, "onSuccess: new user profile created");
+                                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putBoolean(SURVEY_STATUS, false);
+                                            editor.apply();
+
+                                            Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+                                            startActivity(i);
+                                            finish();
                                         }
                                     });
-
-                            Intent i = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(i);
-                            finish();
                         } else {
                             Log.e(TAG, "Error creating user: ", task.getException());
                             Toast.makeText(RegisterActivity.this, "Error!", Toast.LENGTH_SHORT).show();

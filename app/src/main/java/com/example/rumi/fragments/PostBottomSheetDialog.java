@@ -31,10 +31,12 @@ import com.example.rumi.CommentsActivity;
 import com.example.rumi.FilterConstants;
 import com.example.rumi.PostDetailActivity;
 import com.example.rumi.R;
+import com.example.rumi.models.Comment;
 import com.example.rumi.models.Post;
 import com.example.rumi.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -43,6 +45,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,7 +63,7 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
 
     private Post post;
     private TextView tvUserName, tvTitle, tvDescription, tvRelativeTime, tvStatus, tvMajorYear,
-            tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes;
+            tvNumRooms, tvRent, tvDuration, tvFurnished, tvAddress, tvNumLikes, tvNumComments;
     private ImageView ivProfileImage, ivImage, ivComment, ivLike, ivHeartAnim;
     private ArrayList<String> likeList;
     private int numLikes, postPopularity;
@@ -70,6 +73,7 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private CollectionReference usersRef = db.collection(User.KEY_USERS);
     private CollectionReference postsRef = db.collection(Post.KEY_POSTS);
+    private CollectionReference commentsRef = db.collection(Comment.KEY_COMMENTS);
 
     private FrameLayout flContainer;
     private AnimatedVectorDrawable avdHeart;
@@ -112,6 +116,7 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
         ivComment = view.findViewById(R.id.ivComment);
         ivLike = view.findViewById(R.id.ivLike);
         tvNumLikes = view.findViewById(R.id.tvNumLikes);
+        tvNumComments = view.findViewById(R.id.tvNumComments);
         relativeLayout = view.findViewById(R.id.relativeLayout);
         ivHeartAnim = view.findViewById(R.id.ivHeartAnim);
 
@@ -264,6 +269,19 @@ public class PostBottomSheetDialog extends BottomSheetDialogFragment {
         } else {
             tvStatus.setText(LOOKING_FOR_PERSON_STRING);
         }
+
+        commentsRef.whereEqualTo(Comment.KEY_POST_ID, post.getPostId()).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        int numComments = queryDocumentSnapshots.size();
+                        if (numComments == 1) {
+                            tvNumComments.setText(numComments + " comment");
+                        } else {
+                            tvNumComments.setText(numComments + " comments");
+                        }
+                    }
+                });
 
         // set like icon filled or not
         likeList = post.getLikes();

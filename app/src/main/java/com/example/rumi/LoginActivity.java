@@ -146,12 +146,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnFocusChan
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(SURVEY_STATUS, documentSnapshot.getBoolean(User.KEY_SURVEY_STATUS));
                         editor.apply();
+
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
                     }
                 });
-
-        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(i);
-        finish();
     }
 
     @Override

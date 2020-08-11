@@ -122,7 +122,7 @@ public class MatchDetailActivity extends AppCompatActivity {
     private void setInfoFields() {
 
         if (!response.getImageUrl().isEmpty() && response.getImageUrl() != null) {
-            Glide.with(MatchDetailActivity.this).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
+            Glide.with(getApplicationContext()).load(response.getImageUrl()).circleCrop().into(ivProfileImage);
         }
         tvUserName.setText(response.getName());
         tvMajorYear.setText(response.getMajor() + ", " + response.getYear());

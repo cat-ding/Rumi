@@ -390,9 +390,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                         name, major, year, currGeneralVisible, currPrefVisible, currActivityVisible,
                         currHobbyVisible, currEntertainmentVisible, currMusicVisible, currPersonalVisible);
 
+                myResponse.setSurveyId(userId);
+
                 surveysRef.document(userId).set(myResponse).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         usersRef.document(firebaseAuth.getCurrentUser().getUid()).update(User.KEY_SURVEY_STATUS, true);
 
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
