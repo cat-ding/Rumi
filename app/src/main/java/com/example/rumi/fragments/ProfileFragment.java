@@ -150,6 +150,10 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
             btnLogout.setVisibility(View.VISIBLE);
             btnChangeProfileImage.setVisibility(View.VISIBLE);
             btnMessage.setVisibility(View.GONE);
+        } else {
+            btnLogout.setVisibility(View.GONE);
+            btnChangeProfileImage.setVisibility(View.GONE);
+            btnMessage.setVisibility(View.VISIBLE);
         }
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +238,7 @@ public class ProfileFragment extends Fragment implements MessageDialog.MessageLi
                         // QueryDocumentSnapshots are guaranteed to exist
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
+                            post.setPostId(documentSnapshot.getId());
 
                             allPosts.add(post);
                         }

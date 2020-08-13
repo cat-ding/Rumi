@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -78,8 +79,6 @@ public class MessagesFragment extends Fragment {
         rvChats.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvChats.setLayoutManager(layoutManager);
-
-        getChats();
     }
 
     @Override
@@ -90,6 +89,7 @@ public class MessagesFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                        Log.d(TAG, "onEvent: ");
                         if (error != null) {
                             Toast.makeText(getContext(), "Error loading chats!", Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "Error loading chats: ", error);
@@ -105,29 +105,6 @@ public class MessagesFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     }
                 });
-    }
-
-    private void getChats() {
-        chatsRef.whereArrayContains(Chat.KEY_MEMBERS, firebaseAuth.getCurrentUser().getUid())
-                .orderBy(Chat.KEY_LAST_MESSAGE_DATE, Query.Direction.DESCENDING).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        adapter.clear();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Chat chat = documentSnapshot.toObject(Chat.class);
-                            chat.setChatId(documentSnapshot.getId());
-
-                            allChats.add(chat);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: ", e);
-            }
-        });
     }
 
     @Override

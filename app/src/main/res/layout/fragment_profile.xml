@@ -16,6 +16,7 @@
         android:id="@+id/layoutTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:layout_below="@id/toolbar"
         android:background="#F5F5F8"
         android:elevation="4dp">
@@ -36,7 +37,7 @@
             android:layout_below="@id/ivProfileImage"
             android:layout_marginStart="-18dp"
             android:layout_marginTop="-20dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="2dp"
             android:layout_toRightOf="@+id/ivProfileImage"
             app:srcCompat="@drawable/ic_baseline_edit_24" />
 

@@ -84,7 +84,7 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
     private String title, description, startMonth, startDate, endDate;
     private String photoUrl = "", name = "", address = "";
     private Date start, end;
-    private int numRooms = 1, rent, numMonths;
+    private int numRooms = 1, rent = -1, numMonths;
     private boolean lookingForHouse = true, furnished = true;
     private double latitude = 0, longitude = 0;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -207,13 +207,6 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
             layoutDescription.setError("Description is required");
             error = true;
         }
-
-        if (etRent.getText().toString().isEmpty()) {
-            Toast.makeText(ComposeActivity.this, "Rent is required!", Toast.LENGTH_SHORT).show();
-            etRent.requestFocus();
-            progressBar.setVisibility(View.GONE);
-            return;
-        }
         if (tvStartDate.getText().toString().isEmpty()) {
             Toast.makeText(ComposeActivity.this, "Start date is required!", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
@@ -230,7 +223,9 @@ public class ComposeActivity extends AppCompatActivity implements View.OnFocusCh
             return;
         }
 
-        rent = Integer.parseInt(etRent.getText().toString());
+        if (!etRent.getText().toString().isEmpty()) {
+            rent = Integer.parseInt(etRent.getText().toString());
+        }
 
         // calculate number of months between two dates, rounded up to the nearest whole month
         float daysBetween = ((end.getTime() - start.getTime()) / (1000*60*60*24));

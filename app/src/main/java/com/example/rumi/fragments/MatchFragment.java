@@ -119,6 +119,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     public static final Float RANGE = 3f;
 
     private androidx.appcompat.widget.Toolbar toolbar;
+    private boolean hideMenu = true;
+    private MenuItem menuItem;
 
     public MatchFragment() {
         // Required empty public constructor
@@ -165,6 +167,9 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         boolean surveyCompleted = sharedPreferences.getBoolean(SURVEY_STATUS, false);
         if (surveyCompleted) {
+            hideMenu = false;
+            getActivity().invalidateOptionsMenu();
+
             relativeLayoutIntroPage.setVisibility(View.GONE);
             relativeLayoutRecommendations.setVisibility(View.VISIBLE);
 
@@ -177,11 +182,12 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
                 }
             });
         } else {
-            btnMatch = view.findViewById(R.id.btnMatch);
+            hideMenu = true;
+            getActivity().invalidateOptionsMenu();
 
+            btnMatch = view.findViewById(R.id.btnMatch);
             relativeLayoutIntroPage.setVisibility(View.VISIBLE);
             relativeLayoutRecommendations.setVisibility(View.GONE);
-
             btnMatch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -194,6 +200,14 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_match, menu);
+        menuItem = menu.findItem(R.id.action_visibility);
+
+        if (hideMenu) {
+            menuItem.setVisible(false);
+        } else {
+            menuItem.setVisible(true);
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -535,6 +549,8 @@ public class MatchFragment extends Fragment implements MatchDialogOne.PageOneLis
         if (nextPage == MatchConstants.PAGE_FIVE) {
             openMatchDialogFive();
         } else {
+            hideMenu = false;
+            getActivity().invalidateOptionsMenu();
             addToDatabase();
         }
     }

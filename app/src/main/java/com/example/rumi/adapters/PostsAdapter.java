@@ -1,5 +1,6 @@
 package com.example.rumi.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -158,12 +159,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                             intent.putExtra(Post.class.getSimpleName(), Parcels.wrap(detailPost));
                             if (fragment != null) {
                                 fragment.startActivityForResult(intent, REQUEST_CODE);
-                                ((MainActivity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                             else {
-                                ((LikesActivity) context).startActivityForResult(intent, REQUEST_CODE);
-                                ((LikesActivity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                                ((Activity) context).startActivityForResult(intent, REQUEST_CODE);
                             }
+                            ((Activity)context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         }
                         return super.onSingleTapConfirmed(e);
                     }
@@ -289,8 +289,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 tvStatus.setText(LOOKING_FOR_PERSON_STRING);
             }
 
-            tvValues.setText(post.getNumRooms() + " room(s) | $" + post.getRent() + " /mo | "
-                    + post.getStartDate() + " to " + post.getEndDate());
+            if (post.getRent() == -1) {
+                tvValues.setText(post.getNumRooms() + " room(s) | "
+                        + post.getStartDate() + " to " + post.getEndDate());
+            } else {
+                tvValues.setText(post.getNumRooms() + " room(s) | $" + post.getRent() + " /mo | "
+                        + post.getStartDate() + " to " + post.getEndDate());
+            }
 
             bindUserFields(post);
         }
