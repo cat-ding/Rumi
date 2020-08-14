@@ -7,7 +7,7 @@
 2. [Schema](#Schema)
 
 ## Overview
-### [Link to YouTube App Demo](https://www.youtube.com/watch?v=tdrvy2bcw6o)
+### [Link to YouTube App Demo](https://youtu.be/XdNBDoTa6OM)
 
 ### [Link to Google Doc](https://docs.google.com/document/d/19SwEPsgKnhnh3-kFLEtg3jUCONMWaDF65tRUt_p5nxQ/edit?usp=sharing)
 Contains additional information on behind the scenes reasoning, prioritization, and complex algorithm explanation.
