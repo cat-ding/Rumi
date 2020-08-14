@@ -50,7 +50,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/proxima_nova_regular"
-            android:text="Welcome to the Housemmate Matching Page!"
+            android:text="Welcome to the Housemate Matching Page!"
             android:textAlignment="center"
             android:textColor="@color/quantum_black_100"
             android:textSize="24sp" />
@@ -63,7 +63,7 @@
             android:fontFamily="@font/proxima_nova_regular"
             android:layout_marginTop="10dp"
             android:layout_below="@id/tvWelcome"
-            android:text="Click the button below to start a short questionnaire (3 min) about your living preferences to receive housemmate recommendations!"
+            android:text="Click the button below to start a short questionnaire (3 min) about your living preferences to receive housemate recommendations!"
             android:textAlignment="center"
             android:textColor="@color/quantum_black_100"
             android:textSize="18sp"/>
