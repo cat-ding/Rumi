@@ -9,7 +9,7 @@
 ## Overview
 ### [Link to YouTube App Demo](https://www.youtube.com/watch?v=tdrvy2bcw6o)
 
-### [Link to Google Doc](https://docs.google.com/document/d/1liB88dXCX_VpgqF-a3TYppd1-r9tIsdJaxVvoZwsVs0/edit?usp=sharing)
+### [Link to Google Doc](https://docs.google.com/document/d/19SwEPsgKnhnh3-kFLEtg3jUCONMWaDF65tRUt_p5nxQ/edit?usp=sharing)
 Contains additional information on behind the scenes reasoning, prioritization, and complex algorithm explanation.
 ### Description
 An Android application using Firebase as a backend to help better students navigate off-campus housing.
