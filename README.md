@@ -57,9 +57,9 @@ An Android application using Firebase as a backend to help better students navig
     - [x] Google Maps - view addresses from posts in a map
     - [x] Google Places - autocomplete addresses
 - Your app contains at least one more complex algorithm (talk over this with your manager)
-    - [ ] Roommate recommendation page where you fill out a survey and get matched to others with similar preferences
+    - [x] Roommate recommendation page where you fill out a survey and get matched to others with similar preferences
         - This feature will take all the users that have filled out the survey and calculate a compatibility score for each of them. This is inefficient once number of users gets very large, but given the time constraints on this project, I have decided to do it this way. In the future, I would first make a subset of users based on mutual friends, interests, or whatever the user deems to be most important, then calculate compatibility on the subset.
-    - [ ] Selection algorithm for rank finding within this page that gets the top 5 most compatible
+    - [x] Selection algorithm for rank finding within this page that gets the top 5 most compatible
 - Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
     - [x] Double tap to like a post
     - [x] Long press to delete a comment
@@ -72,8 +72,8 @@ An Android application using Firebase as a backend to help better students navig
 **Optional Nice-to-have Stories**
 - [x] Sort through the posts by popularity, recent, rent hi-lo and lo-hi
 - [x] Filter posts by number of rooms, what you're looking for (place or people), furnished or not
-- [ ] Chat fragment
-- [ ] Ability to attach photos to posts (instead of taking a picture you can select from your device's photos)
+- [x] Chat fragment
+- [x] Ability to attach photos to posts (instead of taking a picture you can select from your device's photos)
 - [ ] Need a referral code from someone already in the community to make an account
 - [ ] Tab for your house once you found people
   - [ ] Shared payments, bills (utilities, furniture, etc)
